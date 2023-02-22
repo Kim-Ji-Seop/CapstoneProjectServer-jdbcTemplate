@@ -1,0 +1,3 @@
+18:52:10.533 INFO  [File:TestController.java] [Func:getAll] [Line:33] [Message:INFO Level 테스트]- INFO Level 테스트
+18:52:10.536 WARN  [File:TestController.java] [Func:getAll] [Line:35] [Message:Warn Level 테스트]- Warn Level 테스트
+18:52:10.537 ERROR [File:TestController.java] [Func:getAll] [Line:38] [Message:ERROR Level 테스트]- ERROR Level 테스트
