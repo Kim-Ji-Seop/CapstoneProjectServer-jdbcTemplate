@@ -3,10 +3,7 @@ package com.example.demo.src.domain.user.service;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.secret.Secret;
 import com.example.demo.src.domain.user.dao.UserDao;
-import com.example.demo.src.domain.user.dto.PostCheckDuplicateReq;
-import com.example.demo.src.domain.user.dto.PostCheckDuplicateRes;
-import com.example.demo.src.domain.user.dto.PostSignUpReq;
-import com.example.demo.src.domain.user.dto.PostSignUpRes;
+import com.example.demo.src.domain.user.dto.*;
 import com.example.demo.utils.AES128;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
@@ -77,6 +74,34 @@ public class UserService {
             return new PostCheckDuplicateRes(0); // 중복된 아이디
         }else {
             return new PostCheckDuplicateRes(1); // 가능한 아이디
+        }
+    }
+
+    // 로그인
+    @Transactional
+    public PostLoginRes login(PostLoginReq postLoginReq) throws BaseException {
+        if(postLoginReq.getUid().length() == 0 || postLoginReq.getPassword().length() == 0){
+            throw new BaseException(REQUEST_ERROR); // 2000 : 입력값 전체 빈 값일때
+        }
+
+        String pwd;
+        try{
+            // 비밀번호 암호화
+            pwd = new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(postLoginReq.getPassword()); // 비밀번호 암호화
+            postLoginReq.setPassword(pwd);
+        } catch (Exception ignored) {
+            throw new BaseException(PASSWORD_ENCRYPTION_ERROR); // 4011 : 비밀번호 암호화에 실패하였습니다
+        }
+
+        User user = userDao.login(postLoginReq);
+
+        // uid & pwd 일치 여부
+        if(user.getUid().equals(postLoginReq.getUid()) && user.getPassword().equals(pwd)){
+            int userIdx = user.getUserIdx();
+            String jwt = jwtService.createJwt(userIdx);
+            return new PostLoginRes(jwt,userIdx,user.getName(),user.getNickname());
+        }else{
+            throw new BaseException(FAILED_TO_LOGIN); // 3014 : 없는 아이디거나 비밀번호가 틀렸습니다.
         }
     }
 }

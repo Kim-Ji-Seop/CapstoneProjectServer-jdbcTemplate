@@ -1,6 +1,8 @@
 package com.example.demo.src.domain.user.dao;
 
+import com.example.demo.src.domain.user.dto.PostLoginReq;
 import com.example.demo.src.domain.user.dto.PostSignUpReq;
+import com.example.demo.src.domain.user.dto.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -44,5 +46,21 @@ public class UserDao {
 
         String lastInsertIdQuery = "select last_insert_id()";
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
+    }
+
+    // 로그인
+    public User login(PostLoginReq postLoginReq) {
+        String query = "select id,uid,password,name,nickname from user where uid = ? and password = ?";
+        Object[] logInParams = new Object[]{ postLoginReq.getUid(), postLoginReq.getPassword() };
+
+        return this.jdbcTemplate.queryForObject(query,
+                (rs, rowNum) -> new User(
+                        rs.getInt("id"),
+                        rs.getString("uid"),
+                        rs.getString("password"),
+                        rs.getString("name"),
+                        rs.getString("nickname")
+                ), logInParams// RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
+        ); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 }

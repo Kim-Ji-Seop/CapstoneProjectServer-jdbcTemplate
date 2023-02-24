@@ -2,10 +2,7 @@ package com.example.demo.src.domain.user;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.domain.user.dto.PostCheckDuplicateReq;
-import com.example.demo.src.domain.user.dto.PostCheckDuplicateRes;
-import com.example.demo.src.domain.user.dto.PostSignUpReq;
-import com.example.demo.src.domain.user.dto.PostSignUpRes;
+import com.example.demo.src.domain.user.dto.*;
 import com.example.demo.src.domain.user.service.UserService;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
@@ -54,6 +51,21 @@ public class UserController {
         try {
             PostCheckDuplicateRes postCheckDuplicateRes = userService.checkDuplicateUid(postCheckDuplicateReq);
             return new BaseResponse<>(postCheckDuplicateRes);
+        }catch (BaseException baseException){
+            return new BaseResponse<>((baseException.getStatus()));
+        }
+    }
+    /**
+     * 로그인 API
+     * [POST] /users/login
+     * @return BaseResponse<PostLoginRes>
+     */
+    @ResponseBody
+    @PostMapping("/login")
+    public BaseResponse<PostLoginRes> login(@RequestBody PostLoginReq postLoginReq){
+        try {
+            PostLoginRes postLoginRes = userService.login(postLoginReq);
+            return new BaseResponse<>(postLoginRes);
         }catch (BaseException baseException){
             return new BaseResponse<>((baseException.getStatus()));
         }
