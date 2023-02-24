@@ -21,6 +21,7 @@ public enum BaseResponseStatus {
     EMPTY_JWT(false, 2001, "JWT를 입력해주세요."),
     INVALID_JWT(false, 2002, "유효하지 않은 JWT입니다."),
     INVALID_USER_JWT(false,2003,"권한이 없는 유저의 접근입니다."),
+    POST_USERS_INVALID_UID(false, 2010, "아이디를 다시 확인해주세요."),
     POST_USERS_INVALID_PASSWORD(false, 2011, "비밀번호를 다시 확인해주세요."),
     POST_USERS_INVALID_NICK_NAME(false, 2012, "닉네임을 다시 확인해주세요."),
     // users
@@ -29,7 +30,9 @@ public enum BaseResponseStatus {
     // 회원가입
     // [POST] /users
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
+    // 회원가입 > 중복아이디 체크
     POST_USERS_EXISTS_ID(false,2018,"중복된 아이디입니다."),
+    // 회원가입 > 중복닉네임 체크
     POST_USERS_EXISTS_NICK_NAME(false,2019,"중복된 닉네임입니다."),
     POST_USERS_NOT_FOUND(false,2021,"가입하지 않은 회원입니다."),
     // 시험과제게시판 등록

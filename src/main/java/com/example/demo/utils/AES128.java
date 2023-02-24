@@ -15,7 +15,7 @@ import java.util.Base64;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 // 암호화 관련 AES128(고급 암호화 표준)
-//참고 https://sunghs.tistory.com/119
+// 참고 https://sunghs.tistory.com/119
 public class AES128 {
     private final String ips;
     private final Key keySpec;
