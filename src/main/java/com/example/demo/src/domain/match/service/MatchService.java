@@ -2,6 +2,7 @@ package com.example.demo.src.domain.match.service;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.domain.match.dao.MatchDao;
+import com.example.demo.src.domain.match.dto.ByNetworkRes;
 import com.example.demo.src.domain.match.dto.PossibleMatchesRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
@@ -27,6 +28,18 @@ public class MatchService {
     public PossibleMatchesRes countMatches() throws BaseException {
         try{
             return matchDao.countMatches();
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<ByNetworkRes> getMatchRoomsByNetwork(String network) throws BaseException {
+        try{
+            if(network.equals("온라인")) {
+                return matchDao.getMatchRoomsOnline(network);
+            }else{
+                return matchDao.getMatchRoomsOffline(network);
+            }
         }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
