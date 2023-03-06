@@ -2,9 +2,10 @@ package com.example.demo.src.domain.match;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+import com.example.demo.src.domain.match.dto.ByNetworkRes;
+import com.example.demo.src.domain.match.dto.MatchRoomDetailRes;
 import com.example.demo.src.domain.match.dto.PossibleMatchesRes;
 import com.example.demo.src.domain.match.service.MatchService;
-import com.example.demo.src.domain.user.service.UserService;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,7 @@ public class MatchController {
     }
     /**
      * Method : GET
-     * URI : /rooms?location=
+     * URI : /rooms/locations
      * Description : 지역별 매치
      */
 
@@ -53,7 +54,16 @@ public class MatchController {
      * URI : /rooms?network=
      * Description : 온/오프라인 매치
      */
-
+    @ResponseBody
+    @GetMapping("/rooms")
+    public BaseResponse<List<ByNetworkRes>> getMatchRoomsByNetwork(@RequestParam String network){
+        try {
+            List<ByNetworkRes> byNetworkRes = matchService.getMatchRoomsByNetwork(network);
+            return new BaseResponse<>(byNetworkRes);
+        }catch (BaseException baseException){
+            return new BaseResponse<>(baseException.getStatus());
+        }
+    }
     /**
      * Method : GET
      * URI : /rooms/plans
@@ -65,6 +75,16 @@ public class MatchController {
      * URI : /rooms/:matchIdx
      * Description : 매칭방 상세보기
      */
+    @ResponseBody
+    @GetMapping("/rooms/{matchIdx}")
+    public BaseResponse<MatchRoomDetailRes> matchroomDetail(@PathVariable("matchIdx") int matchIdx){
+        try {
+            MatchRoomDetailRes matchRoomDetailRes = matchService.matchroomDetail(matchIdx);
+            return new BaseResponse<>(matchRoomDetailRes);
+        }catch (BaseException baseException){
+            return new BaseResponse<>(baseException.getStatus());
+        }
+    }
 
 
 }
