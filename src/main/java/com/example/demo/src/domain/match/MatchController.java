@@ -3,6 +3,7 @@ package com.example.demo.src.domain.match;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.domain.match.dto.ByNetworkRes;
+import com.example.demo.src.domain.match.dto.MatchRoomDetailRes;
 import com.example.demo.src.domain.match.dto.PossibleMatchesRes;
 import com.example.demo.src.domain.match.service.MatchService;
 import com.example.demo.utils.JwtService;
@@ -74,6 +75,16 @@ public class MatchController {
      * URI : /rooms/:matchIdx
      * Description : 매칭방 상세보기
      */
+    @ResponseBody
+    @GetMapping("/rooms/{matchIdx}")
+    public BaseResponse<MatchRoomDetailRes> matchroomDetail(@PathVariable("matchIdx") int matchIdx){
+        try {
+            MatchRoomDetailRes matchRoomDetailRes = matchService.matchroomDetail(matchIdx);
+            return new BaseResponse<>(matchRoomDetailRes);
+        }catch (BaseException baseException){
+            return new BaseResponse<>(baseException.getStatus());
+        }
+    }
 
 
 }

@@ -3,6 +3,7 @@ package com.example.demo.src.domain.match.service;
 import com.example.demo.config.BaseException;
 import com.example.demo.src.domain.match.dao.MatchDao;
 import com.example.demo.src.domain.match.dto.ByNetworkRes;
+import com.example.demo.src.domain.match.dto.MatchRoomDetailRes;
 import com.example.demo.src.domain.match.dto.PossibleMatchesRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
@@ -40,6 +41,14 @@ public class MatchService {
             }else{
                 return matchDao.getMatchRoomsOffline(network);
             }
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public MatchRoomDetailRes matchroomDetail(int matchIdx) throws BaseException {
+        try{
+            return matchDao.matchroomDetail(matchIdx);
         }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }

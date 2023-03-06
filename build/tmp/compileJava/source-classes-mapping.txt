@@ -44,11 +44,13 @@ com/example/demo/src/domain/match/dto/ByLocationRes.java
  com.example.demo.src.domain.match.dto.ByLocationRes
 com/example/demo/src/domain/user/UserController.java
  com.example.demo.src.domain.user.UserController
-com/example/demo/src/domain/match/MatchController.java
- com.example.demo.src.domain.match.MatchController
 com/example/demo/src/domain/match/dto/ByNetworkRes.java
  com.example.demo.src.domain.match.dto.ByNetworkRes
+com/example/demo/src/domain/match/MatchController.java
+ com.example.demo.src.domain.match.MatchController
 com/example/demo/src/domain/match/service/MatchService.java
  com.example.demo.src.domain.match.service.MatchService
 com/example/demo/src/domain/match/dao/MatchDao.java
  com.example.demo.src.domain.match.dao.MatchDao
+com/example/demo/src/domain/match/dto/MatchRoomDetailRes.java
+ com.example.demo.src.domain.match.dto.MatchRoomDetailRes
