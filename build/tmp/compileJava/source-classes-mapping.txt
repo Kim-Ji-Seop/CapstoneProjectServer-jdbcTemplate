@@ -22,21 +22,33 @@ com/example/demo/utils/ValidationRegex.java
  com.example.demo.utils.ValidationRegex
 com/example/demo/src/domain/user/dto/PostLoginRes.java
  com.example.demo.src.domain.user.dto.PostLoginRes
-com/example/demo/src/domain/user/service/UserService.java
- com.example.demo.src.domain.user.service.UserService
+com/example/demo/src/domain/user/dto/PostLoginReq.java
+ com.example.demo.src.domain.user.dto.PostLoginReq
 com/example/demo/config/BaseResponseStatus.java
  com.example.demo.config.BaseResponseStatus
 com/example/demo/src/domain/user/dto/User.java
  com.example.demo.src.domain.user.dto.User
-com/example/demo/src/domain/user/UserController.java
- com.example.demo.src.domain.user.UserController
+com/example/demo/config/BaseResponse.java
+ com.example.demo.config.BaseResponse
 com/example/demo/src/domain/user/dao/UserDao.java
  com.example.demo.src.domain.user.dao.UserDao
 com/example/demo/config/BaseException.java
  com.example.demo.config.BaseException
 com/example/demo/utils/JwtService.java
  com.example.demo.utils.JwtService
-com/example/demo/config/BaseResponse.java
- com.example.demo.config.BaseResponse
-com/example/demo/src/domain/user/dto/PostLoginReq.java
- com.example.demo.src.domain.user.dto.PostLoginReq
+com/example/demo/src/domain/user/service/UserService.java
+ com.example.demo.src.domain.user.service.UserService
+com/example/demo/src/domain/match/MatchController.java
+ com.example.demo.src.domain.match.MatchController
+com/example/demo/src/domain/match/dto/ByNetworkRes.java
+ com.example.demo.src.domain.match.dto.ByNetworkRes
+com/example/demo/src/domain/user/UserController.java
+ com.example.demo.src.domain.user.UserController
+com/example/demo/src/domain/match/service/MatchService.java
+ com.example.demo.src.domain.match.service.MatchService
+com/example/demo/src/domain/match/dto/ByLocationRes.java
+ com.example.demo.src.domain.match.dto.ByLocationRes
+com/example/demo/src/domain/match/dao/MatchDao.java
+ com.example.demo.src.domain.match.dao.MatchDao
+com/example/demo/src/domain/match/dto/PossibleMatchesRes.java
+ com.example.demo.src.domain.match.dto.PossibleMatchesRes
