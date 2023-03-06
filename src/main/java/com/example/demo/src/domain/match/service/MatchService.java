@@ -3,6 +3,7 @@ package com.example.demo.src.domain.match.service;
 import com.example.demo.config.BaseException;
 import com.example.demo.src.domain.match.dao.MatchDao;
 import com.example.demo.src.domain.match.dto.ByNetworkRes;
+import com.example.demo.src.domain.match.dto.MatchRecordsRes;
 import com.example.demo.src.domain.match.dto.MatchRoomDetailRes;
 import com.example.demo.src.domain.match.dto.PossibleMatchesRes;
 import com.example.demo.utils.JwtService;
@@ -50,6 +51,15 @@ public class MatchService {
         try{
             return matchDao.matchroomDetail(matchIdx);
         }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<MatchRecordsRes> getMatchRecord(int userIdx) throws BaseException{
+        try{
+            return matchDao.getMatchRecord(userIdx);
+        }catch (Exception exception){
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }

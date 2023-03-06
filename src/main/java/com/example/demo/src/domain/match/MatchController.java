@@ -3,6 +3,7 @@ package com.example.demo.src.domain.match;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.domain.match.dto.ByNetworkRes;
+import com.example.demo.src.domain.match.dto.MatchRecordsRes;
 import com.example.demo.src.domain.match.dto.MatchRoomDetailRes;
 import com.example.demo.src.domain.match.dto.PossibleMatchesRes;
 import com.example.demo.src.domain.match.service.MatchService;
@@ -81,6 +82,23 @@ public class MatchController {
         try {
             MatchRoomDetailRes matchRoomDetailRes = matchService.matchroomDetail(matchIdx);
             return new BaseResponse<>(matchRoomDetailRes);
+        }catch (BaseException baseException){
+            return new BaseResponse<>(baseException.getStatus());
+        }
+    }
+
+    /**
+     * Method: GET
+     * URI: /rooms/records
+     * Description: 사용자의 전적기록 확인
+     *
+     */
+    @ResponseBody
+    @GetMapping("/rooms/records/{userIdx}")
+    public BaseResponse<List<MatchRecordsRes>> getMatchRecord(@PathVariable("userIdx") int userIdx) throws BaseException{
+        try{
+            List<MatchRecordsRes> matchRecordsRes = matchService.getMatchRecord(userIdx);
+            return new BaseResponse<>(matchRecordsRes);
         }catch (BaseException baseException){
             return new BaseResponse<>(baseException.getStatus());
         }

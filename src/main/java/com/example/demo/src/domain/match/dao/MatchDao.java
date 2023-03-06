@@ -1,6 +1,7 @@
 package com.example.demo.src.domain.match.dao;
 
 import com.example.demo.src.domain.match.dto.ByNetworkRes;
+import com.example.demo.src.domain.match.dto.MatchRecordsRes;
 import com.example.demo.src.domain.match.dto.MatchRoomDetailRes;
 import com.example.demo.src.domain.match.dto.PossibleMatchesRes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,5 +101,42 @@ public class MatchDao {
                         rs.getString("location"),
                         rs.getString("place")
                 ),matchIdx);
+    }
+
+    public List<MatchRecordsRes> getMatchRecord(int userIdx){
+        String query = "SELECT (SELECT\n" +
+                "    CASE\n" +
+                "        WHEN\n" +
+                "            instr(date_format(mr.game_time, '%Y-%m-%d %p %h:%i'), 'PM') > 0\n" +
+                "        THEN\n" +
+                "            replace(date_format(mr.game_time, '%Y-%m-%d %p %h:%i'), 'PM', '오후')\n" +
+                "        ELSE\n" +
+                "            replace(date_format(mr.game_time, '%Y-%m-%d %p %h:%i'), 'AM', '오전')\n" +
+                "    END\n" +
+                "    FROM match_room AS mr WHERE h.matchIdx = mr.id) AS game_time,\n" +
+                "    u.nickname, mr.network_type, mr.count,\n" +
+                "    h.id, h.userIdx, h.matchIdx, h.teamIdx, h.settle_type,\n" +
+                "    IF (mr.count = 2, h.total_score, SUM(h.total_score)) AS total_score,\n" +
+                "    h.created, h.updated, h.status\n" +
+                "FROM history AS h\n" +
+                "    LEFT JOIN match_room mr on h.matchIdx = mr.id\n" +
+                "    LEFT JOIN user u on u.id = h.userIdx\n" +
+                "           WHERE h.matchIdx IN(\n" +
+                "                SELECT h.matchIdx FROM history AS h\n" +
+                "                LEFT JOIN\n" +
+                "                    user AS u ON h.userIdx = u.id\n" +
+                "                           WHERE u.id = ?)\n" +
+                "            GROUP BY h.matchIdx, h.teamIdx;";
+
+        return this.jdbcTemplate.query(query,
+                (rs, rowNum) -> new MatchRecordsRes(
+                        rs.getString("game_time"),
+                        rs.getString("nickname"),
+                        rs.getString("network_type"),
+                        rs.getInt("count"),
+                        rs.getInt("teamIdx"),
+                        rs.getString("settle_type"),
+                        rs.getInt("total_score")
+                ), userIdx);
     }
 }
