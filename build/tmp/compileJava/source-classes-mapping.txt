@@ -46,13 +46,17 @@ com/example/demo/src/domain/user/dto/PostLoginRes.java
  com.example.demo.src.domain.user.dto.PostLoginRes
 com/example/demo/src/domain/match/dto/ByNetworkRes.java
  com.example.demo.src.domain.match.dto.ByNetworkRes
-com/example/demo/src/domain/match/dto/MatchRecordsRes.java
- com.example.demo.src.domain.match.dto.MatchRecordsRes
 com/example/demo/config/BaseException.java
  com.example.demo.config.BaseException
 com/example/demo/src/domain/match/MatchController.java
  com.example.demo.src.domain.match.MatchController
+com/example/demo/src/domain/match/dto/MatchRecordsRes.java
+ com.example.demo.src.domain.match.dto.MatchRecordsRes
 com/example/demo/src/domain/match/service/MatchService.java
  com.example.demo.src.domain.match.service.MatchService
+com/example/demo/src/domain/match/dto/PostCreateMatchRoomRes.java
+ com.example.demo.src.domain.match.dto.PostCreateMatchRoomRes
 com/example/demo/src/domain/match/dao/MatchDao.java
  com.example.demo.src.domain.match.dao.MatchDao
+com/example/demo/src/domain/match/dto/PostCreateMatchRoomReq.java
+ com.example.demo.src.domain.match.dto.PostCreateMatchRoomReq

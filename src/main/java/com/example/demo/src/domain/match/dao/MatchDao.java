@@ -1,9 +1,6 @@
 package com.example.demo.src.domain.match.dao;
 
-import com.example.demo.src.domain.match.dto.ByNetworkRes;
-import com.example.demo.src.domain.match.dto.MatchRecordsRes;
-import com.example.demo.src.domain.match.dto.MatchRoomDetailRes;
-import com.example.demo.src.domain.match.dto.PossibleMatchesRes;
+import com.example.demo.src.domain.match.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -138,5 +135,29 @@ public class MatchDao {
                         rs.getString("settle_type"),
                         rs.getInt("total_score")
                 ), userIdx);
+    }
+
+    public PostCreateMatchRoomRes createMatchRoom(PostCreateMatchRoomReq postCreateMatchRoomReq, int userIdx) {
+        String query = "INSERT INTO match_room(title, content, userIdx, game_time, target_score, location, network_type, `count`, place, cost)\n" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        Object[] queryParam = new Object[]{
+                postCreateMatchRoomReq.getTitle() ,
+                postCreateMatchRoomReq.getContent() ,
+                userIdx ,
+                postCreateMatchRoomReq.getDate() ,
+                postCreateMatchRoomReq.getAverage() ,
+                postCreateMatchRoomReq.getLocation() ,
+                postCreateMatchRoomReq.getNetworkType() ,
+                postCreateMatchRoomReq.getNumber() ,
+                postCreateMatchRoomReq.getPlace(),
+                postCreateMatchRoomReq.getCost()};
+
+        this.jdbcTemplate.update(query, queryParam);
+
+        String lastInsertedQ = "select last_insert_id()";
+
+        int newMatchRoomNum = this.jdbcTemplate.queryForObject(lastInsertedQ, int.class);
+        return new PostCreateMatchRoomRes(newMatchRoomNum);
     }
 }

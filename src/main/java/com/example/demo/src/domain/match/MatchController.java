@@ -2,10 +2,7 @@ package com.example.demo.src.domain.match;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.domain.match.dto.ByNetworkRes;
-import com.example.demo.src.domain.match.dto.MatchRecordsRes;
-import com.example.demo.src.domain.match.dto.MatchRoomDetailRes;
-import com.example.demo.src.domain.match.dto.PossibleMatchesRes;
+import com.example.demo.src.domain.match.dto.*;
 import com.example.demo.src.domain.match.service.MatchService;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
@@ -95,7 +92,7 @@ public class MatchController {
      */
     @ResponseBody
     @GetMapping("/rooms/records/{userIdx}")
-    public BaseResponse<List<MatchRecordsRes>> getMatchRecord(@PathVariable("userIdx") int userIdx) throws BaseException{
+    public BaseResponse<List<MatchRecordsRes>> getMatchRecord(@PathVariable("userIdx") int userIdx){
         try{
             List<MatchRecordsRes> matchRecordsRes = matchService.getMatchRecord(userIdx);
             return new BaseResponse<>(matchRecordsRes);
@@ -103,6 +100,20 @@ public class MatchController {
             return new BaseResponse<>(baseException.getStatus());
         }
     }
-
-
+    /**
+     * Method: POST
+     * URI: /rooms
+     * Description: 매칭방 개설하기
+     */
+    @ResponseBody
+    @PostMapping("/rooms")
+    public BaseResponse<PostCreateMatchRoomRes> createMatchRoom(@RequestBody PostCreateMatchRoomReq postCreateMatchRoomReq){
+        try{
+            int userIdx = jwtService.getUserIdx();
+            PostCreateMatchRoomRes postCreateMatchRoomRes = matchService.createMatchRoom(postCreateMatchRoomReq,userIdx);
+            return new BaseResponse<>(postCreateMatchRoomRes);
+        }catch (BaseException baseException){
+            return new BaseResponse<>(baseException.getStatus());
+        }
+    }
 }

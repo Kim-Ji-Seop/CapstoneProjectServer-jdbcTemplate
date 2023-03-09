@@ -2,10 +2,7 @@ package com.example.demo.src.domain.match.service;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.domain.match.dao.MatchDao;
-import com.example.demo.src.domain.match.dto.ByNetworkRes;
-import com.example.demo.src.domain.match.dto.MatchRecordsRes;
-import com.example.demo.src.domain.match.dto.MatchRoomDetailRes;
-import com.example.demo.src.domain.match.dto.PossibleMatchesRes;
+import com.example.demo.src.domain.match.dto.*;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +56,16 @@ public class MatchService {
         try{
             return matchDao.getMatchRecord(userIdx);
         }catch (Exception exception){
-            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public PostCreateMatchRoomRes createMatchRoom(PostCreateMatchRoomReq postCreateMatchRoomReq, int userIdx) throws BaseException{
+        try{
+            // 1. String date -> Timestamp 형식으로 변환 필요
+            // -> postCreateMatchRoomReq.date 를 잘 변형해주자!!
+            return matchDao.createMatchRoom(postCreateMatchRoomReq,userIdx);
+        }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
     }
