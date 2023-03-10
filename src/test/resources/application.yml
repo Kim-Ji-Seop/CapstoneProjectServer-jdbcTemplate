@@ -1,0 +1,16 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: demo
+  datasource:
+    platform: mysql
+    url: jdbc:mysql://capstone-db.crqlyooh7jfa.ap-northeast-2.rds.amazonaws.com/testDB?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: master
+    password: Capstone123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+logging:
+  level:
+    com.example.demo.src: DEBUG

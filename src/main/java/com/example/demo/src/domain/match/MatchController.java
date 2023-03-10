@@ -62,11 +62,13 @@ public class MatchController {
             return new BaseResponse<>(baseException.getStatus());
         }
     }
+
     /**
      * Method : GET
      * URI : /rooms/plans
      * Description : 예정 매치
      */
+
 
     /**
      * Method : GET
@@ -81,6 +83,23 @@ public class MatchController {
             return new BaseResponse<>(matchRoomDetailRes);
         }catch (BaseException baseException){
             return new BaseResponse<>(baseException.getStatus());
+        }
+    }
+
+    /**
+     * Method : GET
+     * URI : /rooms/:matchIdx/test
+     * Description : 매칭방 상세보기 - 테스트용 API
+     * (BaseResponse 형태가 아닌 Dto 형태 그대로 반환 받기 위함)
+     */
+    @ResponseBody
+    @GetMapping("/rooms/{matchIdx}/test")
+    public MatchRoomDetailRes matchroomDetail_test(@PathVariable("matchIdx") int matchIdx){
+        try {
+            MatchRoomDetailRes matchRoomDetailRes = matchService.matchroomDetail(matchIdx);
+            return matchRoomDetailRes;
+        }catch (BaseException baseException){
+            return new MatchRoomDetailRes(null, null, null, null, 0, 0, 0, null, null);
         }
     }
 
@@ -114,6 +133,25 @@ public class MatchController {
             return new BaseResponse<>(postCreateMatchRoomRes);
         }catch (BaseException baseException){
             return new BaseResponse<>(baseException.getStatus());
+        }
+    }
+
+    /**
+     * Method: POST
+     * URI: /rooms/test - 테스트용 API
+     * Description: 매칭방 개설하기
+     * (BaseResponse 형태가 아닌 Dto 형태 그대로 반환 받기 위함)
+     */
+    @ResponseBody
+    @PostMapping("/rooms/test")
+    public PostCreateMatchRoomRes createMatchRoom_test(@RequestBody PostCreateMatchRoomReq postCreateMatchRoomReq){
+        try{
+            int userIdx = jwtService.getUserIdx();
+            PostCreateMatchRoomRes postCreateMatchRoomRes = matchService.createMatchRoom(postCreateMatchRoomReq,userIdx);
+            return postCreateMatchRoomRes;
+        }catch (BaseException baseException){
+            PostCreateMatchRoomRes failed = new PostCreateMatchRoomRes(0);
+            return failed;
         }
     }
 }

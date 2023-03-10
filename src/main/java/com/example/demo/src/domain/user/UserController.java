@@ -70,4 +70,23 @@ public class UserController {
             return new BaseResponse<>((baseException.getStatus()));
         }
     }
+
+    /**
+     * 로그인 API
+     * [POST] /users/login - 테스트용 API
+     * @return BaseResponse<PostLoginRes>
+     * (BaseResponse 형태가 아닌 Dto 형태 그대로 반환 받기 위함)
+     */
+    @ResponseBody
+    @PostMapping("/login/test")
+    public PostLoginRes login_test(@RequestBody PostLoginReq postLoginReq){
+        try {
+            PostLoginRes postLoginRes = userService.login(postLoginReq);
+            return postLoginRes;
+        }catch (BaseException baseException){
+            PostLoginRes failed = new PostLoginRes(null, 0, null, null);
+            return failed;
+        }
+    }
+
 }

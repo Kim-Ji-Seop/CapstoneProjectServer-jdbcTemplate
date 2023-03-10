@@ -149,7 +149,7 @@ public class MatchDao {
                 postCreateMatchRoomReq.getAverage() ,
                 postCreateMatchRoomReq.getLocation() ,
                 postCreateMatchRoomReq.getNetworkType() ,
-                postCreateMatchRoomReq.getNumber() ,
+                postCreateMatchRoomReq.getCount() ,
                 postCreateMatchRoomReq.getPlace(),
                 postCreateMatchRoomReq.getCost()};
 

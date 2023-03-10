@@ -48,10 +48,10 @@ com/example/demo/src/domain/match/dto/ByNetworkRes.java
  com.example.demo.src.domain.match.dto.ByNetworkRes
 com/example/demo/config/BaseException.java
  com.example.demo.config.BaseException
-com/example/demo/src/domain/match/MatchController.java
- com.example.demo.src.domain.match.MatchController
 com/example/demo/src/domain/match/dto/MatchRecordsRes.java
  com.example.demo.src.domain.match.dto.MatchRecordsRes
+com/example/demo/src/domain/match/MatchController.java
+ com.example.demo.src.domain.match.MatchController
 com/example/demo/src/domain/match/service/MatchService.java
  com.example.demo.src.domain.match.service.MatchService
 com/example/demo/src/domain/match/dto/PostCreateMatchRoomRes.java
