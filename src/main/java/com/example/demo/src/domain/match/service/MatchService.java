@@ -62,8 +62,7 @@ public class MatchService {
 
     public PostCreateMatchRoomRes createMatchRoom(PostCreateMatchRoomReq postCreateMatchRoomReq, int userIdx) throws BaseException{
         try{
-            // 1. String date -> Timestamp 형식으로 변환 필요
-            // -> postCreateMatchRoomReq.date 를 잘 변형해주자!!
+
             return matchDao.createMatchRoom(postCreateMatchRoomReq,userIdx);
         }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
