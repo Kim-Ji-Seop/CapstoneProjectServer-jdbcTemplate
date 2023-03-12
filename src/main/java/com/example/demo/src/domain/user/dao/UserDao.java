@@ -35,12 +35,13 @@ public class UserDao {
 
     // 회원가입 -> 마지막 insert PK ID return
     public int signUp(PostSignUpReq postSignUpReq) {
-        String query = "insert into user (uid,password,name,nickname) values (?,?,?,?)";
+        String query = "insert into user (uid,password,name,nickname, devicetoken) values (?,?,?,?,?)";
         Object[] createUserParams = new Object[]{
                 postSignUpReq.getUid(),
                 postSignUpReq.getPassword(),
                 postSignUpReq.getName(),
-                postSignUpReq.getNickName()
+                postSignUpReq.getNickName(),
+                postSignUpReq.getToken()
         };
         this.jdbcTemplate.update(query, createUserParams);
 
