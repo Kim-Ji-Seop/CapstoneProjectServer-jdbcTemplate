@@ -3,6 +3,7 @@ package com.example.demo.src.domain.user.dao;
 import com.example.demo.src.domain.user.dto.PostLoginReq;
 import com.example.demo.src.domain.user.dto.PostSignUpReq;
 import com.example.demo.src.domain.user.dto.User;
+import com.example.demo.src.domain.user.dto.UserSimpleInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -63,5 +64,25 @@ public class UserDao {
                         rs.getString("nickname")
                 ), logInParams// RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
         ); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
+    }
+
+    public UserSimpleInfo userInfo(int userIdx){
+        String query = "select name, nickname from user where id=?";
+
+        return this.jdbcTemplate.queryForObject(query,
+                (rs, rowNum) -> new UserSimpleInfo(
+                        rs.getString("name"),
+                        rs.getString("nickname")
+                ), userIdx);
+    }
+
+
+    public String getTargetFCMtoken(int targetUserIdx) {
+        String query = "select devicetoken from user where id =?";
+
+        return this.jdbcTemplate.queryForObject(query,
+                (rs, rowNum) -> new String(
+                        rs.getString("devicetoken")
+                ), targetUserIdx);
     }
 }
