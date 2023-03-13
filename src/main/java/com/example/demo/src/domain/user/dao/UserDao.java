@@ -5,6 +5,7 @@ import com.example.demo.src.domain.user.dto.PostSignUpReq;
 import com.example.demo.src.domain.user.dto.User;
 import com.example.demo.src.domain.user.dto.UserSimpleInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -67,7 +68,7 @@ public class UserDao {
     }
 
     public UserSimpleInfo userInfo(int userIdx){
-        String query = "select name, nickname from user where id=?";
+        String query = "select `name`, nickname from user where id=?";
 
         return this.jdbcTemplate.queryForObject(query,
                 (rs, rowNum) -> new UserSimpleInfo(
@@ -80,9 +81,19 @@ public class UserDao {
     public String getTargetFCMtoken(int targetUserIdx) {
         String query = "select devicetoken from user where id =?";
 
-        return this.jdbcTemplate.queryForObject(query,
-                (rs, rowNum) -> new String(
-                        rs.getString("devicetoken")
-                ), targetUserIdx);
+//        return this.jdbcTemplate.queryForObject(query,
+//                (rs, rowNum) -> (
+//                        rs.getString("devicetoken")
+//                ), targetUserIdx);
+        try {
+            return this.jdbcTemplate.queryForObject(query,
+                    (rs, rowNum) -> (
+                            rs.getString("devicetoken")
+                    ), targetUserIdx);
+        } catch (EmptyResultDataAccessException e) {
+            System.out.println(e);
+
+        }
+        return null;
     }
 }

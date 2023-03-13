@@ -46,7 +46,7 @@ public class PushService {
 
         // 2. 신청 대상 매칭 생성자 유저 정보 (이름, 닉네임, FCM 토큰)
         int targetUserIdx = matchJoinPushReq.getMatchOwnerUserIdx();
-        UserSimpleInfo ownerUser = userDao.userInfo(targetUserIdx);
+        //UserSimpleInfo ownerUser = userDao.userInfo(targetUserIdx);
         String targetFcmToken = userDao.getTargetFCMtoken(targetUserIdx);
 
         // 3. 매칭방 정보

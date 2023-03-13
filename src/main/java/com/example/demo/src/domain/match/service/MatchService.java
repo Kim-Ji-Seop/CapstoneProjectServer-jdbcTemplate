@@ -34,7 +34,7 @@ public class MatchService {
 
     public List<ByNetworkRes> getMatchRoomsByNetwork(String network) throws BaseException {
         try{
-            if(network.equals("온라인")) {
+            if(network.equals("ONLINE")) {
                 return matchDao.getMatchRoomsOnline(network);
             }else{
                 return matchDao.getMatchRoomsOffline(network);

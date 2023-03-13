@@ -36,13 +36,14 @@ public class MatchDao {
                 "        else\n" +
                 "            replace(date_format(game_time, '%Y-%m-%d %p %h:%i'), 'AM', '오전')\n" +
                 "    end as game_time,\n" +
-                "    target_score\n" +
+                "    target_score,id\n" +
                 "from match_room\n" +
                 "where network_type = ?";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new ByNetworkRes(
                         rs.getString("game_time"),
-                        rs.getInt("target_score")
+                        rs.getInt("target_score"),
+                        rs.getInt("id")
                 ),network);
     }
 
@@ -59,7 +60,7 @@ public class MatchDao {
                 "            replace(date_format(game_time, '%Y-%m-%d %p %h:%i'), 'AM', '오전')\n" +
                 "    end as game_time,\n" +
                 "    place,\n" +
-                "    target_score\n" +
+                "    target_score,id\n" +
                 "from match_room\n" +
                 "where network_type = ?";
         return this.jdbcTemplate.query(query,
@@ -67,7 +68,8 @@ public class MatchDao {
                         rs.getString("game_time"),
                         rs.getInt("target_score"),
                         rs.getString("place"),
-                        rs.getInt("count")
+                        rs.getInt("count"),
+                        rs.getInt("id")
                 ),network);
     }
 

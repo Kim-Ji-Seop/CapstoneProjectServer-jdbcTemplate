@@ -39,7 +39,7 @@ public class PushController {
     @RequestMapping("/send")
     public void send(@RequestBody MatchJoinPushReq matchJoinPushReq) throws BaseException {
        //int userIdx = jwtService.getUserIdx();
-       int userIdx = 14; // 테스트용 jwt ID 가정
+       int userIdx = 17; // 테스트용 jwt ID 가정
        pushService.send(userIdx, matchJoinPushReq);
 
     }
