@@ -99,7 +99,7 @@ public class MatchController {
             MatchRoomDetailRes matchRoomDetailRes = matchService.matchroomDetail(matchIdx);
             return matchRoomDetailRes;
         }catch (BaseException baseException){
-            return new MatchRoomDetailRes(null, null, null, null, 0, 0, 0, null, null);
+            return new MatchRoomDetailRes(null, null, null, null, 0, 0, 0, null, null, 0);
         }
     }
 

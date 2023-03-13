@@ -84,7 +84,7 @@ public class MatchDao {
                 "            replace(date_format(mr.game_time, '%Y-%m-%d %p %h:%i'), 'AM', '오전')\n" +
                 "    end as game_time\n" +
                 "     ,u.nickname,mr.title, mr.content,mr.`count`,mr.target_score,mr.cost\n" +
-                "     ,mr.location,mr.place\n" +
+                "     ,mr.location,mr.place, u.id\n" +
                 "from match_room mr\n" +
                 "join user u on u.id = mr.userIdx\n" +
                 "where mr.id = ?";
@@ -98,7 +98,8 @@ public class MatchDao {
                         rs.getInt("target_score"),
                         rs.getInt("cost"),
                         rs.getString("location"),
-                        rs.getString("place")
+                        rs.getString("place"),
+                        rs.getInt("id")
                 ),matchIdx);
     }
 

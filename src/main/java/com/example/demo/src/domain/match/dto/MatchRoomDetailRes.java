@@ -19,4 +19,5 @@ public class MatchRoomDetailRes {
     private int cost;
     private String location;
     private String place;
+    private int matchOwnerUserIdx;
 }
