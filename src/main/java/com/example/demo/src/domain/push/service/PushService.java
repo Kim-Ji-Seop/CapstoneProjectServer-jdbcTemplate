@@ -4,9 +4,8 @@ import com.example.demo.src.domain.match.dao.MatchDao;
 import com.example.demo.src.domain.match.dto.MatchRoomDetailRes;
 import com.example.demo.src.domain.push.dao.PushDao;
 import com.example.demo.src.domain.push.dto.MatchJoinPushReq;
-import com.example.demo.src.domain.push.dto.MatchJoinPushRes;
 import com.example.demo.src.domain.user.dao.UserDao;
-import com.example.demo.src.domain.user.dto.UserSimpleInfo;
+import com.example.demo.src.domain.user.dto.UserNameNnickName;
 import com.example.demo.utils.JwtService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import okhttp3.*;
@@ -42,7 +41,7 @@ public class PushService {
 
     public void send(int userIdx, MatchJoinPushReq matchJoinPushReq){
         // 1. 매칭 참가 신청 유저 정보 (이름, 닉네임)
-        UserSimpleInfo joinUser = userDao.userInfo(userIdx);
+        UserNameNnickName joinUser = userDao.userInfo(userIdx);
 
         // 2. 신청 대상 매칭 생성자 유저 정보 (이름, 닉네임, FCM 토큰)
         int targetUserIdx = matchJoinPushReq.getMatchOwnerUserIdx();

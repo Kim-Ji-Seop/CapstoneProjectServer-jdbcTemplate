@@ -105,4 +105,13 @@ public class UserService {
             throw new BaseException(FAILED_TO_LOGIN); // 3014 : 없는 아이디거나 비밀번호가 틀렸습니다.
         }
     }
+
+    public UserSimpleInfo getMainViewUserInfo(int userIdx) throws BaseException {
+        try {
+            UserSimpleInfo userSimpleInfo = userDao.getMainViewUserInfo(userIdx);
+            return userSimpleInfo;
+        }catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

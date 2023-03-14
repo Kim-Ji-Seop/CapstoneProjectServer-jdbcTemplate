@@ -1,9 +1,6 @@
 package com.example.demo.src.domain.user.dao;
 
-import com.example.demo.src.domain.user.dto.PostLoginReq;
-import com.example.demo.src.domain.user.dto.PostSignUpReq;
-import com.example.demo.src.domain.user.dto.User;
-import com.example.demo.src.domain.user.dto.UserSimpleInfo;
+import com.example.demo.src.domain.user.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,6 +11,7 @@ import javax.sql.DataSource;
 @Repository
 public class UserDao {
     private JdbcTemplate jdbcTemplate;
+
 
     @Autowired
     public void setDataSource(DataSource dataSource){
@@ -67,11 +65,11 @@ public class UserDao {
         ); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 
-    public UserSimpleInfo userInfo(int userIdx){
+    public UserNameNnickName userInfo(int userIdx){
         String query = "select `name`, nickname from user where id=?";
 
         return this.jdbcTemplate.queryForObject(query,
-                (rs, rowNum) -> new UserSimpleInfo(
+                (rs, rowNum) -> new UserNameNnickName(
                         rs.getString("name"),
                         rs.getString("nickname")
                 ), userIdx);
@@ -95,5 +93,30 @@ public class UserDao {
 
         }
         return null;
+    }
+
+    public UserSimpleInfo getMainViewUserInfo(int userIdx) {
+        String query = "SELECT u.name, u.nickname,\n" +
+                "       ROUND(AVG(h.total_score)) as average,\n" +
+                "       win_count, lose_count,\n" +
+                "       ROUND(h.win_count / h.tenofN * 100) as win_late\n" +
+                "FROM (SELECT COUNT(userIdx) as tenofN,\n" +
+                "      userIdx, total_score,\n" +
+                "      COUNT(case when settle_type = 'WIN' then 1 end) as win_count,\n" +
+                "      COUNT(case when settle_type = 'LOSE' then 1 end) as lose_count\n" +
+                "        FROM history\n" +
+                "      WHERE userIdx = ?\n" +
+                "      ORDER BY updated DESC LIMIT 10 ) as h\n" +
+                "LEFT JOIN user u on u.id = h.userIdx";
+
+        return this.jdbcTemplate.queryForObject(query,
+                (rs, rowNum) -> new UserSimpleInfo(
+                        rs.getString("name"),
+                        rs.getString("nickname"),
+                        rs.getInt("average"),
+                        rs.getInt("win_count"),
+                        rs.getInt("lose_count"),
+                        rs.getInt("win_late")
+                ), userIdx);
     }
 }

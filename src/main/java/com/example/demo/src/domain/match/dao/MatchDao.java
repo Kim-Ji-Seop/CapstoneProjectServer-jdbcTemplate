@@ -103,6 +103,7 @@ public class MatchDao {
                 ),matchIdx);
     }
 
+    // 매칭 전적을 확인하기 위함
     public List<MatchRecordsRes> getMatchRecord(int userIdx){
         String query = "SELECT (SELECT\n" +
                 "    CASE\n" +
@@ -115,7 +116,8 @@ public class MatchDao {
                 "    END\n" +
                 "    FROM match_room AS mr WHERE h.matchIdx = mr.id) AS game_time,\n" +
                 "    u.nickname, mr.network_type, mr.count,\n" +
-                "    h.id, h.userIdx, h.matchIdx, h.teamIdx, h.settle_type,\n" +
+                "    h.id, h.userIdx, h.matchIdx, h.teamIdx,\n" +
+                "    h.settle_type,\n" +
                 "    IF (mr.count = 2, h.total_score, SUM(h.total_score)) AS total_score,\n" +
                 "    h.created, h.updated, h.status\n" +
                 "FROM history AS h\n" +
@@ -126,7 +128,8 @@ public class MatchDao {
                 "                LEFT JOIN\n" +
                 "                    user AS u ON h.userIdx = u.id\n" +
                 "                           WHERE u.id = ?)\n" +
-                "            GROUP BY h.matchIdx, h.teamIdx;";
+                "            GROUP BY h.matchIdx, h.teamIdx\n" +
+                "            ORDER BY h.matchidx;";
 
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new MatchRecordsRes(
@@ -134,11 +137,17 @@ public class MatchDao {
                         rs.getString("nickname"),
                         rs.getString("network_type"),
                         rs.getInt("count"),
+                        rs.getInt("userIdx"),
+                        rs.getInt("matchIdx"),
                         rs.getInt("teamIdx"),
+                        null,
                         rs.getString("settle_type"),
                         rs.getInt("total_score")
                 ), userIdx);
     }
+
+    // user simple-info 에서 사용되는 개인 에버리지 기록 확인용
+
 
     public PostCreateMatchRoomRes createMatchRoom(PostCreateMatchRoomReq postCreateMatchRoomReq, int userIdx) {
         String query = "INSERT INTO match_room(title, content, userIdx, game_time, target_score, location, network_type, `count`, place, cost)\n" +

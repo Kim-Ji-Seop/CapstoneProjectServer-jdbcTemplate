@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
@@ -52,12 +53,38 @@ public class MatchService {
         }
     }
 
-    public List<MatchRecordsRes> getMatchRecord(int userIdx) throws BaseException{
+    public List<HAmatchRecordsRes> getMatchRecord(int userIdx) throws BaseException{
+        List<HAmatchRecordsRes> hAmatchRecordsRes = new ArrayList<>();
+        List<MatchRecordsRes> matchRecordsRes = matchDao.getMatchRecord(userIdx);
         try{
-            return matchDao.getMatchRecord(userIdx);
+            for (int i =0; i<matchRecordsRes.size(); i+=2 ){
+                List<MatchRecordsRes> homeNaway = new ArrayList<>();
+                MatchRecordsRes result1 = matchRecordsRes.get(i);
+                MatchRecordsRes result2 = matchRecordsRes.get(i+1);
+                int matchIdx1 = result1.getMatchIdx();
+                int matchIdx2 = result2.getMatchIdx();
+
+                if (matchIdx1 == matchIdx2) { // 매칭방 번호가 같을때
+                    if(result2.getUserIdx() == userIdx){
+                        MatchRecordsRes temp = result1;
+                        result1 = result2;
+                        result2 = temp;
+                    }
+                    result1.setHomeOrAway("HOME");
+                    result2.setHomeOrAway("AWAY");
+                    homeNaway.add(result1);
+                    homeNaway.add(result2);
+                }
+                else{
+                    throw new BaseException(DATABASE_ERROR);
+                }
+                hAmatchRecordsRes.add(new HAmatchRecordsRes(matchIdx1, homeNaway));
+
+            }
         }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
+        return hAmatchRecordsRes;
     }
 
     public PostCreateMatchRoomRes createMatchRoom(PostCreateMatchRoomReq postCreateMatchRoomReq, int userIdx) throws BaseException{

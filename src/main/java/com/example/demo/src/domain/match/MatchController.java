@@ -103,22 +103,7 @@ public class MatchController {
         }
     }
 
-    /**
-     * Method: GET
-     * URI: /rooms/records
-     * Description: 사용자의 전적기록 확인
-     *
-     */
-    @ResponseBody
-    @GetMapping("/rooms/records/{userIdx}")
-    public BaseResponse<List<MatchRecordsRes>> getMatchRecord(@PathVariable("userIdx") int userIdx){
-        try{
-            List<MatchRecordsRes> matchRecordsRes = matchService.getMatchRecord(userIdx);
-            return new BaseResponse<>(matchRecordsRes);
-        }catch (BaseException baseException){
-            return new BaseResponse<>(baseException.getStatus());
-        }
-    }
+
     /**
      * Method: POST
      * URI: /rooms
