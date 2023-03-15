@@ -93,6 +93,7 @@ public class PushService {
 
             System.out.println("### response str : " + response.toString());
             System.out.println("### response result : " + response.isSuccessful());
+            response.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
