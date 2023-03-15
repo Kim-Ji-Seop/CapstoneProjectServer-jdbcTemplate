@@ -1,9 +1,12 @@
 package com.example.demo.src.domain.push.service;
 
+import com.example.demo.config.BaseException;
+import com.example.demo.config.BaseResponseStatus;
 import com.example.demo.src.domain.match.dao.MatchDao;
 import com.example.demo.src.domain.match.dto.MatchRoomDetailRes;
 import com.example.demo.src.domain.push.dao.PushDao;
 import com.example.demo.src.domain.push.dto.MatchJoinPushReq;
+import com.example.demo.src.domain.push.dto.MatchJoinPushRes;
 import com.example.demo.src.domain.user.dao.UserDao;
 import com.example.demo.src.domain.user.dto.UserNameNnickName;
 import com.example.demo.utils.JwtService;
@@ -13,6 +16,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -39,23 +43,34 @@ public class PushService {
 
     private String FCM_API_URL = "https://fcm.googleapis.com/v1/projects/capstone-push-51e21/messages:send";
 
-    public void send(int userIdx, MatchJoinPushReq matchJoinPushReq){
+    @Transactional
+    public MatchJoinPushRes joinPush(int userIdx, MatchJoinPushReq matchJoinPushReq) throws BaseException {
+        // userIdx -> 참가자
+        // targetUserIdx -> 방장
+        // matchIdx -> 매칭방 번호
+        // push_title
+        // push_content
+
         // 1. 매칭 참가 신청 유저 정보 (이름, 닉네임)
         UserNameNnickName joinUser = userDao.userInfo(userIdx);
 
         // 2. 신청 대상 매칭 생성자 유저 정보 (이름, 닉네임, FCM 토큰)
         int targetUserIdx = matchJoinPushReq.getMatchOwnerUserIdx();
-        //UserSimpleInfo ownerUser = userDao.userInfo(targetUserIdx);
+        //UserNameNnickName ownerUser = userDao.userInfo(targetUserIdx);
         String targetFcmToken = userDao.getTargetFCMtoken(targetUserIdx);
 
         // 3. 매칭방 정보
         int matchIdx = matchJoinPushReq.getMatchIdx();
         MatchRoomDetailRes roomDetailRes = matchDao.matchroomDetail(matchIdx);
 
+
         // 4. 푸쉬알림 전송 메세지 생성
+        String push_title = roomDetailRes.getTitle() + " 경기";
+        String push_content = "<" + roomDetailRes.getDate() + ">\n" + joinUser.getName() + "(" +  joinUser.getNickname() +")" + "님이 참여 요청을 보냈습니다.";
+
         JSONObject jsonValue = new JSONObject();
-        jsonValue.put("title", roomDetailRes.getTitle() + " 경기");
-        jsonValue.put("content", joinUser.getName() + "(" +  joinUser.getNickname() +")" + "님이 참여 요청을 보냈습니다.");
+        jsonValue.put("title", push_title);
+        jsonValue.put("content", push_content);
 
         JSONObject jsonData = new JSONObject();
         jsonData.put("token", targetFcmToken);
@@ -80,6 +95,16 @@ public class PushService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // dao 동작 수행
+        try {
+            int pushIdx = pushDao.sendPush(targetUserIdx, userIdx, matchIdx, push_title, push_content);
+            return new MatchJoinPushRes(pushIdx);
+        }catch (Exception exception){
+            System.out.println(exception);
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+
     }
 
     private static String getAccessToken() throws IOException {

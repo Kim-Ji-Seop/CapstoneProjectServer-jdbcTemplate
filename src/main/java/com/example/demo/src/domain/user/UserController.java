@@ -136,4 +136,15 @@ public class UserController {
         }
     }
 
+    @ResponseBody
+    @GetMapping("/pushes")
+    public BaseResponse<List<GetPushListRes>> getPushRecord() throws BaseException{
+       try{
+           int userIdx = jwtService.getUserIdx();
+           return new BaseResponse<>(userService.getPushRecord(userIdx));
+       }catch (BaseException baseException){
+           return new BaseResponse<>(baseException.getStatus());
+        }
+    }
+
 }

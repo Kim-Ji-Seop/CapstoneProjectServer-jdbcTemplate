@@ -10,7 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MatchJoinPushReq {
-    //String jwt; // jwt 가정 한다고 임의해놈
-    int matchOwnerUserIdx;
-    int matchIdx;
+    int matchOwnerUserIdx; // 매칭방 생성 유저 Id
+    int matchIdx; // 매칭방 Id
 }

@@ -58,6 +58,8 @@ public class MatchService {
         List<MatchRecordsRes> matchRecordsRes = matchDao.getMatchRecord(userIdx);
         try{
             for (int i =0; i<matchRecordsRes.size(); i+=2 ){
+                // 이렇게 2개씩 묶을 수 있는 이유는 DB에서 ORDER BY 로 매칭방 번호순으로 쿼리를 뱉어냈기 때문
+                // 2개의 연속된 매칭방 번호를 붙여서 리스트로 반환 받았음.
                 List<MatchRecordsRes> homeNaway = new ArrayList<>();
                 MatchRecordsRes result1 = matchRecordsRes.get(i);
                 MatchRecordsRes result2 = matchRecordsRes.get(i+1);

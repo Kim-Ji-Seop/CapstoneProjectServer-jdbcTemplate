@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Repository
 public class UserDao {
@@ -118,5 +119,22 @@ public class UserDao {
                         rs.getInt("lose_count"),
                         rs.getInt("win_late")
                 ), userIdx);
+    }
+
+    public List<GetPushListRes> getPushRecord(int userIdx) {
+        String query = "SELECT * FROM push p\n" +
+                "WHERE p.owner_userIdx = ? or p.join_userIdx = ?";
+        Object[] pushRecordParams = new Object[]{userIdx, userIdx};
+        return this.jdbcTemplate.query(query,
+                (rs, rowNum) -> new GetPushListRes(
+                        rs.getInt("owner_userIdx"),
+                        rs.getInt("join_userIdx"),
+                        rs.getInt("matchIdx"),
+                        rs.getString("push_title"),
+                        rs.getString("push_content"),
+                        rs.getString("created"),
+                        rs.getString("updated"),
+                        rs.getString("status")
+                ), pushRecordParams);
     }
 }

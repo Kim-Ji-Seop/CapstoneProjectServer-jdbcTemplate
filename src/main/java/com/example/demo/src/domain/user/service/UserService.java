@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.example.demo.config.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.*;
 
@@ -110,6 +112,14 @@ public class UserService {
         try {
             UserSimpleInfo userSimpleInfo = userDao.getMainViewUserInfo(userIdx);
             return userSimpleInfo;
+        }catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetPushListRes> getPushRecord(int userIdx) throws BaseException{
+        try{
+            return userDao.getPushRecord(userIdx);
         }catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

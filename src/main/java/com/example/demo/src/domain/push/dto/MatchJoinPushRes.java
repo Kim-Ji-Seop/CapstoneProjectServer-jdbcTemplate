@@ -10,5 +10,5 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MatchJoinPushRes {
-    int a;
+    int pushIdx;
 }
