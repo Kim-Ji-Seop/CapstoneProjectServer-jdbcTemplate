@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 
 @Service
@@ -109,8 +110,10 @@ public class PushService {
 
     private static String getAccessToken() throws IOException {
         ClassPathResource resource = new ClassPathResource("keystore/service-account.json");
+        InputStream instream = resource.getInputStream();
+
         GoogleCredential googleCredential = GoogleCredential
-                .fromStream(new FileInputStream(resource.getFile()))
+                .fromStream(instream) //new FileInputStream(resource.getFile())
                 .createScoped(Arrays.asList(SCOPES));
         googleCredential.refreshToken();
         return googleCredential.getAccessToken();
