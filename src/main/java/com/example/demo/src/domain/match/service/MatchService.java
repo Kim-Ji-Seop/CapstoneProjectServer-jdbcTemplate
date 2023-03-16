@@ -1,6 +1,7 @@
 package com.example.demo.src.domain.match.service;
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.domain.history.dao.HistoryDao;
 import com.example.demo.src.domain.match.dao.MatchDao;
 import com.example.demo.src.domain.match.dto.*;
 import com.example.demo.utils.JwtService;
@@ -18,10 +19,12 @@ public class MatchService {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final MatchDao matchDao;
+    private final HistoryDao historyDao;
     private final JwtService jwtService;
 
-    public MatchService(MatchDao matchDao, JwtService jwtService) {
+    public MatchService(MatchDao matchDao, HistoryDao historyDao, JwtService jwtService) {
         this.matchDao = matchDao;
+        this.historyDao = historyDao;
         this.jwtService = jwtService;
     }
 
@@ -91,8 +94,13 @@ public class MatchService {
 
     public PostCreateMatchRoomRes createMatchRoom(PostCreateMatchRoomReq postCreateMatchRoomReq, int userIdx) throws BaseException{
         try{
+            // 1) 매칭방 생성
+            PostCreateMatchRoomRes postCreateMatchRoomRes= matchDao.createMatchRoom(postCreateMatchRoomReq,userIdx);
 
-            return matchDao.createMatchRoom(postCreateMatchRoomReq,userIdx);
+            // 2) 매칭방 생성자 플레이어의 참여 목록을 유지하기 위해 history 테이블에 명단식으로 우선 저장
+            historyDao.createMatchRoomNewPlayer(userIdx, postCreateMatchRoomRes.getMatchIdx(), 1);
+
+            return postCreateMatchRoomRes;
         }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }

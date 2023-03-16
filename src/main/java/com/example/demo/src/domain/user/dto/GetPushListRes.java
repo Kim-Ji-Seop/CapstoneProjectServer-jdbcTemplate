@@ -10,6 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetPushListRes {
+    private int pushIdx;
+    private String profileImg_url;
     private int owner_userIdx;
     private int join_userIdx;
     private int matchIdx;
@@ -17,5 +19,6 @@ public class GetPushListRes {
     private String push_content;
     private String created;
     private String updated;
+    private String onlydate;
     private String status;
 }

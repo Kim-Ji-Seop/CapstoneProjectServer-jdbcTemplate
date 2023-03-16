@@ -1,5 +1,6 @@
 package com.example.demo.src.domain.match.dao;
 
+import com.example.demo.src.domain.history.dao.HistoryDao;
 import com.example.demo.src.domain.match.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,7 +12,7 @@ import java.util.List;
 @Repository
 public class MatchDao {
     private JdbcTemplate jdbcTemplate;
-
+    private HistoryDao historyDao;
     @Autowired
     public void setDataSource(DataSource dataSource){
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -150,10 +151,11 @@ public class MatchDao {
 
 
     public PostCreateMatchRoomRes createMatchRoom(PostCreateMatchRoomReq postCreateMatchRoomReq, int userIdx) {
-        String query = "INSERT INTO match_room(title, content, userIdx, game_time, target_score, location, network_type, `count`, place, cost)\n" +
+        // 1) 매칭방 생성
+        String createMatchRoomQuery = "INSERT INTO match_room(title, content, userIdx, game_time, target_score, location, network_type, `count`, place, cost)\n" +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        Object[] queryParam = new Object[]{
+        Object[] createMatchRoomParam = new Object[]{
                 postCreateMatchRoomReq.getTitle() ,
                 postCreateMatchRoomReq.getContent() ,
                 userIdx ,
@@ -165,11 +167,23 @@ public class MatchDao {
                 postCreateMatchRoomReq.getPlace(),
                 postCreateMatchRoomReq.getCost()};
 
-        this.jdbcTemplate.update(query, queryParam);
+        this.jdbcTemplate.update(createMatchRoomQuery, createMatchRoomParam);
 
         String lastInsertedQ = "select last_insert_id()";
-
         int newMatchRoomNum = this.jdbcTemplate.queryForObject(lastInsertedQ, int.class);
-        return new PostCreateMatchRoomRes(newMatchRoomNum);
+
+        // 2) 반환 완료
+       return new PostCreateMatchRoomRes(newMatchRoomNum);
+    }
+
+    public int MatchRoomJoinedUserCount(int matchIdx){
+        String query = "SELECT COUNT(matchIdx) as currentJoinUserCount \n" +
+                "FROM history\n" +
+                "WHERE matchIdx = ?";
+
+        return this.jdbcTemplate.queryForObject(query,
+                (rs, rowNum) -> new Integer(
+                        rs.getInt("currentJoinUsercount")
+                ), matchIdx);
     }
 }

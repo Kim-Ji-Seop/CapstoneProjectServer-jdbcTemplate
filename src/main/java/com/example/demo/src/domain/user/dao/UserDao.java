@@ -122,11 +122,19 @@ public class UserDao {
     }
 
     public List<GetPushListRes> getPushRecord(int userIdx) {
-        String query = "SELECT * FROM push p\n" +
-                "WHERE p.owner_userIdx = ? or p.join_userIdx = ?";
+        String query = "SELECT id, owner_userIdx, join_userIdx, matchIdx, " +
+                "push_title, push_content, " +
+                "created, updated," +
+                "DATE_FORMAT(updated, '%Y-%m-%d') as onlydate, " +
+                "status " +
+                "FROM push p\n" +
+                "WHERE p.owner_userIdx = ? or p.join_userIdx = ?\n" +
+                "ORDER BY updated DESC";
         Object[] pushRecordParams = new Object[]{userIdx, userIdx};
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new GetPushListRes(
+                        rs.getInt("id"),
+                        null,
                         rs.getInt("owner_userIdx"),
                         rs.getInt("join_userIdx"),
                         rs.getInt("matchIdx"),
@@ -134,7 +142,17 @@ public class UserDao {
                         rs.getString("push_content"),
                         rs.getString("created"),
                         rs.getString("updated"),
+                        rs.getString("onlydate"),
                         rs.getString("status")
                 ), pushRecordParams);
+    }
+
+    public GetUserProfileImgRes getUserProfileImg(int userIdx){
+        String query = "SELECT id, profile_imgurl from user where id = ?";
+        return this.jdbcTemplate.queryForObject(query,
+                (rs, rowNum) -> new GetUserProfileImgRes(
+                        rs.getInt("id"),
+                        rs.getString("profile_imgurl"))
+        , userIdx);
     }
 }

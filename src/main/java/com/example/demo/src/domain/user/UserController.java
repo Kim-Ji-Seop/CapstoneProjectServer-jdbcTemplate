@@ -138,7 +138,7 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/pushes")
-    public BaseResponse<List<GetPushListRes>> getPushRecord() throws BaseException{
+    public BaseResponse<List<GetPushListResByDateArr>> getPushRecord() throws BaseException{
        try{
            int userIdx = jwtService.getUserIdx();
            return new BaseResponse<>(userService.getPushRecord(userIdx));

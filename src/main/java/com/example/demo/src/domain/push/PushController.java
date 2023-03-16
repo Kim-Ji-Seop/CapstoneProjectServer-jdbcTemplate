@@ -2,6 +2,8 @@ package com.example.demo.src.domain.push;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+import com.example.demo.src.domain.push.dto.JoinAcceptOrNotReq;
+import com.example.demo.src.domain.push.dto.JoinAcceptOrNotRes;
 import com.example.demo.src.domain.push.dto.MatchJoinPushReq;
 import com.example.demo.src.domain.push.dto.MatchJoinPushRes;
 import com.example.demo.src.domain.push.service.PushService;
@@ -26,11 +28,11 @@ public class PushController {
 
     /**
      * 매칭방 참여 신청 API
-     * [POST] 서비스단에서 포스트 /push/send
+     * [POST] 서비스단에서 포스트 /push/
      * @return
      */
     @RequestMapping("")
-    public BaseResponse<MatchJoinPushRes> send(@RequestBody MatchJoinPushReq matchJoinPushReq) throws BaseException {
+    public BaseResponse<MatchJoinPushRes> joinPush(@RequestBody MatchJoinPushReq matchJoinPushReq) throws BaseException {
         int userIdx = jwtService.getUserIdx();
         //int userIdx = 17; // 테스트용 jwt ID 가정
         try{
@@ -42,8 +44,16 @@ public class PushController {
 
     }
 
-    /*@RequestMapping("/permission")
-    public BaseResponse<>*/
+    @RequestMapping("/permission")
+    public BaseResponse<JoinAcceptOrNotRes> ownerAccepted(@RequestBody JoinAcceptOrNotReq joinAcceptOrNotReq) throws BaseException{
+        int userIdx = jwtService.getUserIdx();
+        try{
+            JoinAcceptOrNotRes joinAcceptOrNotRes = pushService.ownerAccepted(userIdx, joinAcceptOrNotReq);
+            return new BaseResponse<>(joinAcceptOrNotRes);
+        }catch (BaseException baseException){
+            return new BaseResponse<>(baseException.getStatus());
+        }
+    }
 
 
 }

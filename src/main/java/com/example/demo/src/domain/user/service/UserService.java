@@ -12,6 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
@@ -117,10 +121,45 @@ public class UserService {
         }
     }
 
-    public List<GetPushListRes> getPushRecord(int userIdx) throws BaseException{
+    public List<GetPushListResByDateArr> getPushRecord(int userIdx) throws BaseException{
         try{
-            return userDao.getPushRecord(userIdx);
+            List<GetPushListRes> pushList =  userDao.getPushRecord(userIdx);
+            HashMap<String, List> pushList_hashByDate = new HashMap<>(); // 날짜별 리스트
+
+            List<GetPushListRes> pushList_byDate;
+            String parsingDate;
+
+            for (GetPushListRes push : pushList){
+                parsingDate = push.getOnlydate();
+                if (!pushList_hashByDate.containsKey(parsingDate)){
+                    pushList_hashByDate.put(parsingDate, new ArrayList<>());
+                }
+
+                GetUserProfileImgRes userProfileImgRes;
+                if(push.getOwner_userIdx() == userIdx){
+                    userProfileImgRes = userDao.getUserProfileImg(push.getJoin_userIdx());
+                }
+                else if(push.getJoin_userIdx() == userIdx){
+                    userProfileImgRes = userDao.getUserProfileImg(push.getOwner_userIdx());
+                }
+                else{
+                    throw new BaseException(DATABASE_ERROR);
+                }
+                push.setProfileImg_url(userProfileImgRes.getUserProfileImgUrl());
+
+                if (pushList_hashByDate.containsKey(parsingDate)){
+                    pushList_hashByDate.get(parsingDate).add(push);
+                }
+            }
+
+            List<GetPushListResByDateArr> pushListRes = new ArrayList<>();
+            for (String key: pushList_hashByDate.keySet()){
+                pushListRes.add(new GetPushListResByDateArr(key, pushList_hashByDate.get(key)));
+            }
+            return pushListRes;
+
         }catch (Exception exception) {
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
