@@ -12,6 +12,7 @@ import lombok.Setter;
 public class GetPushListRes {
     private int pushIdx;
     private String profileImg_url;
+    private String opponentNick;
     private int owner_userIdx;
     private int join_userIdx;
     private int matchIdx;

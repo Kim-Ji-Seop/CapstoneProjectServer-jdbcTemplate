@@ -138,24 +138,30 @@ public class UserService {
                     pushList_hashByDate.put(parsingDate, new ArrayList<>());
                 }
 
-                // 2-2) 유저 프로필 이미지 링크 값 가져오기
+                // 2-2) 유저 프로필 이미지 링크, 유저 닉네임 값 가져오기
                 GetUserProfileImgRes userProfileImgRes;
+                UserNameNnickName userNameNnickName;
                 if(push.getOwner_userIdx() == userIdx){
                     userProfileImgRes = userDao.getUserProfileImg(push.getJoin_userIdx());
+                    userNameNnickName = userDao.userInfo(push.getJoin_userIdx());
                 }
                 else if(push.getJoin_userIdx() == userIdx){
                     userProfileImgRes = userDao.getUserProfileImg(push.getOwner_userIdx());
+                    userNameNnickName = userDao.userInfo(push.getOwner_userIdx());
                 }
                 else{
                     throw new BaseException(DATABASE_ERROR);
                 }
                 push.setProfileImg_url(userProfileImgRes.getUserProfileImgUrl());
+                push.setOpponentNick(userNameNnickName.getNickname());
 
+                // 2-3) 날짜 키에 리스트 해당 푸쉬 정보를 추가하기.
                 if (pushList_hashByDate.containsKey(parsingDate)){
                     pushList_hashByDate.get(parsingDate).add(push);
                 }
             }
 
+            // 3) 분류된 날짜별 해쉬맵에 따라서 반환 JSON 값 생성
             List<GetPushListResByDateArr> pushListRes = new ArrayList<>();
             for (String key: pushList_hashByDate.keySet()){
                 pushListRes.add(new GetPushListResByDateArr(key, pushList_hashByDate.get(key)));

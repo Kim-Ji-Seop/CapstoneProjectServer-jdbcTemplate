@@ -136,6 +136,7 @@ public class UserDao {
                 (rs, rowNum) -> new GetPushListRes(
                         rs.getInt("id"),
                         null,
+                        null,
                         rs.getInt("owner_userIdx"),
                         rs.getInt("join_userIdx"),
                         rs.getInt("matchIdx"),
