@@ -66,10 +66,11 @@ public class UserDao {
         ); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 
-    public void loginTokenUpdate(PostLoginReq postLoginReq){
-        String query = "update user SET devicetoken = ? WHERE uid = ? and password = ?";
-        Object[] logInParams = new Object[]{ postLoginReq.getUid(), postLoginReq.getPassword(), postLoginReq.getToken() };
-
+    public void loginTokenUpdate(String uid, String pwdEncrypted, String devicetoken){
+        String query = "UPDATE user SET devicetoken = ?\n" +
+                "WHERE uid = ? and password = ?";
+        Object[] logInParams = new Object[]{ devicetoken, uid, pwdEncrypted };
+        System.out.println(pwdEncrypted + " "+  devicetoken);
         this.jdbcTemplate.update(query, logInParams);
     }
 

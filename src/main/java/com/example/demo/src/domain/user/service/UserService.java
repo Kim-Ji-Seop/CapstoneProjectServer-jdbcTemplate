@@ -107,7 +107,7 @@ public class UserService {
         // uid & pwd 일치 여부
         if(user.getUid().equals(postLoginReq.getUid()) && user.getPassword().equals(pwd)){
             int userIdx = user.getUserIdx();
-            userDao.loginTokenUpdate(postLoginReq);
+            userDao.loginTokenUpdate(user.getUid(), user.getPassword(), postLoginReq.getToken());
             String jwt = jwtService.createJwt(userIdx);
             return new PostLoginRes(jwt,userIdx,user.getName(),user.getNickname());
         }else{
