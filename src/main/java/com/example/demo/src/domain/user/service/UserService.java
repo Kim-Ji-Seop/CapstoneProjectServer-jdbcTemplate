@@ -2,6 +2,8 @@ package com.example.demo.src.domain.user.service;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.secret.Secret;
+import com.example.demo.src.domain.match.dao.MatchDao;
+import com.example.demo.src.domain.match.dto.MatchRoomDetailRes;
 import com.example.demo.src.domain.user.dao.UserDao;
 import com.example.demo.src.domain.user.dto.*;
 import com.example.demo.utils.AES128;
@@ -12,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,11 +26,13 @@ public class UserService {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final UserDao userDao;
+    private final MatchDao matchDao;
     private final JwtService jwtService;
 
     @Autowired
-    public UserService(UserDao userDao, JwtService jwtService) {
+    public UserService(UserDao userDao, MatchDao matchDao, JwtService jwtService) {
         this.userDao = userDao;
+        this.matchDao = matchDao;
         this.jwtService = jwtService;
     }
 
@@ -123,18 +125,20 @@ public class UserService {
 
     public List<GetPushListResByDateArr> getPushRecord(int userIdx) throws BaseException{
         try{
+            // 1) 푸쉬 알림 리스트 목록 가져오기
             List<GetPushListRes> pushList =  userDao.getPushRecord(userIdx);
             HashMap<String, List> pushList_hashByDate = new HashMap<>(); // 날짜별 리스트
 
-            List<GetPushListRes> pushList_byDate;
+            // 2) 알림 생성 날짜별 리스트 묶기
             String parsingDate;
-
             for (GetPushListRes push : pushList){
+                // 2-1) 해쉬맵 형태로 날짜 - 키, 푸쉬 리스트- 밸류 형태로 파싱
                 parsingDate = push.getOnlydate();
                 if (!pushList_hashByDate.containsKey(parsingDate)){
                     pushList_hashByDate.put(parsingDate, new ArrayList<>());
                 }
 
+                // 2-2) 유저 프로필 이미지 링크 값 가져오기
                 GetUserProfileImgRes userProfileImgRes;
                 if(push.getOwner_userIdx() == userIdx){
                     userProfileImgRes = userDao.getUserProfileImg(push.getJoin_userIdx());

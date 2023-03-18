@@ -122,14 +122,15 @@ public class UserDao {
     }
 
     public List<GetPushListRes> getPushRecord(int userIdx) {
-        String query = "SELECT id, owner_userIdx, join_userIdx, matchIdx, " +
-                "push_title, push_content, " +
-                "created, updated," +
-                "DATE_FORMAT(updated, '%Y-%m-%d') as onlydate, " +
-                "status " +
+        String query = "SELECT p.id, p.owner_userIdx, p.join_userIdx, p.matchIdx,\n" +
+                "       p.push_title, p.push_content,\n" +
+                "       mr.game_time, mr.network_type,\n" +
+                "       p.updated, DATE_FORMAT(p.updated, '%Y-%m-%d') as onlydate,\n" +
+                "       p.status\n" +
                 "FROM push p\n" +
+                "LEFT JOIN match_room mr on mr.id = p.matchIdx\n" +
                 "WHERE p.owner_userIdx = ? or p.join_userIdx = ?\n" +
-                "ORDER BY updated DESC";
+                "ORDER BY p.updated DESC;";
         Object[] pushRecordParams = new Object[]{userIdx, userIdx};
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new GetPushListRes(
@@ -138,10 +139,8 @@ public class UserDao {
                         rs.getInt("owner_userIdx"),
                         rs.getInt("join_userIdx"),
                         rs.getInt("matchIdx"),
-                        rs.getString("push_title"),
-                        rs.getString("push_content"),
-                        rs.getString("created"),
-                        rs.getString("updated"),
+                        rs.getString("game_time"),
+                        rs.getString("network_type"),
                         rs.getString("onlydate"),
                         rs.getString("status")
                 ), pushRecordParams);

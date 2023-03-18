@@ -15,10 +15,8 @@ public class GetPushListRes {
     private int owner_userIdx;
     private int join_userIdx;
     private int matchIdx;
-    private String push_title;
-    private String push_content;
-    private String created;
-    private String updated;
+    private String game_time;
+    private String network_type;
     private String onlydate;
     private String status;
 }
