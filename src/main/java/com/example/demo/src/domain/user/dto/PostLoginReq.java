@@ -12,4 +12,5 @@ import lombok.Setter;
 public class PostLoginReq {
     private String uid;
     private String password;
+    private String token;
 }

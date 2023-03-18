@@ -66,6 +66,13 @@ public class UserDao {
         ); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 
+    public void loginTokenUpdate(PostLoginReq postLoginReq){
+        String query = "update user SET devicetoken = ? WHERE uid = ? and password = ?";
+        Object[] logInParams = new Object[]{ postLoginReq.getUid(), postLoginReq.getPassword(), postLoginReq.getToken() };
+
+        this.jdbcTemplate.update(query, logInParams);
+    }
+
     public UserNameNnickName userInfo(int userIdx){
         String query = "select `name`, nickname from user where id=?";
 
