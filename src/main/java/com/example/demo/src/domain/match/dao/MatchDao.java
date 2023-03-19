@@ -186,4 +186,46 @@ public class MatchDao {
                         rs.getInt("currentJoinUsercount")
                 ), matchIdx);
     }
+
+    public List<GetMatchPlanRes> matchPlanList(int userIdx) {
+        String query = "SELECT (SELECT\n" +
+                "    CASE\n" +
+                "        WHEN\n" +
+                "            instr(date_format(mr.game_time, '%Y-%m-%d %p %h:%i'), 'PM') > 0\n" +
+                "        THEN\n" +
+                "            replace(date_format(mr.game_time, '%Y-%m-%d %p %h:%i'), 'PM', '오후')\n" +
+                "        ELSE\n" +
+                "            replace(date_format(mr.game_time, '%Y-%m-%d %p %h:%i'), 'AM', '오전')\n" +
+                "    END\n" +
+                "    FROM match_room AS mr WHERE h.matchIdx = mr.id) AS game_time,\n" +
+                "    u.nickname, mr.network_type, mr.count,\n" +
+                "    h.id, h.userIdx, h.matchIdx, h.teamIdx,\n" +
+                "    h.settle_type,\n" +
+                "    mr.place, mr.status,\n" +
+                "    IF(h.teamIdx = (SELECT teamIdx FROM history WHERE matchIdx=h.matchIdx and userIdx=?), 'HOME', 'AWAY') as homeOrAway\n" +
+                "FROM history AS h\n" +
+                "    LEFT JOIN match_room mr on h.matchIdx = mr.id\n" +
+                "    LEFT JOIN user u on u.id = h.userIdx\n" +
+                "WHERE h.matchIdx IN(SELECT h.matchIdx FROM history AS h WHERE h.userIdx = ?)\n" +
+                "GROUP BY h.matchIdx, h.teamIdx\n" +
+                "ORDER BY h.matchidx;";
+
+        Object[] planParam = new Object[]{
+                userIdx, userIdx
+        };
+
+        return this.jdbcTemplate.query(query,
+                (rs, rowNum) -> new GetMatchPlanRes(
+                        rs.getString("game_time"),
+                        rs.getString("network_type"),
+                        rs.getString("nickname"),
+                        rs.getInt("count"),
+                        rs.getInt("id"),
+                        rs.getInt("userIdx"),
+                        rs.getInt("matchIdx"),
+                        rs.getInt("teamIdx"),
+                        rs.getString("homeOrAway"),
+                        rs.getString("place") == null ? " " : rs.getString("place")
+                ), planParam);
+    }
 }

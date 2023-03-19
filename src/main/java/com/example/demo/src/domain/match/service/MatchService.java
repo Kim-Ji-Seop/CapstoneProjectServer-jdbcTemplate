@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
@@ -101,6 +103,46 @@ public class MatchService {
             historyDao.createMatchRoomNewPlayer(userIdx, postCreateMatchRoomRes.getMatchIdx(), 1);
 
             return postCreateMatchRoomRes;
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetMatchPlanResList> matchPlanList(int userIdx) throws BaseException{
+        try{
+            List<GetMatchPlanRes> getMatchPlanRes = matchDao.matchPlanList(userIdx);
+            HashMap<Integer, List> matchPlan_hasyByMatchIdx = new HashMap<Integer, List>();
+
+            int parsingMatchIdx;
+            for (GetMatchPlanRes matchplan : getMatchPlanRes){
+                parsingMatchIdx = matchplan.getMatchIdx();
+
+                if (!matchPlan_hasyByMatchIdx.containsKey(parsingMatchIdx)){
+                    matchPlan_hasyByMatchIdx.put(parsingMatchIdx, new ArrayList<>());
+                }
+                if (matchplan.getHomeOrAway().equals("HOME")){
+                    System.out.println(matchplan.toString());
+                    matchPlan_hasyByMatchIdx.get(parsingMatchIdx).add(0, matchplan);
+                }
+                else{
+                    matchPlan_hasyByMatchIdx.get(parsingMatchIdx).add(matchplan);
+                }
+            }
+
+            List<GetMatchPlanResList> getMatchPlanResLists = new ArrayList<>();
+
+            for(Integer key: matchPlan_hasyByMatchIdx.keySet()){
+                int matchIdx = key;
+                GetMatchPlanRes get0 = ((GetMatchPlanRes) matchPlan_hasyByMatchIdx.get(key).get(0));
+
+                getMatchPlanResLists.add(new GetMatchPlanResList(
+                        key,
+                        get0.getGame_time(),
+                        get0.getNetwork_type(),
+                        matchPlan_hasyByMatchIdx.get(key)));
+            }
+
+            return getMatchPlanResLists;
         }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }

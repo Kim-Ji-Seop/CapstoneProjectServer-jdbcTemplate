@@ -140,4 +140,17 @@ public class MatchController {
             return failed;
         }
     }
+
+    @ResponseBody
+    @GetMapping("/rooms/plans")
+    public BaseResponse<List<GetMatchPlanResList>> matchPlanList(){
+        try{
+            int userIdx = jwtService.getUserIdx();
+            List<GetMatchPlanResList> getMatchPlanResList = matchService.matchPlanList(userIdx);
+            return new BaseResponse<>(getMatchPlanResList);
+        }catch(BaseException baseException){
+            System.out.println(baseException);
+            return new BaseResponse<>(baseException.getStatus());
+        }
+    }
 }

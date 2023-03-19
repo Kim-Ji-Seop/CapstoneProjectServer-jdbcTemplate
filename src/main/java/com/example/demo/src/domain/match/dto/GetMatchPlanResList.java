@@ -11,7 +11,9 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class HAmatchRecordsRes { // Home & Away
-    int matchIdx;
-    private List<MatchRecordsRes> matchRecordsResList;
+public class GetMatchPlanResList {
+    private int matchIdx;
+    private String game_time;
+    private String network_type;
+    private List<GetMatchPlanRes> getMatchPlanResList;
 }

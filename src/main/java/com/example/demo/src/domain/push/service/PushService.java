@@ -106,9 +106,9 @@ public class PushService {
             // 3. 매칭방 정보
             int targetUserIdx = joinAcceptOrNotReq.getJoin_userIdx();
             int matchIdx = joinAcceptOrNotReq.getMatchIdx();
-            UserNameNnickName ownerUser = userDao.userInfo(userIdx);
-            String targetFcmToken = userDao.getTargetFCMtoken(targetUserIdx);
-            MatchRoomDetailRes roomDetailRes = matchDao.matchroomDetail(matchIdx);
+            UserNameNnickName ownerUser = userDao.userInfo(userIdx); // 매칭 방장의 유저 Info
+            String targetFcmToken = userDao.getTargetFCMtoken(targetUserIdx); // 매칭 신청자에게 수락/거절 메세지를 보낼 FCM 토큰
+            MatchRoomDetailRes roomDetailRes = matchDao.matchroomDetail(matchIdx); // 매칭방 정보
 
             // 4. 푸쉬알림 전송 메세지 생성 - 방장이 참여자를 수락/거절
             String push_title = roomDetailRes.getTitle() + " 경기 ("+")";

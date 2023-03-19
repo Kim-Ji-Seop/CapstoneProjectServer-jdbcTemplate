@@ -164,7 +164,11 @@ public class UserService {
 
             // 3) 분류된 날짜별 해쉬맵에 따라서 반환 JSON 값 생성
             List<GetPushListResByDateArr> pushListRes = new ArrayList<>();
-            for (String key: pushList_hashByDate.keySet()){
+            // 3-1) key set 정렬
+            List<String> sortedKeySet = new ArrayList<>(pushList_hashByDate.keySet());
+            sortedKeySet.sort((s1, s2) -> s2.compareTo(s1));
+
+            for (String key: sortedKeySet){
                 pushListRes.add(new GetPushListResByDateArr(key, pushList_hashByDate.get(key)));
             }
             return pushListRes;
