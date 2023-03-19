@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -121,7 +120,6 @@ public class MatchService {
                     matchPlan_hasyByMatchIdx.put(parsingMatchIdx, new ArrayList<>());
                 }
                 if (matchplan.getHomeOrAway().equals("HOME")){
-                    System.out.println(matchplan.toString());
                     matchPlan_hasyByMatchIdx.get(parsingMatchIdx).add(0, matchplan);
                 }
                 else{
@@ -146,5 +144,25 @@ public class MatchService {
         }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+    public List<GetMatchPlanDetailRes> matchPlanDetial(int userIdx, int matchIdx) throws BaseException{
+        try{
+            String game_time = matchDao.getGameTime(matchIdx);
+            String match_code = matchDao.getMatchCode(matchIdx);
+            List<GetMatchPlanDetailRes> getMatchPlanDetailRes = matchDao.matchPlanDetial(userIdx, matchIdx);
+            for (GetMatchPlanDetailRes planDetail : getMatchPlanDetailRes){
+                if (planDetail.getUserIdx() == userIdx){
+                    planDetail.setHomeOrAway("HOME");
+                }
+                else{
+                    planDetail.setHomeOrAway("AWAY");
+                }
+            }
+            return getMatchPlanDetailRes;
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+
     }
 }

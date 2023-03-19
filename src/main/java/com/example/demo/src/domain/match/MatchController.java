@@ -153,4 +153,19 @@ public class MatchController {
             return new BaseResponse<>(baseException.getStatus());
         }
     }
+
+    @ResponseBody
+    @GetMapping("/rooms/plans/{matchIdx}")
+    public BaseResponse<List<GetMatchPlanDetailRes>> matchPlanDetial(@PathVariable int matchIdx){
+        try{
+            int userIdx = jwtService.getUserIdx();
+            List<GetMatchPlanDetailRes> getMatchPlanDetailRes = matchService.matchPlanDetial(userIdx, matchIdx);
+            return new BaseResponse<>(getMatchPlanDetailRes);
+        }catch(BaseException baseException){
+            System.out.println(baseException);
+            return new BaseResponse<>(baseException.getStatus());
+        }
+    }
+
+
 }

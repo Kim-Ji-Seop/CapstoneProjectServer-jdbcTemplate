@@ -2,6 +2,7 @@ package com.example.demo.src.domain.match.dao;
 
 import com.example.demo.src.domain.history.dao.HistoryDao;
 import com.example.demo.src.domain.match.dto.*;
+import com.example.demo.src.domain.user.dto.GetPushListRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -227,5 +228,59 @@ public class MatchDao {
                         rs.getString("homeOrAway"),
                         rs.getString("place") == null ? " " : rs.getString("place")
                 ), planParam);
+    }
+
+
+    public List<GetMatchPlanDetailRes> matchPlanDetial(int userIdx, int matchIdx) {
+        String query = "SELECT\n" +
+                "    h.userIdx, u.nickname, u.profile_imgurl,\n" +
+                "    MAX(h.total_score) as highScore,\n" +
+                "    ROUND(AVG(h.total_score)) as avgScore,\n" +
+                "    COUNT(h.id) as gameCount,\n" +
+                "    (SELECT COUNT(settle_type) FROM history\n" +
+                "                               WHERE h.settle_type = 'WIN'\n" +
+                "                               AND h.userIdx =userIdx) as winCount,\n" +
+                "    (SELECT COUNT(settle_type) FROM history\n" +
+                "                               WHERE h.settle_type = 'LOSE'\n" +
+                "                               AND h.userIdx = userIdx) as loseCount\n" +
+                "FROM history h\n" +
+                "LEFT JOIN user u on h.userIdx = u.id\n" +
+                "WHERE\n" +
+                "    h.userIdx IN(SELECT userIdx FROM history WHERE matchIdx = ?)\n" +
+                "AND h.total_score IS NOT NULL\n" +
+                "GROUP BY h.userIdx";
+        return this.jdbcTemplate.query(query,
+                (rs, rowNum) -> new GetMatchPlanDetailRes(
+                        rs.getInt("userIdx"),
+                        rs.getString("nickname"),
+                        rs.getString("profile_imgurl"),
+                        rs.getInt("highScore"),
+                        rs.getInt("avgScore"),
+                        rs.getInt("gameCount"),
+                        rs.getInt("winCount"),
+                        rs.getInt("loseCount"),
+                        null
+                ), matchIdx);
+    }
+
+    public String getMatchCode(int matchIdx) {
+        String query = "SELECT match_code FROM match_room\n" +
+                "WHERE id = " + matchIdx;
+        return this.jdbcTemplate.queryForObject(query, String.class);
+    }
+    public String getGameTime(int matchIdx){
+        String query = "SELECT \n" +
+                "    CASE\n" +
+                "        WHEN\n" +
+                "            instr(date_format(game_time, '%Y-%m-%d %p %h:%i'), 'PM') > 0\n" +
+                "        THEN\n" +
+                "            replace(date_format(game_time, '%Y-%m-%d %p %h:%i'), 'PM', '오후')\n" +
+                "        ELSE\n" +
+                "            replace(date_format(game_time, '%Y-%m-%d %p %h:%i'), 'AM', '오전')\n" +
+                "    END as game_time\n" +
+                "FROM match_room\n" +
+                "WHERE id = "+ matchIdx + "\n";
+        return this.jdbcTemplate.queryForObject(query, String.class);
+
     }
 }
