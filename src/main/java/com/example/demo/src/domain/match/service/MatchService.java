@@ -150,13 +150,15 @@ public class MatchService {
         try{
             String game_time = matchDao.getGameTime(matchIdx);
             String match_code = matchDao.getMatchCode(matchIdx);
-            List<GetMatchPlanDetailRes> getMatchPlanDetailRes = matchDao.matchPlanDetial(userIdx, matchIdx);
-            for (GetMatchPlanDetailRes planDetail : getMatchPlanDetailRes){
+            List<GetMatchPlanDetailRes> getMatchPlanDetailRes = new ArrayList<>();
+            for (GetMatchPlanDetailRes planDetail : matchDao.matchPlanDetial(userIdx, matchIdx)){
                 if (planDetail.getUserIdx() == userIdx){
                     planDetail.setHomeOrAway("HOME");
+                    getMatchPlanDetailRes.add(0, planDetail);
                 }
                 else{
                     planDetail.setHomeOrAway("AWAY");
+                    getMatchPlanDetailRes.add(planDetail);
                 }
             }
             return getMatchPlanDetailRes;

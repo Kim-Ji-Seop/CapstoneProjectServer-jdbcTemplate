@@ -199,7 +199,7 @@ public class MatchDao {
                 "            replace(date_format(mr.game_time, '%Y-%m-%d %p %h:%i'), 'AM', '오전')\n" +
                 "    END\n" +
                 "    FROM match_room AS mr WHERE h.matchIdx = mr.id) AS game_time,\n" +
-                "    u.nickname, mr.network_type, mr.count,\n" +
+                "    u.nickname, u.profile_imgurl, mr.network_type, mr.count,\n" +
                 "    h.id, h.userIdx, h.matchIdx, h.teamIdx,\n" +
                 "    h.settle_type,\n" +
                 "    mr.place, mr.status,\n" +
@@ -220,6 +220,7 @@ public class MatchDao {
                         rs.getString("game_time"),
                         rs.getString("network_type"),
                         rs.getString("nickname"),
+                        rs.getString("profile_imgurl") == null ? " ": rs.getString("profile_imgurl"),
                         rs.getInt("count"),
                         rs.getInt("id"),
                         rs.getInt("userIdx"),

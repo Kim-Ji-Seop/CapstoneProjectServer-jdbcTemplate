@@ -13,6 +13,7 @@ public class GetMatchPlanRes {
     private String game_time;
     private String network_type;
     private String nickname;
+    private String profile_imgurl;
     private int count;
     private int historyIdx;
     private int userIdx;
