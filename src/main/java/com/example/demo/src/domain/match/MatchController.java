@@ -156,10 +156,10 @@ public class MatchController {
 
     @ResponseBody
     @GetMapping("/rooms/plans/{matchIdx}")
-    public BaseResponse<List<GetMatchPlanDetailRes>> matchPlanDetial(@PathVariable int matchIdx){
+    public BaseResponse<GetMatchPlanDetailResList> matchPlanDetial(@PathVariable int matchIdx){
         try{
             int userIdx = jwtService.getUserIdx();
-            List<GetMatchPlanDetailRes> getMatchPlanDetailRes = matchService.matchPlanDetial(userIdx, matchIdx);
+            GetMatchPlanDetailResList getMatchPlanDetailRes = matchService.matchPlanDetial(userIdx, matchIdx);
             return new BaseResponse<>(getMatchPlanDetailRes);
         }catch(BaseException baseException){
             System.out.println(baseException);

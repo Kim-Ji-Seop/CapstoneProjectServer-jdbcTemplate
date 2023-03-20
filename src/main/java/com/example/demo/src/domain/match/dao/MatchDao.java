@@ -254,7 +254,7 @@ public class MatchDao {
                 (rs, rowNum) -> new GetMatchPlanDetailRes(
                         rs.getInt("userIdx"),
                         rs.getString("nickname"),
-                        rs.getString("profile_imgurl"),
+                        rs.getString("profile_imgurl") == null? "":rs.getString("profile_imgurl"),
                         rs.getInt("highScore"),
                         rs.getInt("avgScore"),
                         rs.getInt("gameCount"),

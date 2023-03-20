@@ -146,11 +146,12 @@ public class MatchService {
         }
     }
 
-    public List<GetMatchPlanDetailRes> matchPlanDetial(int userIdx, int matchIdx) throws BaseException{
+    public GetMatchPlanDetailResList matchPlanDetial(int userIdx, int matchIdx) throws BaseException{
         try{
             String game_time = matchDao.getGameTime(matchIdx);
             String match_code = matchDao.getMatchCode(matchIdx);
             List<GetMatchPlanDetailRes> getMatchPlanDetailRes = new ArrayList<>();
+
             for (GetMatchPlanDetailRes planDetail : matchDao.matchPlanDetial(userIdx, matchIdx)){
                 if (planDetail.getUserIdx() == userIdx){
                     planDetail.setHomeOrAway("HOME");
@@ -161,7 +162,15 @@ public class MatchService {
                     getMatchPlanDetailRes.add(planDetail);
                 }
             }
-            return getMatchPlanDetailRes;
+
+            GetMatchPlanDetailResList getMatchPlanDetailResListList = new GetMatchPlanDetailResList(
+                    matchIdx,
+                    game_time,
+                    match_code == null ? "": match_code,
+                    getMatchPlanDetailRes
+            );
+
+            return getMatchPlanDetailResListList;
         }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
