@@ -170,12 +170,19 @@ public class MatchService {
             }
 
             // 3) 대표자 히스토리 값 생성
-            GetMatchPlanDetailRes homeDetail = matchDao.matchPlanDetial(home.getUserIdx());
-            GetMatchPlanDetailRes awayDetail = matchDao.matchPlanDetial(away.getUserIdx());
-            homeDetail.setHomeOrAway("HOME");
-            awayDetail.setHomeOrAway("AWAY");
+            List<GetMatchPlanDetailRes> getMatchPlanDetailRes = new ArrayList<>();
+            GetMatchPlanDetailRes homeDetail, awayDetail;
 
-            List<GetMatchPlanDetailRes> getMatchPlanDetailRes = Arrays.asList(homeDetail, awayDetail);
+            homeDetail = matchDao.matchPlanDetial(home.getUserIdx());
+            homeDetail.setHomeOrAway("HOME");
+            getMatchPlanDetailRes.add(homeDetail);
+
+            // home은 null인 경우의 수가 없음. 예외처리
+            if(away != null) {
+                awayDetail = matchDao.matchPlanDetial(away.getUserIdx());
+                awayDetail.setHomeOrAway("AWAY");
+                getMatchPlanDetailRes.add(awayDetail);
+            }
 
             GetMatchPlanDetailResList getMatchPlanDetailResListList = new GetMatchPlanDetailResList(
                     matchIdx,
