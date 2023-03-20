@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -148,21 +149,33 @@ public class MatchService {
 
     public GetMatchPlanDetailResList matchPlanDetial(int userIdx, int matchIdx) throws BaseException{
         try{
+            // 1) 게임시간, 매치코드, 홈/어웨이 유저들의 유저Idx, 팀Idx를 받음
             String game_time = matchDao.getGameTime(matchIdx);
             String match_code = matchDao.getMatchCode(matchIdx);
             int homeTeam = matchDao.getTeamIdx(matchIdx, userIdx);
-            List<GetMatchPlanDetailRes> getMatchPlanDetailRes = new ArrayList<>();
 
-            for (GetMatchPlanDetailRes planDetail : matchDao.matchPlanDetial(userIdx, matchIdx)){
-                if (planDetail.getTeamIdx() == homeTeam){
-                    planDetail.setHomeOrAway("HOME");
-                    getMatchPlanDetailRes.add(0, planDetail);
+            // 2) 각 팀의 대표자를 선정 HOME = 유저 본인, AWAY = 상대방 아무나
+            List<MatchCandidate> matchCandidates = matchDao.matchCandidates(matchIdx);
+            MatchCandidate home = null, away = null;
+            for (MatchCandidate candi : matchCandidates){
+                if (home != null && away != null){
+                    break;
                 }
-                else{
-                    planDetail.setHomeOrAway("AWAY");
-                    getMatchPlanDetailRes.add(planDetail);
+                else if(homeTeam == candi.getTeamIdx() && userIdx == candi.getUserIdx()){
+                    home = candi;
+                }
+                else if (away == null && homeTeam != candi.getTeamIdx()){
+                    away = candi;
                 }
             }
+
+            // 3) 대표자 히스토리 값 생성
+            GetMatchPlanDetailRes homeDetail = matchDao.matchPlanDetial(home.getUserIdx());
+            GetMatchPlanDetailRes awayDetail = matchDao.matchPlanDetial(away.getUserIdx());
+            homeDetail.setHomeOrAway("HOME");
+            awayDetail.setHomeOrAway("AWAY");
+
+            List<GetMatchPlanDetailRes> getMatchPlanDetailRes = Arrays.asList(homeDetail, awayDetail);
 
             GetMatchPlanDetailResList getMatchPlanDetailResListList = new GetMatchPlanDetailResList(
                     matchIdx,

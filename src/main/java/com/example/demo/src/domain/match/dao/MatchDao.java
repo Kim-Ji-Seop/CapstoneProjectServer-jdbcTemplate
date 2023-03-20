@@ -232,25 +232,25 @@ public class MatchDao {
     }
 
 
-    public List<GetMatchPlanDetailRes> matchPlanDetial(int userIdx, int matchIdx) {
+    public GetMatchPlanDetailRes matchPlanDetial(int userIdx) {
         String query = "SELECT\n" +
-                "    h.userIdx, h.teamIdx, u.nickname, u.profile_imgurl,\n" +
+                "    h.teamIdx, h.userIdx, u.nickname, u.profile_imgurl,\n" +
                 "    MAX(h.total_score) as highScore,\n" +
                 "    ROUND(AVG(h.total_score)) as avgScore,\n" +
                 "    COUNT(h.id) as gameCount,\n" +
-                "    (SELECT COUNT(settle_type) FROM history\n" +
-                "                               WHERE h.settle_type = 'WIN'\n" +
-                "                               AND h.userIdx =userIdx) as winCount,\n" +
-                "    (SELECT COUNT(settle_type) FROM history\n" +
-                "                               WHERE h.settle_type = 'LOSE'\n" +
-                "                               AND h.userIdx = userIdx) as loseCount\n" +
+                "    (SELECT COUNT(settle_type)\n" +
+                "     FROM history\n" +
+                "     WHERE h.settle_type = 'WIN' AND userIdx = ?) as winCount,\n" +
+                "    (SELECT COUNT(settle_type)\n" +
+                "     FROM history\n" +
+                "     WHERE h.settle_type = 'LOSE' AND userIdx = ?) as loseCount\n" +
                 "FROM history h\n" +
-                "LEFT JOIN user u on h.userIdx = u.id\n" +
-                "WHERE\n" +
-                "    h.userIdx IN(SELECT userIdx FROM history WHERE matchIdx = ?)\n" +
-                "AND h.total_score IS NOT NULL\n" +
-                "GROUP BY h.userIdx";
-        return this.jdbcTemplate.query(query,
+                "LEFT JOIN user u ON u.id = h.userIdx\n" +
+                "WHERE userIdx = ? AND (settle_type IS NOT NULL AND total_score IS NOT NULL)";
+
+        Object [] param = new Object[] {userIdx, userIdx, userIdx};
+
+        return this.jdbcTemplate.queryForObject(query,
                 (rs, rowNum) -> new GetMatchPlanDetailRes(
                         rs.getInt("teamIdx"),
                         rs.getInt("userIdx"),
@@ -262,7 +262,16 @@ public class MatchDao {
                         rs.getInt("winCount"),
                         rs.getInt("loseCount"),
                         null
-                ), matchIdx);
+                ), param);
+    }
+
+    public List<MatchCandidate> matchCandidates (int matchIdx){
+        String query = "SELECT userIdx, teamIdx FROM history WHERE matchIdx = ?";
+        return this.jdbcTemplate.query(query,
+                (rs,rowNum) -> new MatchCandidate(
+                        rs.getInt("userIdx"),
+                        rs.getInt("teamIdx"))
+        , matchIdx);
     }
 
     public int getTeamIdx(int matchIdx, int userIdx){
