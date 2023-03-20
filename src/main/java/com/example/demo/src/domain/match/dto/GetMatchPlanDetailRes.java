@@ -10,6 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetMatchPlanDetailRes {
+    private int teamIdx;
     private int userIdx;
     private String nickName;
     private String profile_imgurl;

@@ -234,7 +234,7 @@ public class MatchDao {
 
     public List<GetMatchPlanDetailRes> matchPlanDetial(int userIdx, int matchIdx) {
         String query = "SELECT\n" +
-                "    h.userIdx, u.nickname, u.profile_imgurl,\n" +
+                "    h.userIdx, h.teamIdx, u.nickname, u.profile_imgurl,\n" +
                 "    MAX(h.total_score) as highScore,\n" +
                 "    ROUND(AVG(h.total_score)) as avgScore,\n" +
                 "    COUNT(h.id) as gameCount,\n" +
@@ -252,6 +252,7 @@ public class MatchDao {
                 "GROUP BY h.userIdx";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new GetMatchPlanDetailRes(
+                        rs.getInt("teamIdx"),
                         rs.getInt("userIdx"),
                         rs.getString("nickname"),
                         rs.getString("profile_imgurl") == null? "":rs.getString("profile_imgurl"),
@@ -262,6 +263,12 @@ public class MatchDao {
                         rs.getInt("loseCount"),
                         null
                 ), matchIdx);
+    }
+
+    public int getTeamIdx(int matchIdx, int userIdx){
+        String query = "SELECT teamIdx FROM history " +
+                "WHERE matchIdx = " + matchIdx + " and userIdx = " + userIdx;
+        return this.jdbcTemplate.queryForObject(query, Integer.class);
     }
 
     public String getMatchCode(int matchIdx) {

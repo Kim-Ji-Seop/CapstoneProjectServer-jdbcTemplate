@@ -160,6 +160,8 @@ public class PushService {
         JSONObject jsonMessage = new JSONObject();
         jsonMessage.put("message", jsonData);
 
+
+
         // 2. create token & send push
         try {
             OkHttpClient okHttpClient = new OkHttpClient();
