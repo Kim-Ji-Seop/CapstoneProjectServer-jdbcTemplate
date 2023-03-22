@@ -18,12 +18,12 @@ public class StompGameController {
     @MessageMapping(value = "/game/enter")
     public void enter(ChatMessageDTO message){
         message.setMessage(message.getWriter() + " 님이 매칭방에 참여하였습니다.");
-        template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+        template.convertAndSend("/sub/game/room/" + message.getRoomId(), message);
     }
 
     @MessageMapping(value = "/game/message")
     public void message(ChatMessageDTO message){ // 점수 DTO로 수정해야함
         System.out.println(message.getRoomId() + ": " + message.getWriter());
-        template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+        template.convertAndSend("/sub/game/room/" + message.getRoomId(), message);
     }
 }
