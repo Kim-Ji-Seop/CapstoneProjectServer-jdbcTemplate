@@ -21,7 +21,6 @@ public class MatchCodeController {
     @Autowired
     private MatchCodeService matchCodeService;
 
-
     public MatchCodeController(MatchCodeService matchCodeService) {
         this.matchCodeService = matchCodeService;
     }
