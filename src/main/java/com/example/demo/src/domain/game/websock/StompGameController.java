@@ -23,7 +23,7 @@ public class StompGameController {
 
     @MessageMapping(value = "/game/message")
     public void message(ChatMessageDTO message){ // 점수 DTO로 수정해야함
-        System.out.println(message.getRoomId() + ": " + message.getWriter());
+        System.out.println(message.getRoomId() + ": " + message.getWriter() + " -> " + message.getMessage());
         template.convertAndSend("/sub/game/room/" + message.getRoomId(), message);
     }
 }
