@@ -23,6 +23,7 @@ public class MatchCodeService {
     public ChatRoomDTO openNewMatch(String id) throws BaseException {
         try{
             ChatRoomDTO newMatchOpenRes = gameRoomRepository.createChatRoomDTO(id);
+            System.out.println("openNewMatch: " + newMatchOpenRes.getRoomId());
             return newMatchOpenRes;
         }catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);

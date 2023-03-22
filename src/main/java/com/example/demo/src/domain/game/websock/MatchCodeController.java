@@ -26,6 +26,7 @@ public class MatchCodeController {
     @PostMapping ("/open")
     public BaseResponse<ChatRoomDTO> openNewMatch(@RequestParam String id){
         try{
+            System.out.println("get Open: " + id);
             return new BaseResponse<>(matchCodeService.openNewMatch(id));
         } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
