@@ -1,4 +1,4 @@
-package com.example.demo.src.domain.score.websock;
+package com.example.demo.src.domain.game.websock;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -12,7 +12,7 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/stomp/score")
+        registry.addEndpoint("/stomp/game")
                 .setAllowedOrigins("https://www.seop.stie")
                 .withSockJS();
     }

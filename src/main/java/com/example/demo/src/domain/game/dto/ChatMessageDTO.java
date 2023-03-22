@@ -1,4 +1,4 @@
-package com.example.demo.src.domain.score.dto;
+package com.example.demo.src.domain.game.dto;
 
 import lombok.Getter;
 import lombok.Setter;
