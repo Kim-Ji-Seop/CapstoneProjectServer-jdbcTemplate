@@ -3,12 +3,10 @@ package com.example.demo.src.domain.game.websock;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.domain.game.dto.ChatRoomDTO;
-import com.example.demo.src.domain.game.dto.NewMatchOpenRes;
+import com.example.demo.src.domain.game.dto.GameRoomDTO;
 import com.example.demo.src.domain.game.service.MatchCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,10 +22,10 @@ public class MatchCodeController {
 
     @ResponseBody
     @PostMapping ("/open")
-    public BaseResponse<ChatRoomDTO> openNewMatch(@RequestParam String id){
+    public BaseResponse<GameRoomDTO> matchActivated(@RequestParam String id){
         try{
-            System.out.println("get Open: " + id);
-            return new BaseResponse<>(matchCodeService.openNewMatch(id));
+            System.out.println("Match Room: " + id + " activated");
+            return new BaseResponse<>(matchCodeService.matchActivated(id));
         } catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }

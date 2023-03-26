@@ -1,10 +1,8 @@
 package com.example.demo.src.domain.game.service;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.config.BaseResponse;
 import com.example.demo.src.domain.game.dao.GameRoomRepository;
-import com.example.demo.src.domain.game.dto.ChatRoomDTO;
-import com.example.demo.src.domain.game.dto.NewMatchOpenRes;
+import com.example.demo.src.domain.game.dto.GameRoomDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +18,9 @@ public class MatchCodeService {
     }
 
 
-    public ChatRoomDTO openNewMatch(String id) throws BaseException {
+    public GameRoomDTO matchActivated(String id) throws BaseException {
         try{
-            ChatRoomDTO newMatchOpenRes = gameRoomRepository.createChatRoomDTO(id);
+            GameRoomDTO newMatchOpenRes = gameRoomRepository.matchActivated(id);
             System.out.println("openNewMatch: " + newMatchOpenRes.getRoomId());
             return newMatchOpenRes;
         }catch (Exception exception) {

@@ -17,7 +17,7 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/stomp/game")
-                .setAllowedOrigins("*")
+                .setAllowedOrigins("https://www.seop.site")
                 .withSockJS();
     }
 

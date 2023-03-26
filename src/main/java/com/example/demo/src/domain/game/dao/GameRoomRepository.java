@@ -1,6 +1,6 @@
 package com.example.demo.src.domain.game.dao;
 
-import com.example.demo.src.domain.game.dto.ChatRoomDTO;
+import com.example.demo.src.domain.game.dto.GameRoomDTO;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
@@ -9,27 +9,28 @@ import java.util.*;
 @Repository
 public class GameRoomRepository {
 
-    private Map<String, ChatRoomDTO> chatRoomDTOMap;
+    private Map<String, GameRoomDTO> chatRoomDTOMap;
 
     @PostConstruct
     private void init(){
         chatRoomDTOMap = new LinkedHashMap<>();
     }
 
-    public List<ChatRoomDTO> findAllRooms(){
+    public List<GameRoomDTO> findAllRooms(){
         //채팅방 생성 순서 최근 순으로 반환
-        List<ChatRoomDTO> result = new ArrayList<>(chatRoomDTOMap.values());
+        List<GameRoomDTO> result = new ArrayList<>(chatRoomDTOMap.values());
         Collections.reverse(result);
 
         return result;
     }
 
-    public ChatRoomDTO findRoomById(String id){
+    public GameRoomDTO findRoomById(String id){
         return chatRoomDTOMap.get(id);
     }
 
-    public ChatRoomDTO createChatRoomDTO(String name){
-        ChatRoomDTO room = ChatRoomDTO.create(name);
+    public GameRoomDTO matchActivated(String name){
+        GameRoomDTO room = GameRoomDTO.activate(name);
+        // 진행 게임 테이블 생성하여 DB에 저장할것 (id, matchIdx, matchCode)
         chatRoomDTOMap.put(room.getRoomId(), room);
 
         return room;
