@@ -28,11 +28,14 @@ public class GameRoomRepository {
         return chatRoomDTOMap.get(id);
     }
 
-    public GameRoomDTO matchActivated(String name){
-        GameRoomDTO room = GameRoomDTO.activate(name);
+    public GameRoomDTO matchActivated(String code){
+        GameRoomDTO room;
         // 진행 게임 테이블 생성하여 DB에 저장할것 (id, matchIdx, matchCode)
-        chatRoomDTOMap.put(room.getRoomId(), room);
+        if (!chatRoomDTOMap.containsKey(code)){
+            room = GameRoomDTO.activate(code);
+            chatRoomDTOMap.put(code, room);
+        }
 
-        return room;
+        return chatRoomDTOMap.get(code);
     }
 }

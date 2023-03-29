@@ -18,9 +18,9 @@ public class MatchCodeService {
     }
 
 
-    public GameRoomDTO matchActivated(String id) throws BaseException {
+    public GameRoomDTO matchActivated(String code) throws BaseException {
         try{
-            GameRoomDTO newMatchOpenRes = gameRoomRepository.matchActivated(id);
+            GameRoomDTO newMatchOpenRes = gameRoomRepository.matchActivated(code);
             System.out.println("openNewMatch: " + newMatchOpenRes.getRoomId());
             return newMatchOpenRes;
         }catch (Exception exception) {

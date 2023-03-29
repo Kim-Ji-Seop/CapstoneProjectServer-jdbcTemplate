@@ -10,15 +10,15 @@ import java.util.UUID;
 public class GameRoomDTO {
 
     private String roomId;
-    private String name;
+    private String code;
     //private Set<WebSocketSession> sessions = new HashSet<>();
     //WebSocketSession은 Spring에서 Websocket Connection이 맺어진 세션
 
-    public static GameRoomDTO activate(String name){
+    public static GameRoomDTO activate(String code){
         GameRoomDTO room = new GameRoomDTO();
 
         room.roomId = UUID.randomUUID().toString();
-        room.name = name;
+        room.code = code;
         return room;
     }
 }
