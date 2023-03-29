@@ -35,7 +35,7 @@ public class ChatPreHandler extends ChannelInterceptorAdapter {
                     break;
                 case UNSUBSCRIBE:
                     System.out.println("유저 구독 취소...");
-                    break;
+                    return null;
                 default:
                     System.out.println("다른 커맨드...");
                     break;
