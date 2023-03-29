@@ -13,7 +13,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @RequiredArgsConstructor
 public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    //private final ChatPreHandler chatPreHandler;
+    private final ChatPreHandler chatPreHandler;
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/stomp/game")
@@ -29,8 +29,8 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.enableSimpleBroker("/sub");
     }
 
-    /*@Override
+    @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(chatPreHandler);
-    }*/
+    }
 }
