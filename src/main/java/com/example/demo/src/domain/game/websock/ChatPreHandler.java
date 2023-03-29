@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-@Log4j
 public class ChatPreHandler extends ChannelInterceptorAdapter {
 
     @Override
