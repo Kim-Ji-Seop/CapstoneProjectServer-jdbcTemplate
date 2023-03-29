@@ -25,13 +25,19 @@ public class ChatPreHandler extends ChannelInterceptorAdapter {
         if (command != null) {
             switch (command) {
                 case CONNECT:
-                    System.out.println("유저접속...");
+                    System.out.println("유저 접속...");
                     break;
                 case DISCONNECT:
-                    System.out.println("유저퇴장...");
+                    System.out.println("유저 퇴장...");
+                    break;
+                case SUBSCRIBE:
+                    System.out.println("유저 구독...");
+                    break;
+                case UNSUBSCRIBE:
+                    System.out.println("유저 구독 취소...");
                     break;
                 default:
-                    System.out.println("다른커맨드...");
+                    System.out.println("다른 커맨드...");
                     break;
             }
         }
