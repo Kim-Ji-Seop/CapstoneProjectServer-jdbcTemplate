@@ -60,8 +60,6 @@ dependencies {
 
     // webSocket
     implementation ('org.springframework.boot:spring-boot-starter-websocket')
-    implementation 'org.webjars:sockjs-client:1.1.2'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
     // STOMP
     implementation group: 'org.webjars', name: 'stomp-websocket', version: '2.3.3-1'
