@@ -11,8 +11,8 @@ public class GameRoomDTO {
 
     private String roomId;
     private String code;
-    //private Set<WebSocketSession> sessions = new HashSet<>();
-    //WebSocketSession은 Spring에서 Websocket Connection이 맺어진 세션
+    // private Set<WebSocketSession> sessions = new HashSet<>();
+    // WebSocketSession은 Spring에서 Websocket Connection이 맺어진 세션
 
     public static GameRoomDTO activate(String code){
         GameRoomDTO room = new GameRoomDTO();
