@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
 
 @Service
-public class MatchCodeService {
+public class GameRoomService {
     private final GameRoomRepository gameRoomRepository;
 
     @Autowired
-    public MatchCodeService(GameRoomRepository gameRoomRepository) {
+    public GameRoomService(GameRoomRepository gameRoomRepository) {
         this.gameRoomRepository = gameRoomRepository;
     }
 
