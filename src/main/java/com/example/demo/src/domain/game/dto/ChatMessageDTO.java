@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class ChatMessageDTO {
 
-    private String roomId;
+    private String matchIdx;
     private String writer;
     @Nullable private String message;
 }
