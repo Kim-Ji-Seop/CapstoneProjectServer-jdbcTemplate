@@ -1,5 +1,7 @@
 package com.example.demo.src.domain.game.dao;
 
+import com.example.demo.src.domain.game.dto.PostCheckSocketActiveReq;
+import com.example.demo.src.domain.game.dto.PostCheckSocketActiveRes;
 import com.example.demo.src.domain.game.dto.PostMatchCodeReq;
 import com.example.demo.src.domain.game.dto.PostMatchCodeRes;
 import com.example.demo.src.domain.match.dto.MatchRoomDetailRes;
@@ -28,5 +30,13 @@ public class GameRoomDao {
     public void updateMatchRoomStatus(PostMatchCodeRes postMatchCodeRes) {
         String query = "update match_room set status = 'WA' where id = ?";
         this.jdbcTemplate.update(query,postMatchCodeRes.getRoomIdx());
+    }
+
+    public PostCheckSocketActiveRes getRoomStatus(PostCheckSocketActiveReq postCheckSocketActiveReq) {
+        String query = "select status from match_room where id = ?";
+        return this.jdbcTemplate.queryForObject(query,
+                (rs, rowNum) -> new PostCheckSocketActiveRes(
+                        rs.getString("status")
+                ),postCheckSocketActiveReq.getMatchIdx());
     }
 }

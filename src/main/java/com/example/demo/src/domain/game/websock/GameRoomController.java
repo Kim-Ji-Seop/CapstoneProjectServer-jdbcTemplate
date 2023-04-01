@@ -3,9 +3,7 @@ package com.example.demo.src.domain.game.websock;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.domain.game.dto.GameRoomDTO;
-import com.example.demo.src.domain.game.dto.PostMatchCodeReq;
-import com.example.demo.src.domain.game.dto.PostMatchCodeRes;
+import com.example.demo.src.domain.game.dto.*;
 import com.example.demo.src.domain.game.service.GameRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +36,17 @@ public class GameRoomController {
     public BaseResponse<PostMatchCodeRes> getRoomIdx(@RequestBody PostMatchCodeReq postMatchCodeReq){
         try{
             PostMatchCodeRes postMatchCodeRes = gameRoomService.getRoomIdx(postMatchCodeReq);
+            return new BaseResponse<>(postMatchCodeRes);
+        }catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("/join")
+    public BaseResponse<PostCheckSocketActiveRes> getRoomStatus(@RequestBody PostCheckSocketActiveReq postCheckSocketActiveReq){
+        try{
+            PostCheckSocketActiveRes postMatchCodeRes = gameRoomService.getRoomStatus(postCheckSocketActiveReq);
             return new BaseResponse<>(postMatchCodeRes);
         }catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
