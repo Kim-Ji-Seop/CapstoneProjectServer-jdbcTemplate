@@ -28,8 +28,8 @@ public class StompGameController {
         template.convertAndSend("/sub/game/room/" + message.getMatchIdx(), message);
     }
     @MessageMapping(value = "/game/start-game")
-    public void messageToClient(AdminSendScoreDTO message){ // 점수 DTO로 수정해야함
+    public void messageToClient(AdminSendScoreDTO message){
         System.out.println(message.getMatchIdx() + ": " + message.getWriter() + " -> " + message.getFrame() + " frame " + message.getScore() + " score ");
-        template.convertAndSend("/sub/game/room/" + message.getMatchIdx(), message);
+        template.convertAndSend("/sub/game/room/" + message.getMatchIdx(), new AdminSendScoreDTO(message.getMatchIdx(),message.getWriter(),message.getFrame(),message.getScore()));
     }
 }
