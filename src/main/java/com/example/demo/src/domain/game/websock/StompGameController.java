@@ -1,5 +1,6 @@
 package com.example.demo.src.domain.game.websock;
 
+import com.example.demo.src.domain.game.dto.AdminSendScoreDTO;
 import com.example.demo.src.domain.game.dto.ChatMessageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -24,6 +25,11 @@ public class StompGameController {
     @MessageMapping(value = "/game/message")
     public void message(ChatMessageDTO message){ // 점수 DTO로 수정해야함
         System.out.println(message.getMatchIdx() + ": " + message.getWriter() + " -> " + message.getMessage());
+        template.convertAndSend("/sub/game/room/" + message.getMatchIdx(), message);
+    }
+    @MessageMapping(value = "/game/start-game")
+    public void messageToClient(AdminSendScoreDTO message){ // 점수 DTO로 수정해야함
+        System.out.println(message.getMatchIdx() + ": " + message.getWriter() + " -> " + message.getFrame() + " frame " + message.getScore() + " score ");
         template.convertAndSend("/sub/game/room/" + message.getMatchIdx(), message);
     }
 }
