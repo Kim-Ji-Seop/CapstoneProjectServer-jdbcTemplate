@@ -16,12 +16,17 @@ public class GameRoomDao {
     public void setDataSource(DataSource dataSource){
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
-
+    // 매칭 RoomIdx 반환
     public PostMatchCodeRes getRoomIdx(PostMatchCodeReq postMatchCodeReq) {
         String query = "select id from match_room where match_code = ?";
         return this.jdbcTemplate.queryForObject(query,
                 (rs, rowNum) -> new PostMatchCodeRes(
                 rs.getInt("id")
         ),postMatchCodeReq.getMatchCode());
+    }
+    //
+    public void updateMatchRoomStatus(PostMatchCodeRes postMatchCodeRes) {
+        String query = "update match_room set status = 'WA' where id = ?";
+        this.jdbcTemplate.update(query,postMatchCodeRes.getRoomIdx());
     }
 }

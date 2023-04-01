@@ -8,6 +8,7 @@ import com.example.demo.src.domain.game.dto.PostMatchCodeReq;
 import com.example.demo.src.domain.game.dto.PostMatchCodeRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
 
@@ -31,10 +32,14 @@ public class GameRoomService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
+    @Transactional
     public PostMatchCodeRes getRoomIdx(PostMatchCodeReq postMatchCodeReq) throws BaseException{
         try{
+            // RoomIdx 변경
             PostMatchCodeRes postMatchCodeRes = gameRoomDao.getRoomIdx(postMatchCodeReq);
+            // 매칭방 상태변경 -> 소켓 활성화(WA)
+            gameRoomDao.updateMatchRoomStatus(postMatchCodeRes);
+
             return postMatchCodeRes;
         }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
