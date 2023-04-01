@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostMatchCodeReq {
-    private String matchCode;
+public class PostMatchCodeRes {
+    private int roomIdx;
 }
