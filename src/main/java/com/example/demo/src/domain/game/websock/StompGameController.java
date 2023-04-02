@@ -30,6 +30,6 @@ public class StompGameController {
     @MessageMapping(value = "/game/start-game")
     public void messageToClient(AdminSendScoreDTO message){
         System.out.println(message.getMatchIdx() + ": " + message.getWriter() + " -> " + message.getFrame() + " frame " + message.getScore() + " score ");
-        template.convertAndSend("/sub/game/start/" + message.getMatchIdx(), new AdminSendScoreDTO(message.getMatchIdx(),message.getWriter(),message.getFrame(),message.getScore()));
+        template.convertAndSend("/sub/game/room/" + message.getMatchIdx(), new AdminSendScoreDTO(message.getMatchIdx(),message.getWriter(),message.getFrame(),message.getScore()));
     }
 }
