@@ -10,6 +10,5 @@ import lombok.Setter;
 public class AdminSendScoreDTO {
     private String matchIdx;
     private String writer;
-    private int frame;
     private int score;
 }
