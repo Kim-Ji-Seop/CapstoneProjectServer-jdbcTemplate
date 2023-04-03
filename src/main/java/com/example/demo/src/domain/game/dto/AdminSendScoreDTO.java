@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class AdminSendScoreDTO {
+    private int playerNum;
     private String matchIdx;
     private String writer;
     private int score;
