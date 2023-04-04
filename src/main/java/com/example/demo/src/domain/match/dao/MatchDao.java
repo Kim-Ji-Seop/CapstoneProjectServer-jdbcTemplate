@@ -2,7 +2,6 @@ package com.example.demo.src.domain.match.dao;
 
 import com.example.demo.src.domain.history.dao.HistoryDao;
 import com.example.demo.src.domain.match.dto.*;
-import com.example.demo.src.domain.user.dto.GetPushListRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -21,8 +20,8 @@ public class MatchDao {
 
     public PossibleMatchesRes countMatches() {
         String query = "select count(*) as cnt " +
-                        "from match_room " +
-                        "where status='A'";
+                "from match_room " +
+                "where status='A'";
         return this.jdbcTemplate.queryForObject(query,
                 (rs, rowNum) -> new PossibleMatchesRes(rs.getInt("cnt")));
     }
@@ -40,7 +39,7 @@ public class MatchDao {
                 "    end as game_time,\n" +
                 "    target_score,id\n" +
                 "from match_room\n" +
-                "where network_type = ? and status = 'A'";
+                "where network_type = ?";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new ByNetworkRes(
                         rs.getString("game_time"),
@@ -64,7 +63,7 @@ public class MatchDao {
                 "    place,\n" +
                 "    target_score,id\n" +
                 "from match_room\n" +
-                "where network_type = ? and status = 'A'";
+                "where network_type = ?";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new ByNetworkRes(
                         rs.getString("game_time"),
@@ -175,7 +174,7 @@ public class MatchDao {
         int newMatchRoomNum = this.jdbcTemplate.queryForObject(lastInsertedQ, int.class);
 
         // 2) 반환 완료
-       return new PostCreateMatchRoomRes(newMatchRoomNum);
+        return new PostCreateMatchRoomRes(newMatchRoomNum);
     }
 
     public int MatchRoomJoinedUserCount(int matchIdx){
@@ -233,9 +232,8 @@ public class MatchDao {
     }
 
 
-    public GetMatchPlanDetailRes matchPlanDetial(int userIdx) {
+    public GetMatchPlanDetailRes matchPlanDetail(MatchCandidate joinUser) {
         String query = "SELECT\n" +
-                "    h.teamIdx, h.userIdx, u.nickname, u.profile_imgurl,\n" +
                 "    MAX(h.total_score) as highScore,\n" +
                 "    ROUND(AVG(h.total_score)) as avgScore,\n" +
                 "    COUNT(h.id) as gameCount,\n" +
@@ -249,32 +247,39 @@ public class MatchDao {
                 "LEFT JOIN user u ON u.id = h.userIdx\n" +
                 "WHERE userIdx = ? AND (settle_type IS NOT NULL AND total_score IS NOT NULL)";
 
+        int userIdx = joinUser.getUserIdx();
         Object [] param = new Object[] {userIdx, userIdx, userIdx};
 
         return this.jdbcTemplate.queryForObject(query,
                 (rs, rowNum) -> new GetMatchPlanDetailRes(
-                        rs.getInt("teamIdx"),
-                        rs.getInt("userIdx"),
-                        rs.getString("nickname"),
-                        rs.getString("profile_imgurl") == null? "":rs.getString("profile_imgurl"),
-                        rs.getInt("highScore"),
-                        rs.getInt("avgScore"),
+                        joinUser.getTeamIdx(),
+                        joinUser.getUserIdx(),
+                        joinUser.getNickName(),
+                        joinUser.getProfile_imgurl() == null? "":joinUser.getProfile_imgurl(),
+                        rs.getInt("gameCount") == 0?0:rs.getInt("highScore"),
+                        rs.getInt("gameCount") == 0?0:rs.getInt("avgScore"),
                         rs.getInt("gameCount"),
-                        rs.getInt("winCount"),
-                        rs.getInt("loseCount"),
+                        rs.getInt("gameCount") == 0?0:rs.getInt("winCount"),
+                        rs.getInt("gameCount") == 0?0:rs.getInt("loseCount"),
                         null
                 ), param);
     }
 
-    public List<MatchCandidate> matchCandidates (int matchIdx){
-        String query = "SELECT userIdx, teamIdx FROM history WHERE matchIdx = ?";
-        return this.jdbcTemplate.query(query,
-                (rs,rowNum) -> new MatchCandidate(
-                        rs.getInt("userIdx"),
-                        rs.getInt("teamIdx"))
-        , matchIdx);
-    }
+    public List<MatchCandidate> matchCandidates(int matchIdx){
+        String query ="SELECT\n" +
+                "    h.userIdx, h.teamIdx, u.nickname, u.profile_imgurl\n" +
+                "FROM history h\n" +
+                "LEFT JOIN user u on h.userIdx = u.id\n" +
+                "WHERE   h.userIdx IN(SELECT userIdx FROM history WHERE matchIdx = ?)";
 
+        return this.jdbcTemplate.query(query,
+                (rs, rowNum) -> new MatchCandidate(
+                        rs.getInt("userIdx"),
+                        rs.getInt("teamIdx"),
+                        rs.getString("nickname"),
+                        rs.getString("profile_imgurl") == null? "":rs.getString("profile_imgurl")
+                ), matchIdx);
+    }
     public int getTeamIdx(int matchIdx, int userIdx){
         String query = "SELECT teamIdx FROM history " +
                 "WHERE matchIdx = " + matchIdx + " and userIdx = " + userIdx;

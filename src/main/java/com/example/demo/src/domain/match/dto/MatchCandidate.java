@@ -10,6 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MatchCandidate {
-    int userIdx;
-    int teamIdx;
+    private int userIdx;
+    private int teamIdx;
+    private String nickName;
+    private String profile_imgurl;
 }

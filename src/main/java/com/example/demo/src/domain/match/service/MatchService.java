@@ -190,13 +190,13 @@ public class MatchService {
             List<GetMatchPlanDetailRes> getMatchPlanDetailRes = new ArrayList<>();
             GetMatchPlanDetailRes homeDetail, awayDetail;
 
-            homeDetail = matchDao.matchPlanDetial(home.getUserIdx());
+            homeDetail = matchDao.matchPlanDetail(home);
             homeDetail.setHomeOrAway("HOME");
             getMatchPlanDetailRes.add(homeDetail);
 
             // home은 null인 경우의 수가 없음. 예외처리
             if(away != null) {
-                awayDetail = matchDao.matchPlanDetial(away.getUserIdx());
+                awayDetail = matchDao.matchPlanDetail(away);
                 awayDetail.setHomeOrAway("AWAY");
                 getMatchPlanDetailRes.add(awayDetail);
             }
