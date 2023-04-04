@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -94,12 +93,30 @@ public class MatchService {
         return hAmatchRecordsRes;
     }
 
+    public String createMatchCode(int size){
+        if(size > 0) {
+            char[] tmp = new char[size];
+            for(int i=0; i<tmp.length; i++) {
+                int div = (int) Math.floor( Math.random() * 2 );
+
+                if(div == 0) { // 0이면 숫자로
+                    tmp[i] = (char) (Math.random() * 10 + '0') ;
+                }else { //1이면 알파벳
+                    tmp[i] = (char) (Math.random() * 26 + 'A') ;
+                }
+            }
+            return new String(tmp);
+        }
+        return "ERROR : Size is required.";
+    }
     public PostCreateMatchRoomRes createMatchRoom(PostCreateMatchRoomReq postCreateMatchRoomReq, int userIdx) throws BaseException{
         try{
-            // 1) 매칭방 생성
-            PostCreateMatchRoomRes postCreateMatchRoomRes= matchDao.createMatchRoom(postCreateMatchRoomReq,userIdx);
+            // 1) 매칭 코드 생성
+            String matchCode = createMatchCode(6);
+            // 2) 매칭방 생성
+            PostCreateMatchRoomRes postCreateMatchRoomRes= matchDao.createMatchRoom(postCreateMatchRoomReq,userIdx,matchCode);
 
-            // 2) 매칭방 생성자 플레이어의 참여 목록을 유지하기 위해 history 테이블에 명단식으로 우선 저장
+            // 3) 매칭방 생성자 플레이어의 참여 목록을 유지하기 위해 history 테이블에 명단식으로 우선 저장
             historyDao.createMatchRoomNewPlayer(userIdx, postCreateMatchRoomRes.getMatchIdx(), 1);
 
             return postCreateMatchRoomRes;
@@ -147,7 +164,7 @@ public class MatchService {
         }
     }
 
-    public GetMatchPlanDetailResList matchPlanDetial(int userIdx, int matchIdx) throws BaseException{
+    public GetMatchPlanDetailResList matchPlanDetail(int userIdx, int matchIdx) throws BaseException{
         try{
             // 1) 게임시간, 매치코드, 홈/어웨이 유저들의 유저Idx, 팀Idx를 받음
             String game_time = matchDao.getGameTime(matchIdx);

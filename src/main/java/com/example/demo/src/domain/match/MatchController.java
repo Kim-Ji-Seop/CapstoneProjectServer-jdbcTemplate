@@ -159,7 +159,7 @@ public class MatchController {
     public BaseResponse<GetMatchPlanDetailResList> matchPlanDetial(@PathVariable int matchIdx){
         try{
             int userIdx = jwtService.getUserIdx();
-            GetMatchPlanDetailResList getMatchPlanDetailRes = matchService.matchPlanDetial(userIdx, matchIdx);
+            GetMatchPlanDetailResList getMatchPlanDetailRes = matchService.matchPlanDetail(userIdx, matchIdx);
             return new BaseResponse<>(getMatchPlanDetailRes);
         }catch(BaseException baseException){
             System.out.println(baseException);

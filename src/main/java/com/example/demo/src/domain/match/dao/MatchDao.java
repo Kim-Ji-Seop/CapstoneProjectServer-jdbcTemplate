@@ -40,7 +40,7 @@ public class MatchDao {
                 "    end as game_time,\n" +
                 "    target_score,id\n" +
                 "from match_room\n" +
-                "where network_type = ?";
+                "where network_type = ? and status = 'A'";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new ByNetworkRes(
                         rs.getString("game_time"),
@@ -64,7 +64,7 @@ public class MatchDao {
                 "    place,\n" +
                 "    target_score,id\n" +
                 "from match_room\n" +
-                "where network_type = ?";
+                "where network_type = ? and status = 'A'";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new ByNetworkRes(
                         rs.getString("game_time"),
@@ -151,10 +151,10 @@ public class MatchDao {
     // user simple-info 에서 사용되는 개인 에버리지 기록 확인용
 
 
-    public PostCreateMatchRoomRes createMatchRoom(PostCreateMatchRoomReq postCreateMatchRoomReq, int userIdx) {
+    public PostCreateMatchRoomRes createMatchRoom(PostCreateMatchRoomReq postCreateMatchRoomReq, int userIdx, String matchCode) {
         // 1) 매칭방 생성
-        String createMatchRoomQuery = "INSERT INTO match_room(title, content, userIdx, game_time, target_score, location, network_type, `count`, place, cost)\n" +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String createMatchRoomQuery = "INSERT INTO match_room(title, content, userIdx, game_time, target_score, location, network_type, `count`, place, cost, match_code)\n" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         Object[] createMatchRoomParam = new Object[]{
                 postCreateMatchRoomReq.getTitle() ,
@@ -166,7 +166,8 @@ public class MatchDao {
                 postCreateMatchRoomReq.getNetworkType() ,
                 postCreateMatchRoomReq.getCount() ,
                 postCreateMatchRoomReq.getPlace(),
-                postCreateMatchRoomReq.getCost()};
+                postCreateMatchRoomReq.getCost(),
+                matchCode};
 
         this.jdbcTemplate.update(createMatchRoomQuery, createMatchRoomParam);
 

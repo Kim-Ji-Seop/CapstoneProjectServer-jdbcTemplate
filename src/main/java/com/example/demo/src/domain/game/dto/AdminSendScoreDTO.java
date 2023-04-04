@@ -1,14 +1,15 @@
 package com.example.demo.src.domain.game.dto;
 
-import com.google.firebase.database.annotations.Nullable;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class ChatMessageDTO {
-
+@AllArgsConstructor
+public class AdminSendScoreDTO {
+    private int playerNum;
     private String matchIdx;
     private String writer;
-    @Nullable private String message;
+    private int score;
 }

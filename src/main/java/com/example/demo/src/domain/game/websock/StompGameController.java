@@ -1,5 +1,6 @@
 package com.example.demo.src.domain.game.websock;
 
+import com.example.demo.src.domain.game.dto.AdminSendScoreDTO;
 import com.example.demo.src.domain.game.dto.ChatMessageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -18,12 +19,17 @@ public class StompGameController {
     @MessageMapping(value = "/game/enter")
     public void enter(ChatMessageDTO message){
         message.setMessage(message.getWriter() + " 님이 매칭방에 참여하였습니다.");
-        template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+        template.convertAndSend("/sub/game/room/" + message.getMatchIdx(), message);
     }
 
     @MessageMapping(value = "/game/message")
     public void message(ChatMessageDTO message){ // 점수 DTO로 수정해야함
-        System.out.println(message.getRoomId() + ": " + message.getWriter());
-        template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
+        System.out.println(message.getMatchIdx() + ": " + message.getWriter() + " -> " + message.getMessage());
+        template.convertAndSend("/sub/game/room/" + message.getMatchIdx(), message);
+    }
+    @MessageMapping(value = "/game/start-game")
+    public void messageToClient(AdminSendScoreDTO message){
+        System.out.println(message.getMatchIdx() + ": " + message.getWriter() + " -> " + message.getScore() + " score ");
+        template.convertAndSend("/sub/game/room/" + message.getMatchIdx(), new AdminSendScoreDTO(message.getPlayerNum(), message.getMatchIdx(),message.getWriter(),message.getScore()));
     }
 }

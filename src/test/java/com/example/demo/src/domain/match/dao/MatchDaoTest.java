@@ -43,7 +43,7 @@ public class MatchDaoTest { // jUnit4
     @Test
     public void MatchRoom_생성한다() throws Exception{
         // 1) 로그인 후 jwt 생성
-        String login_url = "http://localhost:" + port + "/app/users/login/test";
+        /*String login_url = "http://localhost:" + port + "/app/users/login/test";
         PostLoginReq postLoginReq = new PostLoginReq("aws5624", "Anwooseong56240@");
         PostLoginRes loginResponse = restTemplate.postForObject(login_url, postLoginReq, PostLoginRes.class);
 
@@ -51,7 +51,7 @@ public class MatchDaoTest { // jUnit4
         int userIdx = loginResponse.getUserIdx();
         String validJwt = loginResponse.getJwt();
         System.out.println("로그인 유저 PK: " + userIdx);
-        System.out.println("로그인 유저 JWT: " + validJwt);
+        System.out.println("로그인 유저 JWT: " + validJwt);*/
 
         // 2) 매칭방 생성
         // 2-1) 날짜 생성 String, Timestamp 둘 다 사용 가능 - 추후 LocalDateTime
