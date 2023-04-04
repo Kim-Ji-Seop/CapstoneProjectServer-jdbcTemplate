@@ -40,7 +40,7 @@ public class MatchDao {
                 "    end as game_time,\n" +
                 "    target_score,id\n" +
                 "from match_room\n" +
-                "where network_type = ?";
+                "where network_type = ? and status = 'A'";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new ByNetworkRes(
                         rs.getString("game_time"),
@@ -64,7 +64,7 @@ public class MatchDao {
                 "    place,\n" +
                 "    target_score,id\n" +
                 "from match_room\n" +
-                "where network_type = ?";
+                "where network_type = ? and status = 'A'";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new ByNetworkRes(
                         rs.getString("game_time"),
