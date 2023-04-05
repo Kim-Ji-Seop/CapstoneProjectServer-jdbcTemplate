@@ -15,24 +15,14 @@ import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
 
 @Service
 public class GameRoomService {
-    private final GameRoomRepository gameRoomRepository;
+
     private final GameRoomDao gameRoomDao;
+
     @Autowired
-    public GameRoomService(GameRoomRepository gameRoomRepository,GameRoomDao gameRoomDao) {
-        this.gameRoomRepository = gameRoomRepository;
+    public GameRoomService(GameRoomDao gameRoomDao) {
         this.gameRoomDao = gameRoomDao;
     }
 
-
-    public GameRoomDTO matchActivated(String code) throws BaseException {
-        try{
-            GameRoomDTO newMatchOpenRes = gameRoomRepository.matchActivated(code);
-            System.out.println("openNewMatch: " + newMatchOpenRes.getRoomId());
-            return newMatchOpenRes;
-        }catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
     @Transactional
     public PostMatchCodeRes getRoomIdx(PostMatchCodeReq postMatchCodeReq) throws BaseException{
         try{
