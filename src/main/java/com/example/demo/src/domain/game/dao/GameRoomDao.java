@@ -52,21 +52,28 @@ public class GameRoomDao {
                 ,postCheckSocketActiveReq.getMatchIdx());
     }
 
+    public int getTeamIdx(int historyIdx){
+        String query = "SELECT teamIdx FROM history " +
+                "WHERE id =?";
+        return this.jdbcTemplate.queryForObject(query,
+                (rs, rowNum) -> rs.getInt("teamIdx")
+                , historyIdx
+        );
+    }
 
-    /*public int updateHistory(GameEndReq gameEndReq) {
+    public void updateHistory(GameEndReq gameEndReq) {
         String query = "UPDATE history\n" +
                 "    SET total_score = ?,\n" +
                 "        settle_type = ?\n" +
-                "WHERE userIdx =? AND matchIdx =?\n";
+                "WHERE id = ?\n";
 
         Object[] param = {gameEndReq.getFrameScores()[9],
-        gameEndReq.getSettle_type(),
-        gameEndReq.getUserIdx(),
-        gameEndReq.getMatchIdx()};
+                gameEndReq.getSettle_type(),
+                gameEndReq.getHistoryIdx()
+        };
 
-        KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        return this.jdbcTemplate.update(query, param, Integer.class);
+        this.jdbcTemplate.update(query, param);
     }
 
     public void updateBowlingScore(int[] pitchScore, int frame_number, int accumulate_score, int match_userIdx) {
@@ -94,5 +101,5 @@ public class GameRoomDao {
         };
 
         this.jdbcTemplate.update(query, param);
-    }*/
+    }
 }

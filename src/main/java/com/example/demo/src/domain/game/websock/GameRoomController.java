@@ -45,20 +45,19 @@ public class GameRoomController {
         }
     }
 
-    /*@ResponseBody
+    @ResponseBody
     @PostMapping("/over")
     public BaseResponse<GameEndRes> matchFinished(@RequestBody List<GameEndReq> gameEndReq){
         try{
             //System.out.println(gameEndReq);
-            GameEndRes gameEndRes = gameRoomService.matchFinished(gameEndReq);
-
-            return null;
+            gameRoomService.matchFinished(gameEndReq);
+            return new BaseResponse<>(new GameEndRes(-1));
         }catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
-    }*/
+    }
 
-    /*@ResponseBody
+    @ResponseBody
     @GetMapping("/a")
     public BaseResponse<ArrayRes> checkArray(){
         int [] a = new int[]{1,2,3,4};
@@ -66,6 +65,5 @@ public class GameRoomController {
         ar.setArrays(a);
         return new BaseResponse<>(ar);
     }
-*/
 
 }

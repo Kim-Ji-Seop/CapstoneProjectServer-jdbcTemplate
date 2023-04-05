@@ -2,15 +2,12 @@ package com.example.demo.src.domain.game.service;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.domain.game.dao.GameRoomDao;
-import com.example.demo.src.domain.game.dao.GameRoomRepository;
 import com.example.demo.src.domain.game.dto.*;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -68,7 +65,8 @@ public class GameRoomService {
         }
     }
 
-    /*public GameEndRes matchFinished(List<GameEndReq> gameEndReq) throws BaseException{
+    @Transactional
+    public void matchFinished(List<GameEndReq> gameEndReq) throws BaseException{
         try{
             String settle_type;
             HashMap<Integer, Integer> teamScore = new HashMap<>();
@@ -76,7 +74,7 @@ public class GameRoomService {
 
             // 팀별 점수 합산 - 1팀, 2팀의 총 합이 teamScore 해시맵에 저장됨
             for (GameEndReq gameInfo : gameEndReq){
-                int teamIdx = gameInfo.getTeamIdx();
+                int teamIdx = gameRoomDao.getTeamIdx(gameInfo.getHistoryIdx());
 
                 if(!teamScore.containsKey(teamIdx)){
                     teamScore.put(teamIdx, gameInfo.getFrameScores()[9]);
@@ -127,18 +125,14 @@ public class GameRoomService {
                                     gameInfo.getFrameScoresPerPitch()[frame],
                                     frame+1,
                                     gameInfo.getFrameScores()[frame],
-                                    gameInfo.getUserIdx());
+                                    gameInfo.getHistoryIdx());
                         }
                     }
                 }
-
-            }
-            else{
-                return null;
             }
 
         }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
-    }*/
+    }
 }
