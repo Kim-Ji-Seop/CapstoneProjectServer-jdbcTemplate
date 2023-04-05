@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserNameNnickName {
+public class UserNameNickName {
     private String name;
     private String nickname;
 }

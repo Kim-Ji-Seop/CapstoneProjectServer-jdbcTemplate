@@ -3,7 +3,6 @@ package com.example.demo.src.domain.user.service;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.secret.Secret;
 import com.example.demo.src.domain.match.dao.MatchDao;
-import com.example.demo.src.domain.match.dto.MatchRoomDetailRes;
 import com.example.demo.src.domain.user.dao.UserDao;
 import com.example.demo.src.domain.user.dto.*;
 import com.example.demo.utils.AES128;
@@ -141,20 +140,20 @@ public class UserService {
 
                 // 2-2) 유저 프로필 이미지 링크, 유저 닉네임 값 가져오기
                 GetUserProfileImgRes userProfileImgRes;
-                UserNameNnickName userNameNnickName;
+                UserNameNickName userNameNickName;
                 if(push.getOwner_userIdx() == userIdx){
                     userProfileImgRes = userDao.getUserProfileImg(push.getJoin_userIdx());
-                    userNameNnickName = userDao.userInfo(push.getJoin_userIdx());
+                    userNameNickName = userDao.userInfo(push.getJoin_userIdx());
                 }
                 else if(push.getJoin_userIdx() == userIdx){
                     userProfileImgRes = userDao.getUserProfileImg(push.getOwner_userIdx());
-                    userNameNnickName = userDao.userInfo(push.getOwner_userIdx());
+                    userNameNickName = userDao.userInfo(push.getOwner_userIdx());
                 }
                 else{
                     throw new BaseException(DATABASE_ERROR);
                 }
                 push.setProfileImg_url(userProfileImgRes.getUserProfileImgUrl());
-                push.setOpponentNick(userNameNnickName.getNickname());
+                push.setOpponentNick(userNameNickName.getNickname());
 
                 // 2-3) 날짜 키에 리스트 해당 푸쉬 정보를 추가하기.
                 if (pushList_hashByDate.containsKey(parsingDate)){

@@ -14,8 +14,8 @@ public class UserSimpleInfo {
     private String nickname; // 닉네임
     private int average; // 점수 평균
     // 최근 10 경기 승, 패
-    private int win_count;
-    private int lose_count;
-    private int win_late;
+    private int winCount;
+    private int loseCount;
+    private int winRate;
 
 }

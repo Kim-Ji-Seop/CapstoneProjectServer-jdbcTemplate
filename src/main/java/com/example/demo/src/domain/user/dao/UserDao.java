@@ -74,11 +74,11 @@ public class UserDao {
         this.jdbcTemplate.update(query, logInParams);
     }
 
-    public UserNameNnickName userInfo(int userIdx){
+    public UserNameNickName userInfo(int userIdx){
         String query = "select `name`, nickname from user where id=?";
 
         return this.jdbcTemplate.queryForObject(query,
-                (rs, rowNum) -> new UserNameNnickName(
+                (rs, rowNum) -> new UserNameNickName(
                         rs.getString("name"),
                         rs.getString("nickname")
                 ), userIdx);
