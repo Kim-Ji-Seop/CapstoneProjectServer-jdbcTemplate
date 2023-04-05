@@ -92,7 +92,7 @@ public class GameRoomDao {
 
         Object[] param = {
                 pitchScore[0],
-                pitchScore[1],
+                pitchScore[1] == -1? 0: pitchScore[1],
                 pitchScore[2] == -1? 0: pitchScore[2],
                 frame_number,
                 accumulate_score,
