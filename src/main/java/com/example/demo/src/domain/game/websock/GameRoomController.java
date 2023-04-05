@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping( "/app/game")
@@ -20,19 +22,9 @@ public class GameRoomController {
         this.gameRoomService = gameRoomService;
     }
 
-    @ResponseBody
-    @PostMapping ("/open")
-    public BaseResponse<GameRoomDTO> matchActivated(@RequestParam String id){
-        try{
-            System.out.println("Match Room: " + id + " activated");
-            return new BaseResponse<>(gameRoomService.matchActivated(id));
-        } catch (BaseException exception){
-            return new BaseResponse<>(exception.getStatus());
-        }
-    }
 
     @ResponseBody
-    @PostMapping("/match-code")
+    @PostMapping("/match-code") // admin
     public BaseResponse<PostMatchCodeRes> getRoomIdx(@RequestBody PostMatchCodeReq postMatchCodeReq){
         try{
             PostMatchCodeRes postMatchCodeRes = gameRoomService.getRoomIdx(postMatchCodeReq);
@@ -43,7 +35,7 @@ public class GameRoomController {
     }
 
     @ResponseBody
-    @PostMapping("/join")
+    @PostMapping("/join") // client
     public BaseResponse<PostCheckSocketActiveRes> getRoomStatus(@RequestBody PostCheckSocketActiveReq postCheckSocketActiveReq){
         try{
             PostCheckSocketActiveRes postMatchCodeRes = gameRoomService.getRoomStatus(postCheckSocketActiveReq);
@@ -51,6 +43,28 @@ public class GameRoomController {
         }catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
+    }
+
+    /*@ResponseBody
+    @PostMapping("/over")
+    public BaseResponse<GameEndRes> matchFinished(@RequestBody List<GameEndReq> gameEndReq){
+        try{
+            //System.out.println(gameEndReq);
+            GameEndRes gameEndRes = gameRoomService.matchFinished(gameEndReq);
+
+            return null;
+        }catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }*/
+
+    @ResponseBody
+    @GetMapping("/a")
+    public BaseResponse<ArrayRes> checkArray(){
+        int [] a = new int[]{1,2,3,4};
+        ArrayRes ar = new ArrayRes();
+        ar.setArrays(a);
+        return new BaseResponse<>(ar);
     }
 
 

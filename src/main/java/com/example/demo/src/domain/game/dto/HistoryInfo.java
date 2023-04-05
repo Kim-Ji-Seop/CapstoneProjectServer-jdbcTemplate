@@ -5,13 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class PostMatchCodeRes {
-    private int roomIdx;
-    private List<HistoryInfo> historyInfo;
+@AllArgsConstructor
+public class HistoryInfo {
+    private int historyIdx;
+    private String nickName;
 }
