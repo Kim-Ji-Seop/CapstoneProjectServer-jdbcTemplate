@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="34a7e82e-5c52-4848-89a6-9919de8573d7" name="spring_proj" url="https://3.34.52.117">
+        <fileTransfer rootFolder="/var/www/SpringBootTemplate" accessType="SFTP" host="3.34.52.117" port="22" sshConfigId="c9f41247-dada-40d0-a51f-8c9a907d03fd" sshConfig="ubuntu@3.34.52.117:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="36ab4bb3-d22b-4da7-bc45-78d61842da35" name="sads" url="http://3.34.52.117">
+        <fileTransfer rootFolder="/var/www/SpringBootTemplate" accessType="SFTP" host="3.34.52.117" port="22" sshConfigId="c9f41247-dada-40d0-a51f-8c9a907d03fd" sshConfig="ubuntu@3.34.52.117:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
