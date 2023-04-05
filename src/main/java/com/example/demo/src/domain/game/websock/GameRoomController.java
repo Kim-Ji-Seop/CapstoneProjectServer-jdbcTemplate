@@ -58,7 +58,7 @@ public class GameRoomController {
         }
     }*/
 
-    @ResponseBody
+    /*@ResponseBody
     @GetMapping("/a")
     public BaseResponse<ArrayRes> checkArray(){
         int [] a = new int[]{1,2,3,4};
@@ -66,6 +66,6 @@ public class GameRoomController {
         ar.setArrays(a);
         return new BaseResponse<>(ar);
     }
-
+*/
 
 }
