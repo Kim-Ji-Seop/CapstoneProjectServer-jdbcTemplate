@@ -1,4 +1,90 @@
-02:23:25.771 INFO  [File:StartupInfoLogger.java] [Func:logStarting] [Line:55] [Message:Starting MatchDaoTest using Java 11.0.15 on DESKTOP-8TPRKEG with PID 19340 (started by d in C:\Users\d\Desktop\CapstoneProjectServer-jdbcTemplate)]- Starting MatchDaoTest using Java 11.0.15 on DESKTOP-8TPRKEG with PID 19340 (started by d in C:\Users\d\Desktop\CapstoneProjectServer-jdbcTemplate)
-02:23:25.779 DEBUG [File:StartupInfoLogger.java] [Func:logStarting] [Line:56] [Message:Running with Spring Boot v2.4.2, Spring v5.3.3]- Running with Spring Boot v2.4.2, Spring v5.3.3
-02:23:25.780 INFO  [File:SpringApplication.java] [Func:logStartupProfileInfo] [Line:660] [Message:No active profile set, falling back to default profiles: default]- No active profile set, falling back to default profiles: default
-02:23:31.332 INFO  [File:StartupInfoLogger.java] [Func:logStarted] [Line:61] [Message:Started MatchDaoTest in 6.102 seconds (JVM running for 7.235)]- Started MatchDaoTest in 6.102 seconds (JVM running for 7.235)
+18:33:50.129 INFO  [File:JobConfiguration.java] [Func:lambda$simpleStep1$0] [Line:31] [Message:>>>>> This is simpleStep1]- >>>>> This is simpleStep1
+20:29:00.016 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+20:29:20.003 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+20:33:19.093 DEBUG [File:JobConfiguration.java] [Func:lambda$step1$0] [Line:52] [Message:======= 전송 배치 시작 =======]- ======= 전송 배치 시작 =======
+20:33:20.006 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+20:34:53.650 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:78] [Message:======= 처리할 Item 개수 : 0]- ======= 처리할 Item 개수 : 0
+20:34:53.650 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:80] [Message:======= 처리할 Item 이 없어 종료 ]- ======= 처리할 Item 이 없어 종료 
+20:35:00.015 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+20:36:00.019 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+20:36:20.013 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+20:37:03.640 DEBUG [File:JobConfiguration.java] [Func:lambda$step1$0] [Line:52] [Message:======= 전송 배치 시작 =======]- ======= 전송 배치 시작 =======
+20:37:20.024 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+20:37:40.014 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+20:38:00.009 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+20:39:00.017 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+20:39:20.003 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+20:39:40.006 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:00:20.923 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:00:40.001 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:03:00.008 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:04:40.025 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:07:00.135 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:07:20.015 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:07:40.002 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:08:00.006 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:08:20.014 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:09:00.018 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:09:20.003 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:09:40.005 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:12:01.216 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:12:20.015 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:13:00.007 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:13:40.018 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:14:00.014 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:16:44.303 DEBUG [File:JobConfiguration.java] [Func:lambda$step3$2] [Line:101] [Message:step3: ]- step3: 
+21:16:44.949 DEBUG [File:JobConfiguration.java] [Func:lambda$step4$3] [Line:123] [Message:======= 전송 배치 종료 =======]- ======= 전송 배치 종료 =======
+21:17:00.009 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:17:20.014 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:18:00.005 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:18:40.019 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:19:00.005 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:19:20.014 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:19:40.015 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:22:20.013 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:22:40.013 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:23:00.011 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:23:20.018 INFO  [File:HankerJobA.java] [Func:executeInternal] [Line:30] [Message:작업 스케쥴러 A]- 작업 스케쥴러 A
+21:29:05.779 DEBUG [File:JobConfiguration.java] [Func:lambda$step1$0] [Line:57] [Message:======= 전송 배치 시작 =======]- ======= 전송 배치 시작 =======
+21:29:06.412 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:82] [Message:step2: ]- step2: 
+21:29:07.049 DEBUG [File:JobConfiguration.java] [Func:lambda$step3$2] [Line:101] [Message:step3: ]- step3: 
+21:29:07.688 DEBUG [File:JobConfiguration.java] [Func:lambda$step4$3] [Line:123] [Message:======= 전송 배치 종료 =======]- ======= 전송 배치 종료 =======
+21:29:10.796 DEBUG [File:JobConfiguration.java] [Func:lambda$step1$0] [Line:57] [Message:======= 전송 배치 시작 =======]- ======= 전송 배치 시작 =======
+21:29:11.433 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:82] [Message:step2: ]- step2: 
+21:29:12.067 DEBUG [File:JobConfiguration.java] [Func:lambda$step3$2] [Line:101] [Message:step3: ]- step3: 
+21:29:12.705 DEBUG [File:JobConfiguration.java] [Func:lambda$step4$3] [Line:123] [Message:======= 전송 배치 종료 =======]- ======= 전송 배치 종료 =======
+21:31:00.829 DEBUG [File:JobConfiguration.java] [Func:lambda$step1$0] [Line:57] [Message:======= 전송 배치 시작 =======]- ======= 전송 배치 시작 =======
+21:31:01.457 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:82] [Message:step2: ]- step2: 
+21:31:01.473 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:84] [Message:======= 처리할 Item 개수 : 5]- ======= 처리할 Item 개수 : 5
+21:31:02.100 DEBUG [File:JobConfiguration.java] [Func:lambda$step3$2] [Line:101] [Message:step3: ]- step3: 
+21:31:02.825 DEBUG [File:JobConfiguration.java] [Func:lambda$step4$3] [Line:123] [Message:======= 전송 배치 종료 =======]- ======= 전송 배치 종료 =======
+22:40:01.162 DEBUG [File:JobConfiguration.java] [Func:lambda$step1$0] [Line:57] [Message:======= 전송 배치 시작 =======]- ======= 전송 배치 시작 =======
+22:40:01.824 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:82] [Message:step2: ]- step2: 
+22:40:01.840 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:84] [Message:======= 처리할 Item 개수 : 5]- ======= 처리할 Item 개수 : 5
+22:40:02.494 DEBUG [File:JobConfiguration.java] [Func:lambda$step3$2] [Line:101] [Message:step3: ]- step3: 
+22:40:03.255 DEBUG [File:JobConfiguration.java] [Func:lambda$step4$3] [Line:123] [Message:======= 전송 배치 종료 =======]- ======= 전송 배치 종료 =======
+22:45:45.865 DEBUG [File:JobConfiguration.java] [Func:lambda$step1$0] [Line:57] [Message:======= 전송 배치 시작 =======]- ======= 전송 배치 시작 =======
+22:45:46.549 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:82] [Message:step2: ]- step2: 
+22:45:46.564 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:84] [Message:======= 처리할 Item 개수 : 5]- ======= 처리할 Item 개수 : 5
+22:45:47.145 DEBUG [File:JobConfiguration.java] [Func:lambda$step3$2] [Line:101] [Message:step3: ]- step3: 
+22:45:47.825 DEBUG [File:JobConfiguration.java] [Func:lambda$step4$3] [Line:123] [Message:======= 전송 배치 종료 =======]- ======= 전송 배치 종료 =======
+22:45:50.746 DEBUG [File:JobConfiguration.java] [Func:lambda$step1$0] [Line:57] [Message:======= 전송 배치 시작 =======]- ======= 전송 배치 시작 =======
+22:45:51.361 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:82] [Message:step2: ]- step2: 
+22:45:51.373 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:84] [Message:======= 처리할 Item 개수 : 5]- ======= 처리할 Item 개수 : 5
+22:45:51.980 DEBUG [File:JobConfiguration.java] [Func:lambda$step3$2] [Line:101] [Message:step3: ]- step3: 
+22:45:52.665 DEBUG [File:JobConfiguration.java] [Func:lambda$step4$3] [Line:123] [Message:======= 전송 배치 종료 =======]- ======= 전송 배치 종료 =======
+22:45:55.687 DEBUG [File:JobConfiguration.java] [Func:lambda$step1$0] [Line:57] [Message:======= 전송 배치 시작 =======]- ======= 전송 배치 시작 =======
+22:45:56.227 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:82] [Message:step2: ]- step2: 
+22:45:56.238 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:84] [Message:======= 처리할 Item 개수 : 5]- ======= 처리할 Item 개수 : 5
+22:45:56.849 DEBUG [File:JobConfiguration.java] [Func:lambda$step3$2] [Line:101] [Message:step3: ]- step3: 
+22:45:57.583 DEBUG [File:JobConfiguration.java] [Func:lambda$step4$3] [Line:123] [Message:======= 전송 배치 종료 =======]- ======= 전송 배치 종료 =======
+22:46:20.805 DEBUG [File:JobConfiguration.java] [Func:lambda$step1$0] [Line:57] [Message:======= 전송 배치 시작 =======]- ======= 전송 배치 시작 =======
+22:46:21.481 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:82] [Message:step2: ]- step2: 
+22:46:21.500 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:84] [Message:======= 처리할 Item 개수 : 5]- ======= 처리할 Item 개수 : 5
+22:46:22.168 DEBUG [File:JobConfiguration.java] [Func:lambda$step3$2] [Line:101] [Message:step3: ]- step3: 
+22:46:22.910 DEBUG [File:JobConfiguration.java] [Func:lambda$step4$3] [Line:123] [Message:======= 전송 배치 종료 =======]- ======= 전송 배치 종료 =======
+22:46:40.795 DEBUG [File:JobConfiguration.java] [Func:lambda$step1$0] [Line:57] [Message:======= 전송 배치 시작 =======]- ======= 전송 배치 시작 =======
+22:46:41.445 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:82] [Message:step2: ]- step2: 
+22:46:41.456 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:84] [Message:======= 처리할 Item 개수 : 5]- ======= 처리할 Item 개수 : 5
+22:46:42.151 DEBUG [File:JobConfiguration.java] [Func:lambda$step3$2] [Line:101] [Message:step3: ]- step3: 
+22:46:42.857 DEBUG [File:JobConfiguration.java] [Func:lambda$step4$3] [Line:123] [Message:======= 전송 배치 종료 =======]- ======= 전송 배치 종료 =======

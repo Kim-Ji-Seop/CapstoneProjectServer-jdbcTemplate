@@ -65,6 +65,12 @@ dependencies {
     // STOMP
     implementation group: 'org.webjars', name: 'stomp-websocket', version: '2.3.3-1'
 
+    // Spring Batch
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
+
+    // Spring Scheduler
+    implementation 'org.springframework.boot:spring-boot-starter-quartz'
+
     implementation('org.springframework.boot:spring-boot-starter')
     compile('org.springframework.boot:spring-boot-starter-web')
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
