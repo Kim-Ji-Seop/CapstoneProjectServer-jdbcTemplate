@@ -163,4 +163,6 @@ public class UserDao {
                         rs.getString("profile_imgurl"))
         , userIdx);
     }
+
+
 }

@@ -3,6 +3,7 @@ package com.example.demo.src.domain.game.service;
 import com.example.demo.config.BaseException;
 import com.example.demo.src.domain.game.dao.GameRoomDao;
 import com.example.demo.src.domain.game.dto.*;
+import com.example.demo.src.domain.match.dao.MatchDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,10 +18,12 @@ import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
 public class GameRoomService {
 
     private final GameRoomDao gameRoomDao;
+    private final MatchDao matchDao;
 
     @Autowired
-    public GameRoomService(GameRoomDao gameRoomDao) {
+    public GameRoomService(GameRoomDao gameRoomDao, MatchDao matchDao) {
         this.gameRoomDao = gameRoomDao;
+        this.matchDao = matchDao;
     }
 
     @Transactional
@@ -61,6 +64,8 @@ public class GameRoomService {
             String settle_type;
             HashMap<Integer, Integer> teamScore = new HashMap<>();
             HashMap<Integer, List<GameEndReq>> teamDto = new HashMap<>();
+            int historyIdx = gameEndReq.size() != 0 ? gameEndReq.get(0).getHistoryIdx() : 0;
+            int matchIdx = historyIdx != 0 ? matchDao.getMatchIdxFromHistoryIdx(historyIdx): 0;
 
             // 팀별 점수 합산 - 1팀, 2팀의 총 합이 teamScore 해시맵에 저장됨
             for (GameEndReq gameInfo : gameEndReq){
@@ -119,6 +124,10 @@ public class GameRoomService {
                         }
                     }
                 }
+            }
+
+            if (matchIdx != 0){
+                matchDao.matchGameOver(matchIdx);
             }
 
         }catch (Exception exception){

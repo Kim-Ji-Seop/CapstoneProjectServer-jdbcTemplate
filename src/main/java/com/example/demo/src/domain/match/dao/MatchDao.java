@@ -39,7 +39,7 @@ public class MatchDao {
                 "    end as game_time,\n" +
                 "    target_score,id\n" +
                 "from match_room\n" +
-                "where network_type = ?";
+                "where network_type = ? and status = 'A'";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new ByNetworkRes(
                         rs.getString("game_time"),
@@ -63,7 +63,7 @@ public class MatchDao {
                 "    place,\n" +
                 "    target_score,id\n" +
                 "from match_room\n" +
-                "where network_type = ?";
+                "where network_type = ? and status = 'A'";
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new ByNetworkRes(
                         rs.getString("game_time"),
@@ -105,51 +105,74 @@ public class MatchDao {
     }
 
     // 매칭 전적을 확인하기 위함
-    public List<MatchRecordsRes> getMatchRecord(int userIdx){
-        String query = "SELECT (SELECT\n" +
-                "    CASE\n" +
-                "        WHEN\n" +
-                "            instr(date_format(mr.game_time, '%Y-%m-%d %p %h:%i'), 'PM') > 0\n" +
-                "        THEN\n" +
-                "            replace(date_format(mr.game_time, '%Y-%m-%d %p %h:%i'), 'PM', '오후')\n" +
-                "        ELSE\n" +
-                "            replace(date_format(mr.game_time, '%Y-%m-%d %p %h:%i'), 'AM', '오전')\n" +
-                "    END\n" +
-                "    FROM match_room AS mr WHERE h.matchIdx = mr.id) AS game_time,\n" +
-                "    u.nickname, mr.network_type, mr.count,\n" +
-                "    h.id, h.userIdx, h.matchIdx, h.teamIdx,\n" +
-                "    h.settle_type,\n" +
-                "    IF (mr.count = 2, h.total_score, SUM(h.total_score)) AS total_score,\n" +
-                "    h.created, h.updated, h.status\n" +
-                "FROM history AS h\n" +
-                "    LEFT JOIN match_room mr on h.matchIdx = mr.id\n" +
-                "    LEFT JOIN user u on u.id = h.userIdx\n" +
-                "           WHERE h.matchIdx IN(\n" +
-                "                SELECT h.matchIdx FROM history AS h\n" +
-                "                LEFT JOIN\n" +
-                "                    user AS u ON h.userIdx = u.id\n" +
-                "                           WHERE u.id = ?)\n" +
-                "            GROUP BY h.matchIdx, h.teamIdx\n" +
-                "            ORDER BY h.matchidx;";
+    public List<Integer> getMatchRecord(int userIdx){
+        String query = "SELECT\n" +
+                "    matchIdx\n" +
+                "FROM history\n" +
+                "WHERE userIdx = ? AND total_score IS NOT NULL\n" +
+                "ORDER BY updated DESC, matchIdx";
 
         return this.jdbcTemplate.query(query,
-                (rs, rowNum) -> new MatchRecordsRes(
-                        rs.getString("game_time"),
-                        rs.getString("nickname"),
-                        rs.getString("network_type"),
-                        rs.getInt("count"),
-                        rs.getInt("userIdx"),
-                        rs.getInt("matchIdx"),
-                        rs.getInt("teamIdx"),
-                        null,
-                        rs.getString("settle_type"),
-                        rs.getInt("total_score")
+                (rs, rowNum) -> new Integer(
+                        rs.getInt("matchIdx")
                 ), userIdx);
     }
 
-    // user simple-info 에서 사용되는 개인 에버리지 기록 확인용
+    public List<UserHistoryInfo> getAllUserInfoByMatchIdx(int matchIdx){
+        String query = "SELECT\n" +
+                "    userIdx, matchIdx, teamIdx, settle_type, total_score\n" +
+                "FROM history\n" +
+                "WHERE matchIdx = ? AND total_score IS NOT NULL \n" +
+                "ORDER BY updated DESC, matchIdx, teamIdx";
+
+        return this.jdbcTemplate.query(query,
+                ((rs, rowNum) -> new UserHistoryInfo(
+                        rs.getInt("userIdx"),
+                        rs.getInt("matchIdx"),
+                        rs.getInt("teamIdx"),
+                        rs.getString("settle_type"),
+                        rs.getInt("total_score"))
+                ), matchIdx);
+    }
+
+    public List<UserHistoryInfo> getAllUserInfoByMatchIdxN(int matchIdx){
+        String query = "SELECT\n" +
+                "    userIdx, matchIdx, teamIdx, settle_type, " +
+                "    SUM(total_score) as total_score\n" +
+                "FROM history\n" +
+                "WHERE matchIdx = ? AND total_score IS NOT NULL\n" +
+                "GROUP BY matchIdx, teamIdx\n" +
+                "ORDER BY updated DESC, matchIdx, teamIdx";
+
+        return this.jdbcTemplate.query(query,
+                ((rs, rowNum) -> new UserHistoryInfo(
+                        rs.getInt("userIdx"),
+                        rs.getInt("matchIdx"),
+                        rs.getInt("teamIdx"),
+                        rs.getString("settle_type"),
+                        rs.getInt("total_score"))
+                ), matchIdx);
+    }
+
+    public int getMatchRoomPeopleLimit(int matchIdx){
+        String query = "SELECT count FROM match_room WHERE id = ?";
+
+        return this.jdbcTemplate.queryForObject(query,
+                ((rs, rowNum) -> new Integer(
+                        rs.getInt("count"))
+                ), matchIdx);
+    }
+
+    public String getMatchRoomNetworkTypeById(int matchIdx){
+        String query = "SELECT network_type FROM match_room WHERE id = ?";
+        return this.jdbcTemplate.queryForObject(query,
+                ((rs, rowNum) -> new String(
+                        rs.getString("network_type"))
+                ), matchIdx);
+    }
 
 
+    // 매칭방 생성
     public PostCreateMatchRoomRes createMatchRoom(PostCreateMatchRoomReq postCreateMatchRoomReq, int userIdx, String matchCode) {
         // 1) 매칭방 생성
         String createMatchRoomQuery = "INSERT INTO match_room(title, content, userIdx, game_time, target_score, location, network_type, `count`, place, cost, match_code)\n" +
@@ -177,7 +200,8 @@ public class MatchDao {
         return new PostCreateMatchRoomRes(newMatchRoomNum);
     }
 
-    public int MatchRoomJoinedUserCount(int matchIdx){
+    // 현재 매칭방에 참여하고 있는 인원 수
+    public int matchRoomJoinedUserCount(int matchIdx){
         String query = "SELECT COUNT(matchIdx) as currentJoinUserCount \n" +
                 "FROM history\n" +
                 "WHERE matchIdx = ?";
@@ -187,6 +211,7 @@ public class MatchDao {
                         rs.getInt("currentJoinUsercount")
                 ), matchIdx);
     }
+
 
     public List<GetMatchPlanRes> matchPlanList(int userIdx) {
         String query = "SELECT (SELECT\n" +
@@ -207,7 +232,7 @@ public class MatchDao {
                 "FROM history AS h\n" +
                 "    LEFT JOIN match_room mr on h.matchIdx = mr.id\n" +
                 "    LEFT JOIN user u on u.id = h.userIdx\n" +
-                "WHERE h.matchIdx IN(SELECT h.matchIdx FROM history AS h WHERE h.userIdx = ?)\n" +
+                "WHERE h.matchIdx IN(SELECT h.matchIdx FROM history AS h WHERE h.userIdx = ?) AND mr.status = 'A'\n" +
                 "GROUP BY h.matchIdx, h.teamIdx\n" +
                 "ORDER BY h.matchidx;";
 
@@ -305,5 +330,20 @@ public class MatchDao {
                 "WHERE id = "+ matchIdx + "\n";
         return this.jdbcTemplate.queryForObject(query, String.class);
 
+    }
+
+    public int getMatchIdxFromHistoryIdx(int historyIdx){
+        String query = "SELECT matchIdx FROM history WHERE id = ?";
+        return this.jdbcTemplate.queryForObject(query,
+                (rs, rowNum) -> new Integer(
+                        rs.getInt("matchIdx")
+                ), historyIdx);
+    }
+
+    public void matchGameOver(int matchIdx){
+        String query = "UPDATE match_room " +
+                "SET status = 'E' " +
+                "WHERE id = ?";
+        this.jdbcTemplate.update(query, matchIdx);
     }
 }

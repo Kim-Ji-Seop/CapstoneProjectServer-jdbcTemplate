@@ -36,15 +36,15 @@ public class JobConfiguration {
                 .start(step1()) //STEP 1 실행
                     .on("FAILED")// STEP 1 결과가 FAILED 일 경우
                     .end()// 종료
-                .from(step1()) // STEP1 의 결과로부터
-                    .on("*") // FAILED 를 제외한 모든 경우
-                    .to(step2()) // STEP 2로 이동 후 실행
-                .from(step2()) // STEP2 의 결과로부터
-                    .on("*") // FAILED 를 제외한 모든 경우
-                    .to(step3()) // STEP 3로 이동 후 실행
-                .next(step4()) // STEP 3의 결과에 상관없이 STEP 4 실행
-                .on("*") // STEP4 의 모든 결과에 상관없이
-                .end() // FLOW 종료
+                .from(step1())
+                    .on("*")
+                    .to(step2())
+                .from(step2())
+                    .on("*")
+                    .to(step3())
+                    .next(step4())
+                    .on("*")
+                    .end() // FLOW 종료
                 .end() // JOB 종료
                 .build();
     }
@@ -55,22 +55,6 @@ public class JobConfiguration {
                 .tasklet((stepContribution, chunkContext) -> {
 
                     log.debug("======= 전송 배치 시작 =======");
-                    /*Optional<LockTable> lockTable = Optional
-                            .ofNullable(lockTableRepository.findById("play-batch"))
-                            .orElse(Optional.ofNullable(LockTable
-                                    .builder()
-                                    .instanceId(instanceId)
-                                    .useYn(false)
-                                    .checkDataTime(LocalDateTime.now())
-                                    .build()));
-                    log.debug("======= Lock Table 사용 여부:{},", lockTable.get().isUseYn());
-                    if(lockTable.get().isUseYn()){
-                        log.debug("======= Table 사용 중으로 종료 ");
-                        stepContribution.setExitStatus(ExitStatus.FAILED);
-                    }else{
-                        lockTable.get().setUseYn(true);
-                        lockTableRepository.save(lockTable.get());
-                    }*/
                     return RepeatStatus.FINISHED;
                 }).build();
     }
@@ -84,9 +68,6 @@ public class JobConfiguration {
                     log.debug("======= 처리할 Item 개수 : {}", itemCnt);
                     if(0 == itemCnt){
                         log.debug("======= 처리할 Item 이 없어 종료 ");
-                        /*Optional<LockTable> lockTable = lockTableRepository.findById(instanceId);
-                        lockTable.get().setUseYn(false);
-                        lockTable.get().setCheckDataTime(LocalDateTime.now());*/
                         stepContribution.setExitStatus(ExitStatus.FAILED);
                     }
                     stepContribution.setExitStatus(ExitStatus.COMPLETED);
@@ -115,10 +96,6 @@ public class JobConfiguration {
     public Step step4(){
         return stepBuilderFactory.get("step4")
                 .tasklet((stepContribution, chunkContext) -> {
-                    /*Optional<LockTable> lockTable = lockTableRepository.findById(instanceId);
-                    lockTable.get().setUseYn(false);
-                    lockTable.get().setCheckDataTime(LocalDateTime.now());
-                    lockTableRepository.save(lockTable.get());*/
                     testBatchDao.changeAndInsert();
                     log.debug("======= 전송 배치 종료 =======");
                     return RepeatStatus.FINISHED;

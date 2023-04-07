@@ -132,6 +132,7 @@ public class UserController {
             List<HAmatchRecordsRes> matchRecordsRes = matchService.getMatchRecord(userIdx);
             return new BaseResponse<>(matchRecordsRes);
         }catch (BaseException baseException){
+            System.out.println(baseException);
             return new BaseResponse<>(baseException.getStatus());
         }
     }
@@ -144,6 +145,17 @@ public class UserController {
            return new BaseResponse<>(userService.getPushRecord(userIdx));
        }catch (BaseException baseException){
            return new BaseResponse<>(baseException.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/info")
+    public BaseResponse<UserProfileInfo> getUserProfileInfo() throws BaseException{
+        try{
+            int userIdx = jwtService.getUserIdx();
+            return new BaseResponse<>(userService.getUserProfileInfo(userIdx));
+        }catch (BaseException baseException){
+            return new BaseResponse<>(baseException.getStatus());
         }
     }
 

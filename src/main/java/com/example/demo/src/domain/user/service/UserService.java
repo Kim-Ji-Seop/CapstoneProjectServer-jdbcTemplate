@@ -2,6 +2,7 @@ package com.example.demo.src.domain.user.service;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.secret.Secret;
+import com.example.demo.src.domain.history.dao.HistoryDao;
 import com.example.demo.src.domain.match.dao.MatchDao;
 import com.example.demo.src.domain.user.dao.UserDao;
 import com.example.demo.src.domain.user.dto.*;
@@ -26,12 +27,15 @@ public class UserService {
 
     private final UserDao userDao;
     private final MatchDao matchDao;
+
+    private final HistoryDao historyDao;
     private final JwtService jwtService;
 
     @Autowired
-    public UserService(UserDao userDao, MatchDao matchDao, JwtService jwtService) {
+    public UserService(UserDao userDao, MatchDao matchDao, HistoryDao historyDao, JwtService jwtService) {
         this.userDao = userDao;
         this.matchDao = matchDao;
+        this.historyDao = historyDao;
         this.jwtService = jwtService;
     }
 
@@ -176,5 +180,39 @@ public class UserService {
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+    public UserProfileInfo getUserProfileInfo(int userIdx) {
+        UserNameNickName userNameNickName = userDao.userInfo(userIdx);
+        int userGameCount = historyDao.getUserGameCount(userIdx);
+        int userWinCount = historyDao.getWinCount(userIdx);
+        int userLoseCount = historyDao.getLoseCount(userIdx);
+        int userDrawCount = historyDao.getDrawCount(userIdx);
+        int userAvgScore = historyDao.getAvgScore(userIdx);
+        int userHighScore = historyDao.getHighScore(userIdx);
+
+        List<Integer> historyGames = historyDao.getHistoryIdxes(userIdx);
+
+        int totalStrikeCount = 0;
+        for (int historyIdx : historyGames){
+            totalStrikeCount += historyDao.getStrikeCount(historyIdx);
+        }
+
+        double strikeRate = totalStrikeCount == 0 ? 0 : ((double) totalStrikeCount / (10 * userGameCount)) * 100;
+
+        UserProfileInfo userProfileInfo = new UserProfileInfo(
+                userNameNickName.getName(),
+                userNameNickName.getNickname(),
+                userWinCount,
+                userLoseCount,
+                userDrawCount,
+                userAvgScore,
+                userHighScore,
+                strikeRate,
+                userGameCount
+        );
+
+        return userProfileInfo;
+
     }
 }

@@ -4,6 +4,7 @@ import com.example.demo.config.BaseException;
 import com.example.demo.src.domain.history.dao.HistoryDao;
 import com.example.demo.src.domain.match.dao.MatchDao;
 import com.example.demo.src.domain.match.dto.*;
+import com.example.demo.src.domain.user.dao.UserDao;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +22,13 @@ public class MatchService {
 
     private final MatchDao matchDao;
     private final HistoryDao historyDao;
+    private final UserDao userDao;
     private final JwtService jwtService;
 
-    public MatchService(MatchDao matchDao, HistoryDao historyDao, JwtService jwtService) {
+    public MatchService(MatchDao matchDao, HistoryDao historyDao, UserDao userDao, JwtService jwtService) {
         this.matchDao = matchDao;
         this.historyDao = historyDao;
+        this.userDao = userDao;
         this.jwtService = jwtService;
     }
 
@@ -58,39 +61,78 @@ public class MatchService {
     }
 
     public List<HAmatchRecordsRes> getMatchRecord(int userIdx) throws BaseException{
-        List<HAmatchRecordsRes> hAmatchRecordsRes = new ArrayList<>();
-        List<MatchRecordsRes> matchRecordsRes = matchDao.getMatchRecord(userIdx);
         try{
-            for (int i =0; i<matchRecordsRes.size(); i+=2 ){
-                // 이렇게 2개씩 묶을 수 있는 이유는 DB에서 ORDER BY 로 매칭방 번호순으로 쿼리를 뱉어냈기 때문
-                // 2개의 연속된 매칭방 번호를 붙여서 리스트로 반환 받았음.
-                List<MatchRecordsRes> homeNaway = new ArrayList<>();
-                MatchRecordsRes result1 = matchRecordsRes.get(i);
-                MatchRecordsRes result2 = matchRecordsRes.get(i+1);
-                int matchIdx1 = result1.getMatchIdx();
-                int matchIdx2 = result2.getMatchIdx();
+        List<Integer> matchRecordIdxList = matchDao.getMatchRecord(userIdx);
+        HashMap<Integer, List<UserHistoryInfo>> playerOfMatch = new HashMap<>();
 
-                if (matchIdx1 == matchIdx2) { // 매칭방 번호가 같을때
-                    if(result2.getUserIdx() == userIdx){
-                        MatchRecordsRes temp = result1;
-                        result1 = result2;
-                        result2 = temp;
-                    }
-                    result1.setHomeOrAway("HOME");
-                    result2.setHomeOrAway("AWAY");
-                    homeNaway.add(result1);
-                    homeNaway.add(result2);
-                }
-                else{
-                    throw new BaseException(DATABASE_ERROR);
-                }
-                hAmatchRecordsRes.add(new HAmatchRecordsRes(matchIdx1, homeNaway));
+        for(int i : matchRecordIdxList){
+            int count = matchDao.getMatchRoomPeopleLimit(i);
 
+            if (!playerOfMatch.containsKey(i)){
+                if (count == 2){
+                    playerOfMatch.put(i, matchDao.getAllUserInfoByMatchIdx(i));
+                } else{
+                    playerOfMatch.put(i, matchDao.getAllUserInfoByMatchIdxN(i));
+                }
+                // 위에 두 녀석은 결과값의 길이가 무조건 2로 같다 왜냐하면 팀단위로 뱉기 때문
             }
+        }
+
+        int count, homeTeamIdx;
+        String network_type, gametime;
+        List<HAmatchRecordsRes> hAmatchRecordsRes = new ArrayList<>();
+        for (int i: matchRecordIdxList){
+            List<UserHistoryInfo> tempUserHistoryInfos = playerOfMatch.get(i);
+            count = matchDao.getMatchRoomPeopleLimit(i);
+            network_type = matchDao.getMatchRoomNetworkTypeById(i);
+
+            List<MatchRecordsRes> homeNAway = new ArrayList<>();
+            UserHistoryInfo result1 = playerOfMatch.get(i).get(0);
+            UserHistoryInfo result2 = playerOfMatch.get(i).get(1);
+            UserHistoryInfo temp;
+
+            homeTeamIdx = matchDao.getTeamIdx(i, userIdx);
+            if(result1.getTeamIdx() != homeTeamIdx){
+                temp = result1;
+                result1 = result2;
+                result2 = temp;
+            }
+
+            gametime = matchDao.getGameTime(i);
+
+            homeNAway.add(new MatchRecordsRes(
+                    gametime,
+                    userDao.userInfo(result1.getUserIdx()).getNickname(),
+                    network_type,
+                    count,
+                    result1.getUserIdx(),
+                    result1.getMatchIdx(),
+                    result1.getTeamIdx(),
+                    "HOME",
+                    result1.getSettle_type(),
+                    result1.getTotal_score()
+            ));
+            homeNAway.add(new MatchRecordsRes(
+                    gametime,
+                    userDao.userInfo(result2.getUserIdx()).getNickname(),
+                    network_type,
+                    count,
+                    result2.getUserIdx(),
+                    result2.getMatchIdx(),
+                    result2.getTeamIdx(),
+                    "AWAY",
+                    result2.getSettle_type(),
+                    result2.getTotal_score()
+            ));
+            hAmatchRecordsRes.add(new HAmatchRecordsRes(i, homeNAway));
+        }
+
+        return hAmatchRecordsRes;
+
         }catch (Exception exception){
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
-        return hAmatchRecordsRes;
     }
 
     public String createMatchCode(int size){

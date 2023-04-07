@@ -63,12 +63,6 @@ public class MatchController {
         }
     }
 
-    /**
-     * Method : GET
-     * URI : /rooms/plans
-     * Description : 예정 매치
-     */
-
 
     /**
      * Method : GET
@@ -141,6 +135,11 @@ public class MatchController {
         }
     }
 
+    /**
+     * Method : GET
+     * URI : /rooms/plans
+     * Description : 예정 매치
+     */
     @ResponseBody
     @GetMapping("/rooms/plans")
     public BaseResponse<List<GetMatchPlanResList>> matchPlanList(){
@@ -154,6 +153,11 @@ public class MatchController {
         }
     }
 
+    /**
+     * Method : GET
+     * URI : /rooms/plans/:matchIdx
+     * Description : 예정 매치 상세
+     */
     @ResponseBody
     @GetMapping("/rooms/plans/{matchIdx}")
     public BaseResponse<GetMatchPlanDetailResList> matchPlanDetial(@PathVariable int matchIdx){

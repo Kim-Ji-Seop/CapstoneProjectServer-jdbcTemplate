@@ -61,7 +61,7 @@ public class PushService {
             MatchRoomDetailRes roomDetailRes = matchDao.matchroomDetail(matchIdx);
 
             // ** 매칭방에 방장이 수락하여 매칭 참여인원이 다 차게 되면 참가신청 불가능
-            int currentJoinedUser = matchDao.MatchRoomJoinedUserCount(matchIdx);
+            int currentJoinedUser = matchDao.matchRoomJoinedUserCount(matchIdx);
             if (currentJoinedUser >= roomDetailRes.getCount()){
                 return new MatchJoinPushRes(0);
             }
@@ -115,7 +115,7 @@ public class PushService {
             String push_content = "<" + roomDetailRes.getDate() + ">\n" + ownerUser.getName() + "(" +  ownerUser.getNickname() +")";
 
             // ** 매칭방에 방장이 수락하려는데 매칭 참여인원이 다 찼으면 수락 불가능
-            int currentJoinedUser = matchDao.MatchRoomJoinedUserCount(matchIdx);
+            int currentJoinedUser = matchDao.matchRoomJoinedUserCount(matchIdx);
             if (currentJoinedUser >= roomDetailRes.getCount()){
                 push_content = "<" + roomDetailRes.getDate() + ">\n"+ "남은 자리가 없습니다.";
                 newStatus = "D";
