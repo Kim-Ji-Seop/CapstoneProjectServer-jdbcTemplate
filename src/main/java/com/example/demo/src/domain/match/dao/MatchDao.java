@@ -18,6 +18,7 @@ public class MatchDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+
     public PossibleMatchesRes countMatches() {
         String query = "select count(*) as cnt " +
                 "from match_room " +
@@ -295,7 +296,9 @@ public class MatchDao {
                 "    h.userIdx, h.teamIdx, u.nickname, u.profile_imgurl\n" +
                 "FROM history h\n" +
                 "LEFT JOIN user u on h.userIdx = u.id\n" +
-                "WHERE   h.userIdx IN(SELECT userIdx FROM history WHERE matchIdx = ?)";
+                "WHERE   h.userIdx IN(SELECT userIdx FROM history WHERE matchIdx = ?) AND h.matchIdx = ?";
+
+        Object[] param = {matchIdx, matchIdx};
 
         return this.jdbcTemplate.query(query,
                 (rs, rowNum) -> new MatchCandidate(
@@ -303,7 +306,7 @@ public class MatchDao {
                         rs.getInt("teamIdx"),
                         rs.getString("nickname"),
                         rs.getString("profile_imgurl") == null? "":rs.getString("profile_imgurl")
-                ), matchIdx);
+                ), param);
     }
     public int getTeamIdx(int matchIdx, int userIdx){
         String query = "SELECT teamIdx FROM history " +
