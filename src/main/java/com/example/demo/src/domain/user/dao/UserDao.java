@@ -106,11 +106,11 @@ public class UserDao {
 
     public UserSimpleInfo getMainViewUserInfo(int userIdx) {
         String query = "SELECT u.name, u.nickname,\n" +
-                "       ROUND(AVG(h.total_score)) as average,\n" +
+                "       ROUND(h.total_score) as average,\n" +
                 "       win_count, lose_count,\n" +
                 "       ROUND(h.win_count / h.tenofN * 100) as win_late\n" +
                 "FROM (SELECT COUNT(userIdx) as tenofN,\n" +
-                "      userIdx, total_score,\n" +
+                "      userIdx, avg(total_score) as total_score,\n" +
                 "      COUNT(case when settle_type = 'WIN' then 1 end) as win_count,\n" +
                 "      COUNT(case when settle_type = 'LOSE' then 1 end) as lose_count\n" +
                 "        FROM history\n" +
