@@ -16,6 +16,7 @@ public class UserSimpleInfo {
     // 최근 10 경기 승, 패
     private int winCount;
     private int loseCount;
+    private int drawCount;
     private int winRate;
 
 }

@@ -107,15 +107,15 @@ public class UserDao {
     public UserSimpleInfo getMainViewUserInfo(int userIdx) {
         String query = "SELECT u.name, u.nickname,\n" +
                 "       ROUND(h.total_score) as average,\n" +
-                "       win_count, lose_count,\n" +
-                "       ROUND(h.win_count / h.tenofN * 100) as win_late\n" +
+                "       win_count, lose_count, draw_count,\n" +
+                "       ROUND(h.win_count / h.tenofN * 100) as win_Rate\n" +
                 "FROM (SELECT COUNT(userIdx) as tenofN,\n" +
-                "      userIdx, avg(total_score) as total_score,\n" +
-                "      COUNT(case when settle_type = 'WIN' then 1 end) as win_count,\n" +
-                "      COUNT(case when settle_type = 'LOSE' then 1 end) as lose_count\n" +
+                "        userIdx, avg(total_score) as total_score,\n" +
+                "          COUNT(case when settle_type = 'WIN' then 1 end) as win_count,\n" +
+                "          COUNT(case when settle_type = 'LOSE' then 1 end) as lose_count,\n" +
+                "          COUNT(case when settle_type = 'DRAW' then 1 end) as draw_count\n" +
                 "        FROM history\n" +
-                "      WHERE userIdx = ?\n" +
-                "      ORDER BY updated DESC LIMIT 10 ) as h\n" +
+                "      WHERE userIdx = ?) as h\n" +
                 "LEFT JOIN user u on u.id = h.userIdx";
 
         return this.jdbcTemplate.queryForObject(query,
@@ -125,7 +125,8 @@ public class UserDao {
                         rs.getInt("average"),
                         rs.getInt("win_count"),
                         rs.getInt("lose_count"),
-                        rs.getInt("win_late")
+                        rs.getInt("draw_count"),
+                        rs.getInt("win_Rate")
                 ), userIdx);
     }
 
