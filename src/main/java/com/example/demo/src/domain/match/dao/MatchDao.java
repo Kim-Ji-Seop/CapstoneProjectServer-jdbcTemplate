@@ -215,7 +215,8 @@ public class MatchDao {
 
 
     public List<GetMatchPlanRes> matchPlanList(int userIdx) {
-        String query = "SELECT (SELECT\n" +
+        String query =
+                "SELECT (SELECT\n" +
                 "    CASE\n" +
                 "        WHEN\n" +
                 "            instr(date_format(mr.game_time, '%Y-%m-%d %p %h:%i'), 'PM') > 0\n" +
@@ -233,7 +234,7 @@ public class MatchDao {
                 "FROM history AS h\n" +
                 "    LEFT JOIN match_room mr on h.matchIdx = mr.id\n" +
                 "    LEFT JOIN user u on u.id = h.userIdx\n" +
-                "WHERE h.matchIdx IN(SELECT h.matchIdx FROM history AS h WHERE h.userIdx = ?) AND mr.status = 'A'\n" +
+                "WHERE h.matchIdx IN(SELECT h.matchIdx FROM history AS h WHERE h.userIdx = ?) AND mr.status = 'A' AND h.status = 'A'\n" +
                 "GROUP BY h.matchIdx, h.teamIdx\n" +
                 "ORDER BY h.matchidx;";
 

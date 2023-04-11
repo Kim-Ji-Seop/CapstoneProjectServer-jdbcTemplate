@@ -2,6 +2,7 @@ package com.example.demo.src.domain.push.dao;
 
 import com.example.demo.src.domain.history.dao.HistoryDao;
 import com.example.demo.src.domain.push.dto.JoinAcceptOrNotReq;
+import com.example.demo.src.domain.push.dto.MatchCancelReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -47,5 +48,25 @@ public class PushDao {
         this.jdbcTemplate.update(acceptQuery, pushParams);
 
         return pushIdx;
+    }
+
+    public int isOwnerCheck(MatchCancelReq matchCancelReq) {
+        String query = "select userIdx from match_room where id = ?";
+        return this.jdbcTemplate.queryForObject(query,int.class,matchCancelReq.getMatchIdx());
+    }
+
+    public void deleteMatchRoomByOwner(int matchIdx) {
+        String query =
+                "update history h, match_room mr\n" +
+                "    set h.status = 'D',\n" +
+                "        mr.status = 'D'\n" +
+                "where h.matchIdx = mr.id and h.matchIdx = ?";
+        this.jdbcTemplate.update(query,matchIdx);
+    }
+
+    public void exitMatchRoom(int userIdx, int matchIdx) {
+        String query =
+                "update history set status = 'D' where matchIdx = ? and userIdx = ?";
+        this.jdbcTemplate.update(query,matchIdx,userIdx);
     }
 }

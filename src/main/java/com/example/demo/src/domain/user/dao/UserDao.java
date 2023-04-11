@@ -88,10 +88,6 @@ public class UserDao {
     public String getTargetFCMtoken(int targetUserIdx) {
         String query = "select devicetoken from user where id =?";
 
-//        return this.jdbcTemplate.queryForObject(query,
-//                (rs, rowNum) -> (
-//                        rs.getString("devicetoken")
-//                ), targetUserIdx);
         try {
             return this.jdbcTemplate.queryForObject(query,
                     (rs, rowNum) -> (

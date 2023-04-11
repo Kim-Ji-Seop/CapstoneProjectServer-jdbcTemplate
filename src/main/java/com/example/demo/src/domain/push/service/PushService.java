@@ -6,10 +6,7 @@ import com.example.demo.src.domain.history.dao.HistoryDao;
 import com.example.demo.src.domain.match.dao.MatchDao;
 import com.example.demo.src.domain.match.dto.MatchRoomDetailRes;
 import com.example.demo.src.domain.push.dao.PushDao;
-import com.example.demo.src.domain.push.dto.JoinAcceptOrNotReq;
-import com.example.demo.src.domain.push.dto.JoinAcceptOrNotRes;
-import com.example.demo.src.domain.push.dto.MatchJoinPushReq;
-import com.example.demo.src.domain.push.dto.MatchJoinPushRes;
+import com.example.demo.src.domain.push.dto.*;
 import com.example.demo.src.domain.user.dao.UserDao;
 import com.example.demo.src.domain.user.dto.UserNameNickName;
 import com.example.demo.utils.JwtService;
@@ -21,6 +18,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -126,7 +124,6 @@ public class PushService {
             // 4-1) 수락 시
             if (newStatus == "A"){
                 int teamIdx = 0;
-                /* team 설정 로직 추가할것*/
 
                 historyDao.createMatchRoomNewPlayer(
                         joinAcceptOrNotReq.getJoin_userIdx(),
@@ -179,5 +176,21 @@ public class PushService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Integer matchCancel(int userIdx, MatchCancelReq matchCancelReq) throws BaseException{
+        // 1. 매칭취소 유저가 방장인지? 일반유저인지?
+        if(userIdx == pushDao.isOwnerCheck(matchCancelReq)){
+            // 2. 방장유저라면 -> 매칭방과 매칭방에 속한 유저들을 전부 status D 처리를 해준다.
+            pushDao.deleteMatchRoomByOwner(matchCancelReq.getMatchIdx());
+            return 1;
+        }else{
+            // 3. 일반유저라면 -> 매칭방에 속한 상태를 D로 만든다.
+            pushDao.exitMatchRoom(userIdx,matchCancelReq.getMatchIdx());
+            return 0;
+        }
+
+
+
     }
 }

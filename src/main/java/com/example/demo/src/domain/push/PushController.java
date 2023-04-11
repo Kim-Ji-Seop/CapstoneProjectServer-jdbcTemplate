@@ -2,12 +2,10 @@ package com.example.demo.src.domain.push;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.domain.push.dto.JoinAcceptOrNotReq;
-import com.example.demo.src.domain.push.dto.JoinAcceptOrNotRes;
-import com.example.demo.src.domain.push.dto.MatchJoinPushReq;
-import com.example.demo.src.domain.push.dto.MatchJoinPushRes;
+import com.example.demo.src.domain.push.dto.*;
 import com.example.demo.src.domain.push.service.PushService;
 import com.example.demo.utils.JwtService;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +32,6 @@ public class PushController {
     @RequestMapping("")
     public BaseResponse<MatchJoinPushRes> joinPush(@RequestBody MatchJoinPushReq matchJoinPushReq) throws BaseException {
         int userIdx = jwtService.getUserIdx();
-        //int userIdx = 17; // 테스트용 jwt ID 가정
         try{
             MatchJoinPushRes matchJoinPushRes = pushService.joinPush(userIdx, matchJoinPushReq);
             return new BaseResponse<>(matchJoinPushRes);
@@ -50,6 +47,16 @@ public class PushController {
         try{
             JoinAcceptOrNotRes joinAcceptOrNotRes = pushService.ownerAccepted(userIdx, joinAcceptOrNotReq);
             return new BaseResponse<>(joinAcceptOrNotRes);
+        }catch (BaseException baseException){
+            return new BaseResponse<>(baseException.getStatus());
+        }
+    }
+
+    @RequestMapping("/cancel")
+    public BaseResponse<Integer> matchCancel(@RequestBody MatchCancelReq matchCancelReq) throws BaseException{
+        int userIdx = jwtService.getUserIdx();
+        try{
+            return new BaseResponse<>(pushService.matchCancel(userIdx,matchCancelReq));
         }catch (BaseException baseException){
             return new BaseResponse<>(baseException.getStatus());
         }
