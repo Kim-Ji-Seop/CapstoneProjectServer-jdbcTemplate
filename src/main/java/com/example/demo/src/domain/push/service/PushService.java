@@ -181,7 +181,10 @@ public class PushService {
     public Integer matchCancel(int userIdx, MatchCancelReq matchCancelReq) throws BaseException{
         // 푸쉬알림 전송 메세지 생성 - 방장이 매칭방 취소
         // 푸시알림 보내기
+        System.out.println(matchCancelReq.getMatchCancelUserList().toString());
         int targetUserIdx = matchCancelReq.getMatchCancelUserList().get(0).getUserIdx();
+        System.out.println(targetUserIdx);
+
         MatchRoomDetailRes roomDetailRes = matchDao.matchroomDetail(matchCancelReq.getMatchIdx()); // 매칭방 정보
         String targetFcmToken = userDao.getTargetFCMtoken(targetUserIdx);
 
