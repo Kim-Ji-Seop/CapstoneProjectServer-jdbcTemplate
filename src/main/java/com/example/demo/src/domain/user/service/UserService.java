@@ -199,6 +199,7 @@ public class UserService {
         }
 
         double strikeRate = totalStrikeCount == 0 ? 0 : ((double) totalStrikeCount / (10 * userGameCount)) * 100;
+        strikeRate = Math.round(strikeRate * 100) / 100.0;
 
         UserProfileInfo userProfileInfo = new UserProfileInfo(
                 userNameNickName.getName(),
