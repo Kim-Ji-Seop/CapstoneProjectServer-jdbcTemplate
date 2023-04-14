@@ -179,29 +179,30 @@ public class PushService {
     }
 
     public Integer matchCancel(int userIdx, MatchCancelReq matchCancelReq) throws BaseException{
+        // 푸쉬알림 전송 메세지 생성 - 방장이 매칭방 취소
+        // 푸시알림 보내기
+        int targetUserIdx = matchCancelReq.getMatchCancelUserList().get(0).getUserIdx();
+        MatchRoomDetailRes roomDetailRes = matchDao.matchroomDetail(matchCancelReq.getMatchIdx()); // 매칭방 정보
+        String targetFcmToken = userDao.getTargetFCMtoken(targetUserIdx);
+
+        String push_title = roomDetailRes.getTitle() + " 경기 ("+")";
+        String push_content;
+
         // 1. 매칭취소 유저가 방장인지? 일반유저인지?
         if(userIdx == pushDao.isOwnerCheck(matchCancelReq)){
             // 2. 방장유저라면 -> 매칭방과 매칭방에 속한 유저들을 전부 status D 처리를 해준다.
             pushDao.deleteMatchRoomByOwner(matchCancelReq.getMatchIdx());
+            push_content = roomDetailRes.getNickname() + "님이 매칭방을 삭제했습니다.";
 
-            // 푸쉬알림 전송 메세지 생성 - 방장이 매칭방 취소
-            // 푸시알림 보내기
-            int targetUserIdx = matchCancelReq.getMatchCancelUserList().get(0).getUserIdx();
-            MatchRoomDetailRes roomDetailRes = matchDao.matchroomDetail(matchCancelReq.getMatchIdx()); // 매칭방 정보
-            String targetFcmToken = userDao.getTargetFCMtoken(targetUserIdx);
-
-            String push_title = roomDetailRes.getTitle() + " 경기 ("+")";
-            String push_content = roomDetailRes.getNickname() + "님이 매칭을 취소했습니다.";
-
-            sendFcmPush(targetFcmToken,push_title,push_content);
-            return 1;
         }else{
             // 3. 일반유저라면 -> 매칭방에 속한 상태를 D로 만든다.
             pushDao.exitMatchRoom(userIdx,matchCancelReq.getMatchIdx());
-            return 0;
+            push_content = roomDetailRes.getNickname() + "님이 매칭을 취소했습니다.";
         }
 
+        sendFcmPush(targetFcmToken,push_title,push_content);
 
+        return userIdx == pushDao.isOwnerCheck(matchCancelReq) ? 1 : 0;
 
     }
 }

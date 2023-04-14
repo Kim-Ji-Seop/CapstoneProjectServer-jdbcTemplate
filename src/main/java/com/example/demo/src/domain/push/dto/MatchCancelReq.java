@@ -1,5 +1,6 @@
 package com.example.demo.src.domain.push.dto;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,5 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 public class MatchCancelReq {
     private int matchIdx;
+    @SerializedName("userIdxList")
     private List<MatchCancelUser> matchCancelUserList;
 }
