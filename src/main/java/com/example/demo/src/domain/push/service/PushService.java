@@ -157,8 +157,6 @@ public class PushService {
         JSONObject jsonMessage = new JSONObject();
         jsonMessage.put("message", jsonData);
 
-
-
         // 2. create token & send push
         try {
             OkHttpClient okHttpClient = new OkHttpClient();
@@ -181,7 +179,6 @@ public class PushService {
     public Integer matchCancel(int userIdx, MatchCancelReq matchCancelReq) throws BaseException{
         // 푸쉬알림 전송 메세지 생성 - 방장이 매칭방 취소
         // 푸시알림 보내기
-        System.out.println(matchCancelReq.getMatchCancelUserList().toString());
         int targetUserIdx = matchCancelReq.getMatchCancelUserList().get(0).getUserIdx();
         System.out.println(targetUserIdx);
 

@@ -14,6 +14,5 @@ import java.util.List;
 @NoArgsConstructor
 public class MatchCancelReq {
     private int matchIdx;
-    @SerializedName("userIdxList")
     private List<MatchCancelUser> matchCancelUserList;
 }

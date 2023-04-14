@@ -266,13 +266,13 @@ public class MatchDao {
                 "    COUNT(h.id) as gameCount,\n" +
                 "    (SELECT COUNT(settle_type)\n" +
                 "     FROM history\n" +
-                "     WHERE h.settle_type = 'WIN' AND userIdx = ?) as winCount,\n" +
+                "     WHERE settle_type = 'WIN' AND userIdx = ?) as winCount,\n" +
                 "    (SELECT COUNT(settle_type)\n" +
                 "     FROM history\n" +
-                "     WHERE h.settle_type = 'LOSE' AND userIdx = ?) as loseCount\n" +
+                "     WHERE settle_type = 'LOSE' AND userIdx = ?) as loseCount\n" +
                 "FROM history h\n" +
                 "LEFT JOIN user u ON u.id = h.userIdx\n" +
-                "WHERE userIdx = ? AND (settle_type IS NOT NULL AND total_score IS NOT NULL)";
+                "WHERE h.userIdx = ? AND (h.settle_type IS NOT NULL AND h.total_score IS NOT NULL) AND h.status <> 'D'";
 
         int userIdx = joinUser.getUserIdx();
         Object [] param = new Object[] {userIdx, userIdx, userIdx};

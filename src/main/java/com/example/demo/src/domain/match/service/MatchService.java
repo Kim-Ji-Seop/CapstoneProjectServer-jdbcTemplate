@@ -227,8 +227,8 @@ public class MatchService {
                     away = candi;
                 }
             }
-            System.out.println(home.toString());
-            System.out.println(away.toString());
+            //System.out.println(home.toString());
+            //System.out.println(away.toString());
 
             // 3) 대표자 히스토리 값 생성
             List<GetMatchPlanDetailRes> getMatchPlanDetailRes = new ArrayList<>();

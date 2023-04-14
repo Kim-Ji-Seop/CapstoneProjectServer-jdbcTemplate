@@ -111,7 +111,7 @@ public class UserDao {
                 "          COUNT(case when settle_type = 'LOSE' then 1 end) as lose_count,\n" +
                 "          COUNT(case when settle_type = 'DRAW' then 1 end) as draw_count\n" +
                 "        FROM history\n" +
-                "      WHERE userIdx = ?) as h\n" +
+                "      WHERE userIdx = ? AND (settle_type IS NOT NULL AND total_score IS NOT NULL) AND status <> 'D') as h\n" +
                 "LEFT JOIN user u on u.id = h.userIdx";
 
         return this.jdbcTemplate.queryForObject(query,
