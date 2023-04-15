@@ -41,6 +41,19 @@ public class MatchController {
             return new BaseResponse<>(baseException.getStatus());
         }
     }
+
+    @ResponseBody
+    @GetMapping("/rooms/counts/online")
+    public BaseResponse<PossibleMatchesRes> onlineCountMatches(){
+        try {
+            PossibleMatchesRes possibleMatchesRes = matchService.onlineCountMatches();
+            return new BaseResponse<>(possibleMatchesRes);
+        }catch (BaseException baseException){
+            return new BaseResponse<>(baseException.getStatus());
+        }
+    }
+
+
     /**
      * Method : GET
      * URI : /rooms/locations
@@ -54,9 +67,11 @@ public class MatchController {
      */
     @ResponseBody
     @GetMapping("/rooms")
-    public BaseResponse<List<ByNetworkRes>> getMatchRoomsByNetwork(@RequestParam String network){
+    public BaseResponse<List<ByNetworkRes>> getMatchRoomsByNetwork(@RequestParam String network,
+                                                                   @RequestParam(required = false) String localName,
+                                                                   @RequestParam(required = false) String cityName){
         try {
-            List<ByNetworkRes> byNetworkRes = matchService.getMatchRoomsByNetwork(network);
+            List<ByNetworkRes> byNetworkRes = matchService.getMatchRoomsByNetwork(network, localName, cityName);
             return new BaseResponse<>(byNetworkRes);
         }catch (BaseException baseException){
             return new BaseResponse<>(baseException.getStatus());
@@ -169,6 +184,17 @@ public class MatchController {
             System.out.println(baseException);
             return new BaseResponse<>(baseException.getStatus());
         }
+    }
+
+    @ResponseBody
+    @GetMapping("/local")
+    public BaseResponse<List<String>> getLocalCities(@RequestParam String localName){
+        try{
+            return new BaseResponse<>(matchService.getLocalCities(localName));
+        }catch (BaseException baseException){
+            return new BaseResponse<>(baseException.getStatus());
+        }
+
     }
 
 

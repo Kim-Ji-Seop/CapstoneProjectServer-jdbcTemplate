@@ -1,5 +1,6 @@
 package com.example.demo.src.domain.match.dao;
 
+import com.example.demo.config.BaseResponse;
 import com.example.demo.src.domain.history.dao.HistoryDao;
 import com.example.demo.src.domain.match.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,14 @@ public class MatchDao {
         String query = "select count(*) as cnt " +
                 "from match_room " +
                 "where status='A'";
+        return this.jdbcTemplate.queryForObject(query,
+                (rs, rowNum) -> new PossibleMatchesRes(rs.getInt("cnt")));
+    }
+
+    public PossibleMatchesRes onlineCountMatches() {
+        String query = "select count(*) as cnt " +
+                "from match_room " +
+                "where status='A' AND network_type = 'ONLINE'";
         return this.jdbcTemplate.queryForObject(query,
                 (rs, rowNum) -> new PossibleMatchesRes(rs.getInt("cnt")));
     }
@@ -349,5 +358,81 @@ public class MatchDao {
                 "SET status = 'E' " +
                 "WHERE id = ?";
         this.jdbcTemplate.update(query, matchIdx);
+    }
+
+
+    public List<String> getLocalCities(String local) {
+        String query = "SELECT l.city FROM location l\n" +
+                "WHERE l.local = ?";
+        return this.jdbcTemplate.query(query,
+                (rs,rowNum) ->
+                        new String(rs.getString("city"))
+                , local);
+    }
+
+    // 매칭방 지역 단위, 도시 단위로 조회
+    public List<ByNetworkRes> getmatchRoomsOfflineByLocalCity(String network, int locationIdx) {
+        String query = "select\n" +
+                "    `count`,\n" +
+                "    case\n" +
+                "        when\n" +
+                "            instr(date_format(game_time, '%Y-%m-%d %p %h:%i'), 'PM') > 0\n" +
+                "        then\n" +
+                "            replace(date_format(game_time, '%Y-%m-%d %p %h:%i'), 'PM', '오후')\n" +
+                "        else\n" +
+                "            replace(date_format(game_time, '%Y-%m-%d %p %h:%i'), 'AM', '오전')\n" +
+                "    end as game_time,\n" +
+                "    place,\n" +
+                "    target_score,id\n" +
+                "from match_room\n" +
+                "where network_type = ? and status = 'A' AND WHERE locationIdx = ?";
+
+        Object [] param = {network, locationIdx};
+        return this.jdbcTemplate.query(query,
+                (rs, rowNum) -> new ByNetworkRes(
+                        rs.getString("game_time"),
+                        rs.getInt("target_score"),
+                        rs.getString("place"),
+                        rs.getInt("count"),
+                        rs.getInt("id")
+                ),param);
+    }
+
+    public int getLocationIdx(String localName, String cityName){
+        String query = "SELECT l.id FROM location l WHERE l.local = ? AND l.city = ?";
+        Object [] param = {localName, cityName};
+
+        return this.jdbcTemplate.queryForObject(query,
+                (rs, rowNum) -> rs.getInt("id"), param);
+    }
+
+    // 매칭방 지역 단위로 조회
+    public List<ByNetworkRes> getmatchRoomsOfflineByLocal(String network, String localName) {
+        String query = "select\n" +
+                "    mr.count,\n" +
+                "    case\n" +
+                "        when\n" +
+                "            instr(date_format(mr.game_time, '%Y-%m-%d %p %h:%i'), 'PM') > 0\n" +
+                "        then\n" +
+                "            replace(date_format(mr.game_time, '%Y-%m-%d %p %h:%i'), 'PM', '오후')\n" +
+                "        else\n" +
+                "            replace(date_format(mr.game_time, '%Y-%m-%d %p %h:%i'), 'AM', '오전')\n" +
+                "    end as game_time,\n" +
+                "    mr.place,\n" +
+                "    mr.target_score, mr.id\n" +
+                "from match_room mr\n" +
+                "INNER JOIN location l on mr.locationIdx = l.id\n" +
+                "where mr.network_type = ? and mr.status = 'A' AND  l.local = ?;";
+
+        Object [] param = {network, localName};
+
+        return this.jdbcTemplate.query(query,
+                (rs, rowNum) -> new ByNetworkRes(
+                        rs.getString("game_time"),
+                        rs.getInt("target_score"),
+                        rs.getString("place"),
+                        rs.getInt("count"),
+                        rs.getInt("id")
+                ),param);
     }
 }

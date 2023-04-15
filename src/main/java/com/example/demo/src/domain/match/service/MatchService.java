@@ -1,6 +1,7 @@
 package com.example.demo.src.domain.match.service;
 
 import com.example.demo.config.BaseException;
+import com.example.demo.config.BaseResponse;
 import com.example.demo.src.domain.history.dao.HistoryDao;
 import com.example.demo.src.domain.match.dao.MatchDao;
 import com.example.demo.src.domain.match.dto.*;
@@ -40,12 +41,31 @@ public class MatchService {
         }
     }
 
-    public List<ByNetworkRes> getMatchRoomsByNetwork(String network) throws BaseException {
+    public PossibleMatchesRes onlineCountMatches() throws BaseException{
+        try{
+            return matchDao.onlineCountMatches();
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<ByNetworkRes> getMatchRoomsByNetwork(String network, String localName, String cityName) throws BaseException {
         try{
             if(network.equals("ONLINE")) {
                 return matchDao.getMatchRoomsOnline(network);
             }else{
-                return matchDao.getMatchRoomsOffline(network);
+                if(localName != null){
+                    if(cityName != null){
+                        int locationIdx = matchDao.getLocationIdx(localName, cityName);
+                        return matchDao.getmatchRoomsOfflineByLocalCity(network, locationIdx);
+                    }
+                    else{
+                        return matchDao.getmatchRoomsOfflineByLocal(network, localName);
+                    }
+                }
+                else{
+                    return matchDao.getMatchRoomsOffline(network);
+                }
             }
         }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
@@ -253,6 +273,16 @@ public class MatchService {
             );
 
             return getMatchPlanDetailResListList;
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+    }
+
+
+    public List<String> getLocalCities(String local) throws BaseException{
+        try{
+            return matchDao.getLocalCities(local);
         }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
