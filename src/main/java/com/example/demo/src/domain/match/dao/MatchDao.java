@@ -385,7 +385,7 @@ public class MatchDao {
                 "    place,\n" +
                 "    target_score,id\n" +
                 "from match_room\n" +
-                "where network_type = ? and status = 'A' AND WHERE locationIdx = ?";
+                "WHERE network_type = ? and status = 'A' AND  locationIdx = ?";
 
         Object [] param = {network, locationIdx};
         return this.jdbcTemplate.query(query,
@@ -399,11 +399,11 @@ public class MatchDao {
     }
 
     public int getLocationIdx(String localName, String cityName){
-        String query = "SELECT l.id FROM location l WHERE l.local = ? AND l.city = ?";
+        String query = "SELECT id FROM location WHERE `local` = ? AND city = ?";
         Object [] param = {localName, cityName};
 
         return this.jdbcTemplate.queryForObject(query,
-                (rs, rowNum) -> rs.getInt("id"), param);
+                (rs, rowNum) -> new Integer (rs.getInt("id")), param);
     }
 
     // 매칭방 지역 단위로 조회

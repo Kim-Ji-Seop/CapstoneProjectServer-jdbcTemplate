@@ -56,6 +56,7 @@ public class MatchService {
             }else{
                 if(localName != null){
                     if(cityName != null){
+
                         int locationIdx = matchDao.getLocationIdx(localName, cityName);
                         return matchDao.getmatchRoomsOfflineByLocalCity(network, locationIdx);
                     }
