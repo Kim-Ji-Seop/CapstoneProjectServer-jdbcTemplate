@@ -71,6 +71,7 @@ public class MatchController {
                                                                    @RequestParam(required = false) String localName,
                                                                    @RequestParam(required = false) String cityName){
         try {
+            System.out.println(network + " " + localName + " " + cityName + " ");
             List<ByNetworkRes> byNetworkRes = matchService.getMatchRoomsByNetwork(network, localName, cityName);
             return new BaseResponse<>(byNetworkRes);
         }catch (BaseException baseException){
