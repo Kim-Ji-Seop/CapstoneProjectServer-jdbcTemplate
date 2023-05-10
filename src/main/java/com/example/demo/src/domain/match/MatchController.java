@@ -124,7 +124,7 @@ public class MatchController {
     public BaseResponse<PostCreateMatchRoomRes> createMatchRoom(@RequestBody PostCreateMatchRoomReq postCreateMatchRoomReq){
         try{
             int userIdx = jwtService.getUserIdx();
-            //int userIdx = 13;
+
             PostCreateMatchRoomRes postCreateMatchRoomRes = matchService.createMatchRoom(postCreateMatchRoomReq,userIdx);
             return new BaseResponse<>(postCreateMatchRoomRes);
         }catch (BaseException baseException){

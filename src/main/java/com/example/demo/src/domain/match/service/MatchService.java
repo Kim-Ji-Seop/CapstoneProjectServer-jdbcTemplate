@@ -191,6 +191,7 @@ public class MatchService {
 
             return postCreateMatchRoomRes;
         }catch (Exception exception){
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }

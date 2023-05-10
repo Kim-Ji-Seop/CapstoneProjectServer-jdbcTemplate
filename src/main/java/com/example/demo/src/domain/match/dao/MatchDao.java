@@ -186,7 +186,7 @@ public class MatchDao {
     public PostCreateMatchRoomRes createMatchRoom(PostCreateMatchRoomReq postCreateMatchRoomReq, int userIdx, String matchCode, int localIdx) {
         // 1) 매칭방 생성
         String createMatchRoomQuery = "INSERT INTO match_room(title, content, userIdx, game_time, target_score, location, network_type, `count`, place, cost, match_code, locationIdx)\n" +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         Object[] createMatchRoomParam = new Object[]{
                 postCreateMatchRoomReq.getTitle() ,
