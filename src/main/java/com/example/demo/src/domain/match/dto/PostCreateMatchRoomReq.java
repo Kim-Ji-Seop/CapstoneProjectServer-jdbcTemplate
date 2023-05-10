@@ -17,6 +17,8 @@ public class PostCreateMatchRoomReq {
     private int count; // 인원 수
     @Nullable private String location; // 지역
     @Nullable private String place; // 장소
+    @Nullable private String localName; // db 지역 명
+    @Nullable private String cityName; // db 도시 명
     private int average; // 팀 avg
     private String networkType; // 네트워크 타입
     private int cost; // 비용

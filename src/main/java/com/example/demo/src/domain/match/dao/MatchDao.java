@@ -183,9 +183,9 @@ public class MatchDao {
 
 
     // 매칭방 생성
-    public PostCreateMatchRoomRes createMatchRoom(PostCreateMatchRoomReq postCreateMatchRoomReq, int userIdx, String matchCode) {
+    public PostCreateMatchRoomRes createMatchRoom(PostCreateMatchRoomReq postCreateMatchRoomReq, int userIdx, String matchCode, int localIdx) {
         // 1) 매칭방 생성
-        String createMatchRoomQuery = "INSERT INTO match_room(title, content, userIdx, game_time, target_score, location, network_type, `count`, place, cost, match_code)\n" +
+        String createMatchRoomQuery = "INSERT INTO match_room(title, content, userIdx, game_time, target_score, location, network_type, `count`, place, cost, match_code, locationIdx)\n" +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         Object[] createMatchRoomParam = new Object[]{
@@ -199,7 +199,8 @@ public class MatchDao {
                 postCreateMatchRoomReq.getCount() ,
                 postCreateMatchRoomReq.getPlace(),
                 postCreateMatchRoomReq.getCost(),
-                matchCode};
+                matchCode,
+                localIdx == 0 ? null : localIdx};
 
         this.jdbcTemplate.update(createMatchRoomQuery, createMatchRoomParam);
 

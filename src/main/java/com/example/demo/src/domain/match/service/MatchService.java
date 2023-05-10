@@ -176,8 +176,15 @@ public class MatchService {
         try{
             // 1) 매칭 코드 생성
             String matchCode = createMatchCode(6);
+
+            int localIdx = 0;
+            // 지역 전처리 분류
+            if (postCreateMatchRoomReq.getLocalName() != null && postCreateMatchRoomReq.getCityName() != null){
+                localIdx = matchDao.getLocationIdx(postCreateMatchRoomReq.getLocalName(), postCreateMatchRoomReq.getCityName());
+            }
+
             // 2) 매칭방 생성
-            PostCreateMatchRoomRes postCreateMatchRoomRes= matchDao.createMatchRoom(postCreateMatchRoomReq,userIdx,matchCode);
+            PostCreateMatchRoomRes postCreateMatchRoomRes= matchDao.createMatchRoom(postCreateMatchRoomReq,userIdx,matchCode, localIdx);
 
             // 3) 매칭방 생성자 플레이어의 참여 목록을 유지하기 위해 history 테이블에 명단식으로 우선 저장
             historyDao.createMatchRoomNewPlayer(userIdx, postCreateMatchRoomRes.getMatchIdx(), 1);
