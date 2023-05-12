@@ -100,31 +100,6 @@ public class UserDao {
         return null;
     }
 
-    public UserSimpleInfo getMainViewUserInfo(int userIdx) {
-        String query = "SELECT u.name, u.nickname,\n" +
-                "       ROUND(h.total_score) as average,\n" +
-                "       win_count, lose_count, draw_count,\n" +
-                "       ROUND(h.win_count / h.tenofN * 100) as win_Rate\n" +
-                "FROM (SELECT COUNT(userIdx) as tenofN,\n" +
-                "        userIdx, avg(total_score) as total_score,\n" +
-                "          COUNT(case when settle_type = 'WIN' then 1 end) as win_count,\n" +
-                "          COUNT(case when settle_type = 'LOSE' then 1 end) as lose_count,\n" +
-                "          COUNT(case when settle_type = 'DRAW' then 1 end) as draw_count\n" +
-                "        FROM history\n" +
-                "      WHERE userIdx = ? AND (settle_type IS NOT NULL AND total_score IS NOT NULL) AND status <> 'D') as h\n" +
-                "LEFT JOIN user u on u.id = h.userIdx";
-
-        return this.jdbcTemplate.queryForObject(query,
-                (rs, rowNum) -> new UserSimpleInfo(
-                        rs.getString("name"),
-                        rs.getString("nickname"),
-                        rs.getInt("average"),
-                        rs.getInt("win_count"),
-                        rs.getInt("lose_count"),
-                        rs.getInt("draw_count"),
-                        rs.getInt("win_Rate")
-                ), userIdx);
-    }
 
     public List<GetPushListRes> getPushRecord(int userIdx) {
         String query = "SELECT p.id, p.owner_userIdx, p.join_userIdx, p.matchIdx,\n" +

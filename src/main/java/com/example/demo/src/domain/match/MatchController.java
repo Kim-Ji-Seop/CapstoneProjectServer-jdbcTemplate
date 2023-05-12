@@ -59,6 +59,19 @@ public class MatchController {
      * URI : /rooms/locations
      * Description : 지역별 매치
      */
+    @ResponseBody
+    @GetMapping("/rooms/counts/locations")
+    public BaseResponse<PossibleMatchesRes> localCountMatches(@RequestParam(required = false) String localName,
+                                                              @RequestParam(required = false) String cityName){
+        try {
+            PossibleMatchesRes possibleMatchesRes = matchService.localCountMatches(localName, cityName);
+            return new BaseResponse<>(possibleMatchesRes);
+        }catch (BaseException baseException){
+            return new BaseResponse<>(baseException.getStatus());
+        }
+    }
+
+
 
     /**
      * Method : GET

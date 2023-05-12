@@ -36,6 +36,16 @@ public class MatchDao {
                 (rs, rowNum) -> new PossibleMatchesRes(rs.getInt("cnt")));
     }
 
+    public PossibleMatchesRes localCountMatches(int localIdx){
+        String query = "SELECT\n" +
+                "    COUNT(*) as cnt\n" +
+                "FROM match_room\n" +
+                "WHERE status = 'A' AND network_type ='OFFLINE' AND locationIdx = ?";
+        return this.jdbcTemplate.queryForObject(query,
+                (rs, rowNum) -> new PossibleMatchesRes(rs.getInt("cnt")),
+                localIdx);
+    }
+
     public List<ByNetworkRes> getMatchRoomsOnline(String network) {
         network = "Online";
         String query = "select\n" +
