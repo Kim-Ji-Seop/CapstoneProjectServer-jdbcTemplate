@@ -120,8 +120,22 @@ public class UserService {
 
     public UserSimpleInfo getMainViewUserInfo(int userIdx) throws BaseException {
         try {
-            UserSimpleInfo userSimpleInfo = userDao.getMainViewUserInfo(userIdx);
-            return userSimpleInfo;
+            UserNameNickName userInfo = userDao.userInfo(userIdx);
+            int recentAvgScore = historyDao.getRecentAvgScore(userIdx);
+            int recentWinCount = historyDao.getRecentWinCount(userIdx);
+            int recentLoseCount = historyDao.getRecentLoseCount(userIdx);
+            int recentDrawCount = historyDao.getRecentDrawCount(userIdx);
+            int recentWinRate = (int) recentWinCount / 10;
+
+            return new UserSimpleInfo(
+                    userInfo.getName(),
+                    userInfo.getNickname(),
+                    recentAvgScore,
+                    recentWinCount,
+                    recentLoseCount,
+                    recentDrawCount,
+                    recentWinRate
+                    );
         }catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

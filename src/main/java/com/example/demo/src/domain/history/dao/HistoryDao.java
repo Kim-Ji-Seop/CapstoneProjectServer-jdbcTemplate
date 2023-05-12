@@ -55,11 +55,39 @@ public class HistoryDao {
                 , userIdx);
     }
 
+    public int getRecentWinCount(int userIdx){
+        String query = "SELECT COUNT(wins.id) as winCount\n" +
+                "FROM (SELECT\n" +
+                "        id, settle_type\n" +
+                "     FROM history\n" +
+                "     WHERE userIdx= ? AND total_score IS NOT NULL\n" +
+                "     ORDER BY created DESC limit 10) as wins\n" +
+                "WHERE wins.settle_type = 'WIN'";
+
+        return this.jdbcTemplate.queryForObject(query,
+                (rs, rowNum) -> rs.getInt("winCount")
+                , userIdx);
+    }
+
     public int getLoseCount(int userIdx) {
         String query = "SELECT\n" +
                 "    COUNT(id) as loseCount\n" +
                 "FROM history\n" +
                 "WHERE userIdx= ? AND total_score IS NOT NULL AND settle_type = 'LOSE'";
+        return this.jdbcTemplate.queryForObject(query,
+                (rs, rowNum) -> rs.getInt("loseCount")
+                , userIdx);
+    }
+
+    public int getRecentLoseCount(int userIdx){
+        String query = "SELECT COUNT(loses.id) as loseCount\n" +
+                "FROM (SELECT\n" +
+                "        id, settle_type\n" +
+                "     FROM history\n" +
+                "     WHERE userIdx= ? AND total_score IS NOT NULL\n" +
+                "     ORDER BY created DESC limit 10) as loses\n" +
+                "WHERE loses.settle_type = 'LOSE'";
+
         return this.jdbcTemplate.queryForObject(query,
                 (rs, rowNum) -> rs.getInt("loseCount")
                 , userIdx);
@@ -75,11 +103,39 @@ public class HistoryDao {
                 , userIdx);
     }
 
+    public int getRecentDrawCount(int userIdx){
+        String query = "SELECT COUNT(draws.id) as drawCount\n" +
+                "FROM (SELECT\n" +
+                "        id, settle_type\n" +
+                "     FROM history\n" +
+                "     WHERE userIdx= ? AND total_score IS NOT NULL\n" +
+                "     ORDER BY created DESC limit 10) as draws\n" +
+                "WHERE draws.settle_type = 'DRAW'";
+
+        return this.jdbcTemplate.queryForObject(query,
+                (rs, rowNum) -> rs.getInt("drawCount")
+                , userIdx);
+    }
+
     public int getAvgScore(int userIdx) {
         String query = "SELECT\n" +
                 "    ROUND(AVG(total_score)) as avgScore\n" +
                 "FROM history\n" +
                 "WHERE userIdx = ? AND total_score IS NOT NULL";
+
+        return this.jdbcTemplate.queryForObject(query,
+                (rs, rowNum) -> rs.getInt("avgScore")
+                , userIdx);
+    }
+
+    public int getRecentAvgScore(int userIdx){
+        String query = "SELECT ROUND(AVG(avgs.total_score)) as avgScore\n" +
+                "FROM\n" +
+                "    (SELECT\n" +
+                "        total_score\n" +
+                "     FROM history\n" +
+                "     WHERE userIdx = ? AND total_score IS NOT NULL\n" +
+                "     ORDER BY created DESC limit 10) as avgs";
 
         return this.jdbcTemplate.queryForObject(query,
                 (rs, rowNum) -> rs.getInt("avgScore")
