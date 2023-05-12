@@ -26,7 +26,7 @@ public class JobScheduler {
     @Autowired
     private JobConfiguration jobConfiguration;
 
-    @Scheduled(cron = "* * * * * *")
+    @Scheduled(cron = "0/20 0 00 * * *")
     public void runJob() {
         Map<String, JobParameter> confMap = new HashMap<>();
         confMap.put("time", new JobParameter(System.currentTimeMillis()));
