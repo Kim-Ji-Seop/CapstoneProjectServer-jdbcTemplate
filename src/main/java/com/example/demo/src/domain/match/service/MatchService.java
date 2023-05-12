@@ -52,7 +52,7 @@ public class MatchService {
     public PossibleMatchesRes localCountMatches(String localName, String cityName) throws BaseException{
         try{
             int localIdx = matchDao.getLocationIdx(localName, cityName);
-            System.out.println(localIdx);
+            //System.out.println(localIdx);
             return matchDao.localCountMatches(localIdx);
         }catch (Exception exception){
             System.out.println(exception);

@@ -60,8 +60,14 @@ public class PushDao {
                 "update history h, match_room mr\n" +
                 "    set h.status = 'D',\n" +
                 "        mr.status = 'D'\n" +
-                "where h.matchIdx = mr.id and h.matchIdx = ?";
-        this.jdbcTemplate.update(query,matchIdx);
+                "where h.matchIdx = ? and mr.matchIdx = ?";
+
+        Object[] params = new Object[]{
+                matchIdx,
+                matchIdx
+        };
+
+        this.jdbcTemplate.update(query,params);
     }
 
     public void exitMatchRoom(int userIdx, int matchIdx) {

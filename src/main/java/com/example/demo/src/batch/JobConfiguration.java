@@ -101,4 +101,9 @@ public class JobConfiguration {
                     return RepeatStatus.FINISHED;
                 }).build();
     }
+
+    @Bean
+    public Job updatedMatchRoomStatusByGameTime(){
+
+    }
 }

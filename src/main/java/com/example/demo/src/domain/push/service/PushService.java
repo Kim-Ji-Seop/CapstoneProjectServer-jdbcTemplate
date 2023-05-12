@@ -176,14 +176,11 @@ public class PushService {
         }
     }
 
+    // 1:1이라고 가정했을 때
     public Integer matchCancel(int userIdx, MatchCancelReq matchCancelReq) throws BaseException{
         // 푸쉬알림 전송 메세지 생성 - 방장이 매칭방 취소
         // 푸시알림 보내기
-        int targetUserIdx = matchCancelReq.getMatchCancelUserList().get(0).getUserIdx();
-        System.out.println(targetUserIdx);
-
         MatchRoomDetailRes roomDetailRes = matchDao.matchroomDetail(matchCancelReq.getMatchIdx()); // 매칭방 정보
-        String targetFcmToken = userDao.getTargetFCMtoken(targetUserIdx);
 
         String push_title = roomDetailRes.getTitle() + " 경기 ("+")";
         String push_content;
@@ -200,7 +197,16 @@ public class PushService {
             push_content = roomDetailRes.getNickname() + "님이 매칭을 취소했습니다.";
         }
 
-        sendFcmPush(targetFcmToken,push_title,push_content);
+        int targetUserIdx;
+        String targetFcmToken;
+        // matchCancelReq.getMatchCancelUserList() 이 리스트가 null 이라면, 매칭방에 참가한 인원이 매칭방장 밖에 없다는 뜻
+        // 참여한 사람이 있다는 것은 상대방이 1명 들어왔다는 것. 1:1이라고 온라인을 가정했을때.
+        if (matchCancelReq.getMatchCancelUserList() != null){
+            targetUserIdx = matchCancelReq.getMatchCancelUserList().get(0).getUserIdx();
+            System.out.println(targetUserIdx);
+            targetFcmToken = userDao.getTargetFCMtoken(targetUserIdx);
+            sendFcmPush(targetFcmToken, push_title, push_content);
+        }
 
         return userIdx == pushDao.isOwnerCheck(matchCancelReq) ? 1 : 0;
 
