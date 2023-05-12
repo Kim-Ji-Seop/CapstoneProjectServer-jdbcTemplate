@@ -60,7 +60,7 @@ public class PushDao {
                 "update history h, match_room mr\n" +
                 "    set h.status = 'D',\n" +
                 "        mr.status = 'D'\n" +
-                "where h.matchIdx = ? and mr.matchIdx = ?";
+                "where h.matchIdx = ? and mr.id = ?";
 
         Object[] params = new Object[]{
                 matchIdx,
