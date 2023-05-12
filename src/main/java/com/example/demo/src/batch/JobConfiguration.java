@@ -102,8 +102,8 @@ public class JobConfiguration {
                 }).build();
     }
 
-    @Bean
+    /*@Bean
     public Job updatedMatchRoomStatusByGameTime(){
 
-    }
+    }*/
 }
