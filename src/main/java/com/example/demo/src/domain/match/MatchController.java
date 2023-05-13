@@ -173,8 +173,8 @@ public class MatchController {
     @GetMapping("/rooms/plans")
     public BaseResponse<List<GetMatchPlanResList>> matchPlanList(){
         try{
-            int userIdx = jwtService.getUserIdx();
-            List<GetMatchPlanResList> getMatchPlanResList = matchService.matchPlanList(userIdx);
+            //int userIdx = jwtService.getUserIdx();
+            List<GetMatchPlanResList> getMatchPlanResList = matchService.matchPlanList(24);
             return new BaseResponse<>(getMatchPlanResList);
         }catch(BaseException baseException){
             System.out.println(baseException);

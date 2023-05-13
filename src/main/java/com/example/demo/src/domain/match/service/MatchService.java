@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -209,31 +210,31 @@ public class MatchService {
     public List<GetMatchPlanResList> matchPlanList(int userIdx) throws BaseException{
         try{
             List<GetMatchPlanRes> getMatchPlanRes = matchDao.matchPlanList(userIdx);
-            HashMap<Integer, List> matchPlan_hasyByMatchIdx = new HashMap<Integer, List>();
+            HashMap<String, List> matchPlan_hasyByMatchIdx = new HashMap<String, List>();
 
-            int parsingMatchIdx;
+            String parsingGameTime;
             for (GetMatchPlanRes matchplan : getMatchPlanRes){
-                parsingMatchIdx = matchplan.getMatchIdx();
+                parsingGameTime = matchplan.getGame_time();
 
-                if (!matchPlan_hasyByMatchIdx.containsKey(parsingMatchIdx)){
-                    matchPlan_hasyByMatchIdx.put(parsingMatchIdx, new ArrayList<>());
+                if (!matchPlan_hasyByMatchIdx.containsKey(parsingGameTime)){
+                    matchPlan_hasyByMatchIdx.put(parsingGameTime, new ArrayList<>());
                 }
                 if (matchplan.getHomeOrAway().equals("HOME")){
-                    matchPlan_hasyByMatchIdx.get(parsingMatchIdx).add(0, matchplan);
+                    matchPlan_hasyByMatchIdx.get(parsingGameTime).add(0, matchplan);
                 }
                 else{
-                    matchPlan_hasyByMatchIdx.get(parsingMatchIdx).add(matchplan);
+                    matchPlan_hasyByMatchIdx.get(parsingGameTime).add(matchplan);
                 }
             }
 
             List<GetMatchPlanResList> getMatchPlanResLists = new ArrayList<>();
 
-            for(Integer key: matchPlan_hasyByMatchIdx.keySet()){
-                int matchIdx = key;
+            for(String key: matchPlan_hasyByMatchIdx.keySet()){
+                String gameTime = key;
                 GetMatchPlanRes get0 = ((GetMatchPlanRes) matchPlan_hasyByMatchIdx.get(key).get(0));
 
                 getMatchPlanResLists.add(new GetMatchPlanResList(
-                        key,
+                        get0.getMatchIdx(),
                         get0.getGame_time(),
                         get0.getNetwork_type(),
                         matchPlan_hasyByMatchIdx.get(key)));
