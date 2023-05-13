@@ -107,9 +107,9 @@ public class UserController {
     @ResponseBody
     @GetMapping("/simple-info")
     public BaseResponse<UserSimpleInfo> getMainViewUserInfo() throws BaseException {
-        int userIdx = jwtService.getUserIdx();
+        //int userIdx = jwtService.getUserIdx();
         try{
-            UserSimpleInfo userSimpleInfo = userService.getMainViewUserInfo(userIdx);
+            UserSimpleInfo userSimpleInfo = userService.getMainViewUserInfo(24);
             return new BaseResponse<>(userSimpleInfo);
         }catch (BaseException baseException){
             return new BaseResponse<>((baseException.getStatus()));
