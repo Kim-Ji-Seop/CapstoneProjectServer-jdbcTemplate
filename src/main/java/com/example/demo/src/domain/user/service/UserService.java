@@ -125,7 +125,13 @@ public class UserService {
             int recentWinCount = historyDao.getRecentWinCount(userIdx);
             int recentLoseCount = historyDao.getRecentLoseCount(userIdx);
             int recentDrawCount = historyDao.getRecentDrawCount(userIdx);
-            int recentWinRate = recentWinCount / 10;
+            int maxTenGame = 10;
+
+            if (recentWinCount + recentLoseCount + recentDrawCount < 10){
+                maxTenGame = recentWinCount + recentLoseCount + recentDrawCount;
+            }
+
+            int recentWinRate = recentWinCount / maxTenGame;
 
             return new UserSimpleInfo(
                     userInfo.getName(),
