@@ -56,7 +56,7 @@ public class MatchService {
             //System.out.println(localIdx);
             return matchDao.localCountMatches(localIdx);
         }catch (Exception exception){
-            System.out.println(exception);
+            System.out.println("localCountMatches: " + exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
