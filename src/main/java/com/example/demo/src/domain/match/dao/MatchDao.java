@@ -253,7 +253,7 @@ public class MatchDao {
                 "FROM history AS h\n" +
                 "    LEFT JOIN match_room mr on h.matchIdx = mr.id\n" +
                 "    LEFT JOIN user u on u.id = h.userIdx\n" +
-                "WHERE h.matchIdx IN(SELECT h.matchIdx FROM history AS h WHERE h.userIdx = ?) AND mr.status = 'A' AND h.status = 'A'\n" +
+                "WHERE h.matchIdx IN(SELECT h.matchIdx FROM history AS h WHERE h.userIdx = ? AND h.status = 'A') AND mr.status = 'A' AND h.status = 'A'\n" +
                 "GROUP BY h.matchIdx, h.teamIdx\n" +
                 "ORDER BY game_time DESC;";
 
