@@ -1,6 +1,5 @@
 package com.example.demo.src.domain.match.dao;
 
-import com.example.demo.config.BaseResponse;
 import com.example.demo.src.domain.history.dao.HistoryDao;
 import com.example.demo.src.domain.match.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -445,5 +444,52 @@ public class MatchDao {
                         rs.getInt("count"),
                         rs.getInt("id")
                 ),param);
+    }
+
+
+    // 배치에 사용할 SQL
+    public int deactivateMatch(){ // 매치를 상태 D로
+        String query = "UPDATE match_room\n" +
+                "SET status = 'D'\n" +
+                "WHERE game_time < NOW()\n" +
+                "  AND TIMESTAMPDIFF(MINUTE, NOW(), game_time) < -10\n" +
+                "  AND network_type = 'OFFLINE'\n" +
+                "  AND status = 'A'";
+
+        return this.jdbcTemplate.update(query);
+    }
+
+    public int deactivateHistory(int matchIdx){ // 매치와 관련된 유저 참여 기록 상태 D로
+        String query = "UPDATE history\n" +
+                "SET status = 'D'\n" +
+                "WHERE matchIdx = ?\n" +
+                "  AND (settle_type IS NULL OR total_score IS NULL)\n" +
+                "  AND status = 'A'";
+
+        return this.jdbcTemplate.update(query, matchIdx);
+    }
+
+    public int unvalidMatchCount(){ // 비활성화 시켜야할 오프라인 매치 수
+        String query = "SELECT count(id) as cnt\n" +
+                "FROM match_room\n" +
+                "WHERE game_time < NOW()\n" +
+                "  AND TIMESTAMPDIFF(MINUTE, NOW(), game_time) < -10\n" +
+                "  AND network_type = 'OFFLINE'\n" +
+                "  AND status = 'A';";
+
+        return this.jdbcTemplate.queryForObject(query,
+                (rs, rowNum) -> rs.getInt("cnt"));
+    }
+
+    public List<Integer> unvalidMatchIdxList(){ // 비활성화 시켜야할 오프라인 매치 Id 리스트
+        String query = "SELECT id\n" +
+                "FROM match_room\n" +
+                "WHERE game_time < NOW()\n" +
+                "  AND TIMESTAMPDIFF(MINUTE, NOW(), game_time) < -10\n" +
+                "  AND network_type = 'OFFLINE'\n" +
+                "  AND status = 'A';";
+
+        return this.jdbcTemplate.query(query,
+                (rs,rowNum) -> rs.getInt("id"));
     }
 }

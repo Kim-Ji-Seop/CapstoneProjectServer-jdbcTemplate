@@ -2,6 +2,7 @@ package com.example.demo.src.batch;
 
 import com.example.demo.src.batch.domain.TestBatch;
 import com.example.demo.src.batch.repository.TestBatchDao;
+import com.example.demo.src.domain.match.service.MatchService;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -26,6 +29,9 @@ public class JobConfiguration {
     private final StepBuilderFactory stepBuilderFactory;
     @Autowired
     private TestBatchDao testBatchDao;
+
+    @Autowired
+    private MatchService matchService;
 
     @Value("${spring.application.name}")
     private String instanceId;
@@ -102,8 +108,46 @@ public class JobConfiguration {
                 }).build();
     }
 
-    /*@Bean
+    @Bean
     public Job updatedMatchRoomStatusByGameTime(){
+        return jobBuilderFactory.get("updatedMatchRoomStatusByGameTime")
+                .start(deactivateMatchRoom()) //STEP 1 실행
+                /*    .on("FAILED")// STEP 1 결과가 FAILED 일 경우
+                    .to(deativateFailed())
+                    .on("*")
+                    .end()// 종료
+                .from(step1())
+                    .on("*")
+                    .end()
+                .end()*/
+                .build();
+    }
 
-    }*/
+    @Bean
+    public Step deactivateMatchRoom(){
+        return stepBuilderFactory.get("deactivateMatchRoom")
+                .tasklet((stepContribution, chunkContext) -> {
+                    SimpleDateFormat dateF =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                    log.info("deactiveMatchStart log={}", "\n\n<------ " +  dateF.format(new Date())+ "시간지난 오프라인 매칭방 비활성화 ------>");
+                    List<Integer> result = matchService.deactivateMatch();
+                    log.info("<------ 오프라인 매칭방 비활성화 결과 ------>");
+                    log.info("deactiveResult log={}" , "unvalidMatchCount: " + result.get(0) + "\n" +
+                            "updatedMatchCount : " + result.get(1) + "\n" +
+                            "updatedHistoryCount : " + result.get(2));
+
+                    stepContribution.setExitStatus(ExitStatus.COMPLETED);
+                    return RepeatStatus.FINISHED;
+
+                }).build();
+    }
+
+    @Bean
+    public Step deativateFailed(){
+        return stepBuilderFactory.get("deativateFailed")
+                .tasklet((stepContribution, chunkContext) -> {
+                    log.info("Failed Occur log={} ", "<****** " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss") + "매칭방 비활성화 실패 ******>");
+                    return RepeatStatus.FINISHED;
+                }).build();
+    }
 }

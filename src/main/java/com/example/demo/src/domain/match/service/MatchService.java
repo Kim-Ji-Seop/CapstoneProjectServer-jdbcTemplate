@@ -10,6 +10,7 @@ import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -303,6 +304,30 @@ public class MatchService {
     public List<String> getLocalCities(String local) throws BaseException{
         try{
             return matchDao.getLocalCities(local);
+        }catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    @Transactional
+    public List<Integer> deactivateMatch() throws BaseException{
+        try{
+            int unvalidMatchCount = matchDao.unvalidMatchCount();
+            List<Integer> unvalidMatchIdxList = matchDao.unvalidMatchIdxList();
+
+            int updatedMatchCount = matchDao.deactivateMatch();
+            int updatedHistoryCount = 0;
+            for (int matchIdx : unvalidMatchIdxList){
+                updatedHistoryCount += matchDao.deactivateHistory(matchIdx);
+            }
+
+            List<Integer> result = new ArrayList<>();
+            result.add(unvalidMatchCount);
+            result.add(updatedMatchCount);
+            result.add(updatedHistoryCount);
+
+            return result;
+
         }catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }

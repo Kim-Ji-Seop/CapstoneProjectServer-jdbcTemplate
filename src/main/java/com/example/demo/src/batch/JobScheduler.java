@@ -26,20 +26,20 @@ public class JobScheduler {
     @Autowired
     private JobConfiguration jobConfiguration;
 
-    @Scheduled(cron = "0/20 0 00 * * *")
+  /*  @Scheduled(cron = "0 0/1 * * * *")
     public void runJob() {
         Map<String, JobParameter> confMap = new HashMap<>();
         confMap.put("time", new JobParameter(System.currentTimeMillis()));
         JobParameters jobParameters = new JobParameters(confMap);
 
         try {
-            jobLauncher.run(jobConfiguration.testJob(), jobParameters);
+            jobLauncher.run(jobConfiguration.updatedMatchRoomStatusByGameTime(), jobParameters);
 
         } catch (JobExecutionAlreadyRunningException | JobInstanceAlreadyCompleteException
                  | JobParametersInvalidException | org.springframework.batch.core.repository.JobRestartException e) {
 
             log.error(e.getMessage());
         }
-    }
+    }*/
 
 }
