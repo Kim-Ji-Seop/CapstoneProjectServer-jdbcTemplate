@@ -25,9 +25,9 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         // pub 경로로 수신되는 STOMP메세지는 @Controller 객체의 @MessageMapping 메서드로 라우팅 됨
-        // 메시지를 발행하는 요청 url => 즉 메시지 보낼 때
+        // SipmleAnnotationMethod, 메시지를 발행하는 요청 url => 클라이언트가 메시지를 보낼 때 (From Client)
         registry.setApplicationDestinationPrefixes("/pub");
-        // 메시지를 구독하는 요청 url => 즉 메시지 받을 때
+        // SimpleBroker,  클라이언트에게 메시지를 보낼 때 (To Client)
         registry.enableSimpleBroker("/sub");
     }
 

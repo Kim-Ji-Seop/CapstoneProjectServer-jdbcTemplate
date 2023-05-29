@@ -20,15 +20,20 @@ import java.util.List;
 public class UserController {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    // UserService 클래스
+    // User 도메인에 대한 DB접근과 데이터를 로직 처리하기 위한 클래스
     @Autowired
     private final UserService userService;
 
+    // MatchService 클래스
+    // Match 도메인에 대한 DB접근과 데이터를 로직 처리하기 위한 클래스
     @Autowired
     private final MatchService matchService;
 
     @Autowired
-    private final JwtService jwtService;
+    private final JwtService jwtService; // JwtService 클래스
 
+    // 클래스 생성자
     public UserController(UserService userService, MatchService matchService, JwtService jwtService) {
         this.userService = userService;
         this.matchService = matchService;
@@ -158,5 +163,6 @@ public class UserController {
             return new BaseResponse<>(baseException.getStatus());
         }
     }
+
 
 }

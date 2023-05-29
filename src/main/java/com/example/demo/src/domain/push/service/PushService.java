@@ -32,7 +32,7 @@ public class PushService {
     private final HistoryDao historyDao;
 
     private final JwtService jwtService;
-    private static final String MESSAGING_SCOPE = "https://www.googleapis.com/auth/firebase.messaging";
+    private static final String MESSAGING_SCOPE = "https://www.googleapis.com/auth/firebase.messaging"; // googleAPI 인가 url
     private static final String[] SCOPES = { MESSAGING_SCOPE };
 
     @Autowired
@@ -44,8 +44,10 @@ public class PushService {
         this.jwtService = jwtService;
     }
 
+    // 푸쉬 알림 메세지를 보낼 파이어베이스 URL
     private String FCM_API_URL = "https://fcm.googleapis.com/v1/projects/capstone-push-51e21/messages:send";
 
+    // 매칭방 참가 신청 알림
     @Transactional
     public MatchJoinPushRes joinPush(int userIdx, MatchJoinPushReq matchJoinPushReq) throws BaseException {
         try {
@@ -81,7 +83,7 @@ public class PushService {
 
     }
 
-
+    // access token을 파이어베이스에서 제공받은 키 파일에서 가져옴
     private static String getAccessToken() throws IOException {
         ClassPathResource resource = new ClassPathResource("keystore/service-account.json");
         InputStream instream = resource.getInputStream();
@@ -93,6 +95,9 @@ public class PushService {
         return googleCredential.getAccessToken();
     }
 
+
+    // 매칭방 참가 수락 알림
+    @Transactional
     public JoinAcceptOrNotRes ownerAccepted(int userIdx, JoinAcceptOrNotReq joinAcceptOrNotReq) throws BaseException{
         try{
             // 0) 매칭 참가 요청에 대한 수락:A /거절:D  처리
@@ -145,6 +150,7 @@ public class PushService {
 
     }
 
+    // 파이어베이스 서버에 푸쉬 메세지 전송
     private void sendFcmPush(String targetFcmToken, String push_title, String push_content) {
         JSONObject jsonValue = new JSONObject();
         jsonValue.put("title", push_title);
@@ -177,6 +183,8 @@ public class PushService {
     }
 
     // 1:1이라고 가정했을 때
+    // 매칭 취소 푸쉬 알림
+    @Transactional
     public Integer matchCancel(int userIdx, MatchCancelReq matchCancelReq) throws BaseException{
         // 푸쉬알림 전송 메세지 생성 - 방장이 매칭방 취소
         // 푸시알림 보내기

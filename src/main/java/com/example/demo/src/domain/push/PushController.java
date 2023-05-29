@@ -41,6 +41,11 @@ public class PushController {
 
     }
 
+    /**
+     * 매칭방 참여 신청 수락 API
+     * [POST] 서비스단에서 포스트 /push/
+     * @return
+     */
     @RequestMapping("/permission")
     public BaseResponse<JoinAcceptOrNotRes> ownerAccepted(@RequestBody JoinAcceptOrNotReq joinAcceptOrNotReq) throws BaseException{
         int userIdx = jwtService.getUserIdx();
@@ -52,6 +57,11 @@ public class PushController {
         }
     }
 
+    /**
+     * 매칭방 참여 신청 거절 API
+     * [POST] 서비스단에서 포스트 /push/
+     * @return
+     */
     @RequestMapping("/cancel")
     public BaseResponse<Integer> matchCancel(@RequestBody MatchCancelReq matchCancelReq) throws BaseException{
         int userIdx = jwtService.getUserIdx();

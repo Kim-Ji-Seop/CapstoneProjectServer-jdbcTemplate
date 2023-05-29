@@ -202,22 +202,27 @@ public class UserService {
         }
     }
 
+    // User 의 프로필 정보 가져오기
     public UserProfileInfo getUserProfileInfo(int userIdx) {
+        // 서브쿼리 사용을 하지않고 SQL 분리
         UserNameNickName userNameNickName = userDao.userInfo(userIdx);
-        int userGameCount = historyDao.getUserGameCount(userIdx);
-        int userWinCount = historyDao.getWinCount(userIdx);
-        int userLoseCount = historyDao.getLoseCount(userIdx);
-        int userDrawCount = historyDao.getDrawCount(userIdx);
-        int userAvgScore = historyDao.getAvgScore(userIdx);
-        int userHighScore = historyDao.getHighScore(userIdx);
+        int userGameCount = historyDao.getUserGameCount(userIdx); // user 게임 수
+        int userWinCount = historyDao.getWinCount(userIdx); // user 이긴 횟수
+        int userLoseCount = historyDao.getLoseCount(userIdx); // user 진 횟수
+        int userDrawCount = historyDao.getDrawCount(userIdx); // user 비긴 횟수
+        int userAvgScore = historyDao.getAvgScore(userIdx); // user 평균 점수
+        int userHighScore = historyDao.getHighScore(userIdx); // user 최고 점수
 
+        // 유저의 히스토리 게임 기록 가져오기
         List<Integer> historyGames = historyDao.getHistoryIdxes(userIdx);
 
+        // 스트라이크 수 가져오기
         int totalStrikeCount = 0;
         for (int historyIdx : historyGames){
             totalStrikeCount += historyDao.getStrikeCount(historyIdx);
         }
 
+        // 스트라이크율 계산
         double strikeRate = totalStrikeCount == 0 ? 0 : ((double) totalStrikeCount / (10 * userGameCount)) * 100;
         strikeRate = Math.round(strikeRate * 100) / 100.0;
 

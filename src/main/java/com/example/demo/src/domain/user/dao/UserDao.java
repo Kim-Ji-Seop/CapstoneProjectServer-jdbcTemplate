@@ -66,6 +66,7 @@ public class UserDao {
         ); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 
+    // 파이어베이스 전용 디바이스 토큰 최신화(로그인 시)
     public void loginTokenUpdate(String uid, String pwdEncrypted, String devicetoken){
         String query = "UPDATE user SET devicetoken = ?\n" +
                 "WHERE uid = ? and password = ?";
@@ -74,6 +75,7 @@ public class UserDao {
         this.jdbcTemplate.update(query, logInParams);
     }
 
+    // 유저 기본정보 (이름, 닉네임)
     public UserNameNickName userInfo(int userIdx){
         String query = "select `name`, nickname from user where id=?";
 
@@ -84,7 +86,7 @@ public class UserDao {
                 ), userIdx);
     }
 
-
+    // 알림 전송하기 위한 특정 유저의 디바이스 토큰 조회
     public String getTargetFCMtoken(int targetUserIdx) {
         String query = "select devicetoken from user where id =?";
 
@@ -100,7 +102,7 @@ public class UserDao {
         return null;
     }
 
-
+    // 유저의 푸쉬 알림 기록 조회
     public List<GetPushListRes> getPushRecord(int userIdx) {
         String query = "SELECT p.id, p.owner_userIdx, p.join_userIdx, p.matchIdx,\n" +
                 "       p.push_title, p.push_content,\n" +
@@ -127,6 +129,7 @@ public class UserDao {
                 ), pushRecordParams);
     }
 
+    // 유저의 프로필 이미지 조회
     public GetUserProfileImgRes getUserProfileImg(int userIdx){
         String query = "SELECT id, profile_imgurl from user where id = ?";
         return this.jdbcTemplate.queryForObject(query,
