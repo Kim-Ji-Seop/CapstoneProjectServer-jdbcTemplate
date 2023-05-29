@@ -1,3 +1,10 @@
-18:52:10.533 INFO  [File:TestController.java] [Func:getAll] [Line:33] [Message:INFO Level 테스트]- INFO Level 테스트
-18:52:10.536 WARN  [File:TestController.java] [Func:getAll] [Line:35] [Message:Warn Level 테스트]- Warn Level 테스트
-18:52:10.537 ERROR [File:TestController.java] [Func:getAll] [Line:38] [Message:ERROR Level 테스트]- ERROR Level 테스트
+00:53:31.730 DEBUG [File:JobConfiguration.java] [Func:lambda$step1$0] [Line:57] [Message:======= 전송 배치 시작 =======]- ======= 전송 배치 시작 =======
+00:53:32.367 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:66] [Message:step2: ]- step2: 
+00:53:32.382 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:68] [Message:======= 처리할 Item 개수 : 5]- ======= 처리할 Item 개수 : 5
+00:53:32.991 DEBUG [File:JobConfiguration.java] [Func:lambda$step3$2] [Line:82] [Message:step3: ]- step3: 
+00:53:33.688 DEBUG [File:JobConfiguration.java] [Func:lambda$step4$3] [Line:100] [Message:======= 전송 배치 종료 =======]- ======= 전송 배치 종료 =======
+00:53:35.740 DEBUG [File:JobConfiguration.java] [Func:lambda$step1$0] [Line:57] [Message:======= 전송 배치 시작 =======]- ======= 전송 배치 시작 =======
+00:53:36.368 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:66] [Message:step2: ]- step2: 
+00:53:36.379 DEBUG [File:JobConfiguration.java] [Func:lambda$step2$1] [Line:68] [Message:======= 처리할 Item 개수 : 5]- ======= 처리할 Item 개수 : 5
+00:53:36.938 DEBUG [File:JobConfiguration.java] [Func:lambda$step3$2] [Line:82] [Message:step3: ]- step3: 
+00:53:37.576 DEBUG [File:JobConfiguration.java] [Func:lambda$step4$3] [Line:100] [Message:======= 전송 배치 종료 =======]- ======= 전송 배치 종료 =======

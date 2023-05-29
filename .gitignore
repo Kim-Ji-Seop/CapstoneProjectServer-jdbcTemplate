@@ -1,3 +1,8 @@
 # Project exclude paths
 /.gradle/
 #/src/main/java/com/example/demo/config/secret/
+
+service-account.json
+application.yml
+
+app.log
