@@ -2,22 +2,19 @@
 
 ### Folder Structure
 - `src`: 메인 로직
-  `src`에는 도메인 별로 패키지를 구성하도록 했다. **도메인**이란 회원(User), 게시글(Post), 댓글(Comment), 주문(Order) 등 소프트웨어에 대한 요구사항 혹은 문제 영역이라고 생각하면 된다. 각자 설계할 APP을 분석하고 필요한 도메인을 도출하여 `src` 폴더를 구성하자.
+  `src`에는 도메인 별로 패키지를 구성하도록 했다. **도메인**이란 회원(User), 게시글(Post), 댓글(Comment), 주문(Order) 등 소프트웨어에 대한 요구사항 혹은 문제 영역이라고 생각하면 된다. 설계할 APP을 분석하고 필요한 도메인을 도출하여 `src` 폴더를 구성하자.
 - `config` 및 `util` 폴더: 메인 로직은 아니지만 `src` 에서 필요한 부차적인 파일들을 모아놓은 폴더
 - 도메인 폴더 구조
-> Route - Controller - Provider/Service - DAO
+> Route - Controller - Service - DAO
 > Springboot에서는 Route기능을 Controller단에서 해준다.
 
 - Route: Request에서 보낸 라우팅 처리
-- Controller: Request를 처리하고 Response 해주는 곳. (Provider/Service에 넘겨주고 다시 받아온 결과값을 형식화), 형식적 Validation
-- Service: 비즈니스 로직 처리, 의미적 Validation
+- Controller: Request를 처리하고 Response 해주는 곳. (Service에 넘겨주고 다시 받아온 결과값을 형식화)
+- Service: 비즈니스 로직 처리, 의미적 Validation 처리, 형식적 Validation 처리
 - DAO: Data Access Object의 줄임말. Query가 작성되어 있는 곳.
 
-- 메소드 네이밍룰
-  
 
-
-Controller -> Service/Provider -> DAO -> DB
+Controller -> Service -> DAO -> DB
 
 > DB -> DAO(Repository) -> Service -> Controller -> Route -> `Response`
 
@@ -26,8 +23,7 @@ Controller -> Service/Provider -> DAO -> DB
 
 ### Validation
 서버 API 구성의 기본은 Validation을 잘 처리하는 것이다. 외부에서 어떤 값을 날리든 Validation을 잘 처리하여 서버가 터지는 일이 없도록 유의하자.
-값, 형식, 길이 등의 형식적 Validation은 Controller에서,
-DB에서 검증해야 하는 의미적 Validation은 Service에서 처리하면 된다.
+값, 형식, 길이 등의 형식적 Validation과 DB에서 검증해야 하는 의미적 Validation은 Service에서 처리하게 한다.
 
 ## ✨Structure
 앞에 (*)이 붙어있는 파일(or 폴더)은 추가적인 과정 이후에 생성된다.
@@ -44,22 +40,101 @@ api-server-spring-boot
     > config
       > secret
         | Secret.java // git에 추적되지 않아야 할 시크릿 키 값들이 작성되어야 하는 곳
-      | BaseException.java // Controller, Service, Provider 에서 Response 용으로 공통적으로 사용 될 익셉션 클래스
+      | BaseException.java // Controller, Service 에서 Response 용으로 공통적으로 사용 될 Exception 클래스
       | BaseResponse.java // Controller 에서 Response 용으로 공통적으로 사용되는 구조를 위한 모델 클래스
-      | BaseResponseStatus.java // Controller, Service, Provider 에서 사용 할 Response Status 관리 클래스 
-      | Constant.java // 공통적으로 사용될 상수 값들을 관리하는 곳
+      | BaseResponseStatus.java // Controller, Service 에서 사용 할 Response Status 관리 클래스 
     > src
+      > batch
+        > domain
+          | BooleanToYNConverter.java //  Boolean 값을 "Y" 또는 "N" 문자열로, 그리고 "Y" 또는 "N" 문자열을 Boolean 값으로 변환하는 AttributeConverter를 구현
+          | HankerJobA.java // Quartz 스케줄러를 사용하여 특정 작업을 수행하는 클래스, 여기서는 특정 시간이 되면 해당 작업을 일시중지 한다.
+          | TestBatch.java // 배치 테스트를 위한 Dto라고 보면 된다.
+        > repository
+          | TestBatchDao.java // 배치의 사용을 테스트 및 실제 구현 Dao 클래스
+        | JobConfiguration.java // Spring Batch를 사용해 정의된 여러 작업 단계(Step)를 이용해 배치 작업(Job)을 수행하는 설정(Configuration)을 정의
+        | JobScheduler.java // Spring Batch 작업을 스케줄링하는 JobScheduler 클래스다. 주석 처리된 runJob 메소드를 사용하여 특정 시간에 배치 작업을 실행하도록 스케줄링하는 기능을 포함하고 있다.
+        | JobSetting.java // Quartz 스케줄러를 사용하여 HankerJobA 클래스의 작업을 20초 간격으로 실행하도록 스케줄링하는 설정(JobSetting)을 정의.
+      > domain
+        > game
+          > dao
+            | GameRoomDao.java // 게임 방과 관련된 데이터베이스 작업(매치 룸 인덱스 조회, 매치 룸 상태 업데이트, 히스토리 인덱스 및 닉네임 조회, 룸 상태 조회, 팀 인덱스 조회, 히스토리 업데이트, 볼링 점수 업데이트)을 수행하는 DAO 클래스
+          > dto
+            | AdminSendScoreDTO.java // 볼링장에서 중앙서버로 점수를 보내주기 위한 Request를 정의한 클래스
+            | ChatMessageDTO.java
+            | GameEndReq.java
+            | GameEndRes.java
+            | HistoryInfo.java
+            | NewMatchOpenRes.java
+            | PostCheckSocketActiveReq.java
+            | PostCheckSocketActiveRes.java
+            | PostMatchCodeReq.java
+            | PostMatchCodeRes.java
+          > service
+            | GameRoomService.java
+          > websock
+            | ChatPreHandler.java
+            | GameRoomController.java
+            | StompGameController.java
+            | StompWebSocketConfig.java
+        > history
+          > dao
+            | HistoryDao.java
+          > dto
+            | NewHistoryPlayerRes.java
+        > match
+          > dao
+            | MatchDao.java
+          > dto
+            | ByLocationRes.java
+            | ByNetworkRes.java
+            | GetMatchPlanDetailRes.java
+            | GetMatchPlanDetailResList.java
+            | GetMatchPlanRes.java
+            | GetMatchPlanResList.java
+            | HAmatchRecordsRes.java
+            | MatchCandidate.java
+            | MatchRecordsRes.java
+            | MatchRoomDetailRes.java
+            | PossibleMatchesRes.java
+            | PostCreateMatchRoomReq.java
+            | PostCreateMatchRoomRes.java
+            | UserHistoryInfo.java
+          > service
+            | MatchService.java
+          | MatchController.java
+        > push
+          > dao
+            | PushDao.java
+          > dto
+            | JoinAcceptOrNotReq.java
+            | JoinAcceptOrNotRes.java
+            | MatchCancelReq.java
+            | MatchCancelUser.java
+            | MatchJoinPushReq.java
+            | MatchJoinPushRes.java
+          > service
+            | PushService.java
+          | PushController.java
+        > user
+          > dao
+            | UserDao.java
+          > dto
+            | GetPushListRes.java
+            | GetPushListResByDateArr.java
+            | GetUserProfileImgRes.java
+            | PostCheckDuplicateReq.java
+            | PostCheckDuplicateRes.java
+            | PostLoginReq.java
+            | PostLoginRes.java
+            | User.java
+            | UserNameNickName.java
+            | UserProfileInfo.java
+            | UserSimpleInfo.java
+          > service
+            | UserService.java
+          | UserController.java
       > test
         | TestController.java // logger를 어떻게 써야하는지 보여주는 테스트 클래스
-      > user
-        > models
-          | GetUserRes.java        
-          | PostUserReq.java 
-          | PostUserRes.java 
-        | UserController.java
-        | UserProvider.java
-        | UserService.java
-        | UserDao.java
       | WebSecurityConfig.java // spring-boot-starter-security, jwt 를 사용하기 위한 클래스 
     > utils
       | AES128.java // 암호화 관련 클래스
@@ -87,11 +162,11 @@ log는 통신 시에 발생하는 오류들을 기록하는 곳이다. 실제 �
 
 `application.yml`
 
-에서 **포트 번호를 정의**하고 **DataBase 연동**을 위한 값을 설정한다.
+에서 **포트 번호를 정의**하고 **DataBase 연동**을 위한 값을 설정한다. 현재는 gitignore의 처리로 외부에서는 보기 힘든 상태로 해놨다.
 
 `logback-spring.xml`
 
-logs 폴더에 로그 기록을 어떤 형식으로 남길 것인지 설정한다. logs 폴더에 어떻게 기록이 남겨져 있는지 확인해보시라. (커스텀 하지 않아도 된다면`logback-spring.xml` 를 수정할 필요는 없다.)
+logs 폴더에 로그 기록을 어떤 형식으로 남길 것인지 설정한다. logs 폴더에 어떻게 기록이 남겨져 있는지 확인해보자.
 
 ### src - main - java
 
@@ -99,23 +174,22 @@ logs 폴더에 로그 기록을 어떤 형식으로 남길 것인지 설정한�
 
 `DemoApplication.java` 은 스프링 부트 프로젝트의 시작을 알리는 `@SpringBootApplication` 어노테이션을 사용하고 있다. (구글링 통해 `@SpringBootApplication`의 다른 기능도 살펴보자.)
 
-`src`폴더에는 실제 **API가 동작하는 프로세스**를 담았고 `config` 폴더에는 `src`에서 필요한 Secret key, Base 클래스, 상수 클래스를, `util` 폴더에는 JWT, 암호화, 정규표현식 등의 클래스를 모아놨다.
+`src`폴더에는 실제 **API가 동작하는 프로세스**를 담았고 `config` 폴더에는 `src`에서 필요한 Secret key, Base 클래스를, `util` 폴더에는 JWT, 암호화, 정규표현식 등의 클래스를 모아놨다.
 
-`src`를 자세하게 살펴보자. `src`는 각 **도메인**별로 패키지를 구분해 놓는다. 현재는 `user` 도메인과 `test` 도메인이 있다. **도메인**이란 게시글, 댓글, 회원, 정산, 결제 등 소프트웨어에 대한 요구사항 혹은 문제 영역이라고 생각하면 된다.
+`src`를 자세하게 살펴보자. `src`는 각 **도메인**별로 패키지를 구분해 놓는다. **도메인**이란 게시글, 댓글, 회원, 정산, 결제 등 소프트웨어에 대한 요구사항 혹은 문제 영역이라고 생각하면 된다.
 
 이 도메인들은 API 통신에서 어떤 프로세스로 처리되는가? API 통신의 기본은 Request → Response이다. 스프링 부트에서 **어떻게 Request를 받아서, 어떻게 처리하고, 어떻게 Response 하는지**를 중점적으로 살펴보자. 전반적인 API 통신 프로세스는 다음과 같다.
 
-> **Request** → `XXXController.java`(=Router+Controller) → `Service` (CUD) / `Provider` (R) (=Business Logic) → `Dao` (DB) → **Response**
+> **Request** → `XXXController.java`(=Router+Controller) → `Service` (CRUD) (=Business Logic) → `Dao` (DB) → **Response**
 
 #### 1. Controller / `UserController.java`  / @RestController
 
 > 1) API 통신의 **Routing** 처리
 > 2) Request를 다른 계층에 넘기고 처리된 결과 값을 Response 해주는 로직
->  + Request의 **형식적 Validation** 처리 (DB를 거치지 않고도 검사할 수 있는)
 
 **1) `@Autowired`**
 
-UserController의 생성자에 `@Autowired` 어노테이션이 붙어있다. 이는 **의존성 주입**을 위한 것으로, `UserController`  뿐만 아니라 다음에 살펴볼 `UserService`, `UserProvider`의 생성자에도 각각 붙어 있는 것을 확인할 수 있다. 간단히 요약하면 객체 생성을 자동으로 해주는 역할이다. 자세한 프로세스는 구글링을 통해 살펴보자.
+UserController의 생성자에 `@Autowired` 어노테이션이 붙어있다. 이는 **의존성 주입**을 위한 것으로, `UserController`  뿐만 아니라 다음에 살펴볼 `UserService`의 생성자에도 각각 붙어 있는 것을 확인할 수 있다. 간단히 요약하면 객체 생성을 자동으로 해주는 역할이다. 자세한 프로세스는 구글링을 통해 살펴보자.
 
 나머지 어노테이션들 역시 구글링을 통해 이해하자.
 
@@ -125,14 +199,14 @@ Response할 때, 공통 부분은 묶고 다른 부분은 제네릭을 통해 �
 
 **3) 메소드 네이밍룰**
 
-이 템플릿에서는 사용되는 메소드 명명 규칙은 다음과 같다.
+메소드 명명 규칙은 다음과 같다.
 
 > HTTP Method + 핵심 URI
 
 - **GET** `/users` 를 처리하는 메소드명 → getUsers
 - **PATCH** `/users` 를 처리하는 메소드명 →patchUsers
 
-항상 이 규칙을 따라야 하는 것은 아니지만, 네이밍은 통일성 있게 해주는 게 좋다.
+항상 이 규칙을 따라야 하는 것은 아니지만, 네이밍은 통일성 있게 해주었으면 한다.
 
 **4) Res, Req 네이밍룰**
 
@@ -144,10 +218,11 @@ Response할 때, 공통 부분은 묶고 다른 부분은 제네릭을 통해 �
 
 이 Res, Req 모델은 `(도메인명) / models` 폴더에 만들면 된다.
 
-#### 2. Service 와 Provider / `UserService.java` `UserProvider.java` / @Service
+#### 2. Service / `UserService.java` / @Service
 
 > 1) **비즈니스 로직**을 다루는 곳 (DB 접근[CRUD], DB에서 받아온 것 형식화)
 >  + Request의 **의미적** **Validation** 처리 (DB를 거쳐야 검사할 수 있는)
+>  + Request의 **형식적** **Validation** 처리
 
 `Service`와 `Provider`는 비즈니스 로직을 다루는 곳이다. **CRUD** 중 **R(Read)** 에 해당하는 코드가 긴 경우가 많기 때문에 **R(Read)** 만 따로 분리해 `Service`는 **CUD(Create, Update, Delete)** 를, `Provider`는 **R(Read)** 를 다루도록 했다. 유지 보수가 용이해진다.
 
@@ -155,11 +230,11 @@ Response할 때, 공통 부분은 묶고 다른 부분은 제네릭을 통해 �
 > **R(Read)** 와 관련된 곳이다. DB에서 select 해서 얻어온 값을 가공해서 뱉어준다.
 
 `Service`
-> **CUD(Create, Update, Delete)** 와 관련된 곳이다. **CUD**에서 **R**이 필요한 경우가 있는데, 그럴 때는 `Provider`에 구성되어 있는 것을 `Service`에서 사용하면 된다.
+> **CRUD(Create, Read, Update, Delete)** 와 관련된 곳이다.
 
 **1) 메소드명**
 
-메소드의 prefix로 다음 규칙을 따르고 있다.
+메소드의 prefix로 다음 규칙을 따랐으면 한다.
 
 C → createXXX `createInfo`
 
@@ -171,13 +246,12 @@ D → deleteXXX `deleteInfo`
 
 **2) BaseException**
 
-`BaseException`을 통해 `Service`나 `Provider`에서 `Controller`에 Exception을 던진다. 마찬가지로 Status 값은 `BaseResponseStatus` 의 `enum`을 통해 관리한다.
+`BaseException`을 통해 `Service`에서 `Controller`에 Exception을 던진다. 마찬가지로 Status 값은 `BaseResponseStatus` 의 `enum`을 통해 관리한다.
 
 #### 3. DAO / `UserDao.java`
-JdbcTemplate을 사용하여 구성되어 있다. 자세한 내용은 이곳 [공식 문서](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/JdbcTemplate.html) 와 템플릿의 기본 예제를 참고하자.
+JdbcTemplate을 사용하여 구성되어 있다. 자세한 내용은 이곳 [공식 문서](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/JdbcTemplate.html) 을 참고하자.
 
 ## ✨Usage
-### API 만들기 예제
 로컬에서 DemoApplication을 실행시킨다. (로컬 서버 구동 시)
 
 [DB 연결 없이 TEST]
@@ -187,17 +261,14 @@ JdbcTemplate을 사용하여 구성되어 있다. 자세한 내용은 이곳 [�
 [DB 연결 이후 TEST]
 1. resources > application.yml에서 본인의 DB 정보를 입력한다.
 2. DB에 TEST를 위한 간단한 테이블을 하나 만든다.
-3. UserController.java, UserProvider.java, UserService.java, UserDao.java를 구성하여 해당 테이블의 값들을 불러오는 로직을 만든다.
+3. UserController.java, UserService.java, UserDao.java를 구성하여 해당 테이블의 값들을 불러오는 로직을 만든다.
 4. 포스트맨을 통해 본인이 만든 API 테스트가 잘 되는지 확인한다.
 
 ### nohup
-무중단 서비스를 위해 nohup을 사용한다. 자세한 내용은 환경 구축 실습 영상을 참고하자.
+무중단 서비스를 위해 nohup을 사용한다. nohup과 &의 사용으로 백그라운드에서의 서버 실행이 가능하다.
 
 ### Error
 서버 Error를 마주했다면, 원인을 파악할 수 있는 다양한 방법들을 통해 문제 원인을 찾자.
 - 컴파일 에러 확인
 - log 폴더 확인
 - 그 외 방법들
-
-## ✨License
-- 본 템플릿의 소유권은 소프트스퀘어드에 있습니다. 본 자료에 대한 상업적 이용 및 무단 복제, 배포 및 변경을 원칙적으로 금지하며 이를 위반할 때에는 형사처벌을 받을 수 있습니다.
