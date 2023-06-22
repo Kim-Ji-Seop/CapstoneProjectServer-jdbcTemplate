@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ChatMessageDTO {
+public class ScoreSendMessageDTO {
 
     private String matchIdx;
     private String writer;
