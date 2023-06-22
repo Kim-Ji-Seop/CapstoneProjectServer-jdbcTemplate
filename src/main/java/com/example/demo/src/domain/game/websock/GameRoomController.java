@@ -57,13 +57,4 @@ public class GameRoomController {
         }
     }
 
-    @ResponseBody
-    @GetMapping("/a")
-    public BaseResponse<ArrayRes> checkArray(){
-        int [] a = new int[]{1,2,3,4};
-        ArrayRes ar = new ArrayRes();
-        ar.setArrays(a);
-        return new BaseResponse<>(ar);
-    }
-
 }
