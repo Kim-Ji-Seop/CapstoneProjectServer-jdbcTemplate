@@ -8,11 +8,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableBatchProcessing
 @SpringBootApplication
-public class DemoApplication {
+public class CapstonApplication {
 
     public static void main(String[] args) {
 
-        SpringApplication.run(DemoApplication.class, args);
+        SpringApplication.run(CapstonApplication.class, args);
 
         // 메모리 사용량 출력
         long heapSize = Runtime.getRuntime().totalMemory();
