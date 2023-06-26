@@ -36,7 +36,7 @@ api-server-spring-boot
     | app-%d{yyyy-MM-dd}.%i.gz
     | error.log // error 레벨에 해당하는 로그가 작성 되는 파일
     | error-%d{yyyy-MM-dd}.%i.gz
-  > src.main.java.com.example.demo
+  > src.main.java.com.capston.bowler
     > config
       > secret
         | Secret.java // git에 추적되지 않아야 할 시크릿 키 값들이 작성되어야 하는 곳
@@ -163,7 +163,7 @@ logs 폴더에 로그 기록을 어떤 형식으로 남길 것인지 설정한�
 
 ### src - main - java
 
-`com.example.demo` 패키지에는 크게 `config` 폴더, `src` 폴더와 이 프로젝트의 시작점인 `DemoApplication.java`가 있다.
+`com.capston.bowler` 패키지에는 크게 `config` 폴더, `src` 폴더와 이 프로젝트의 시작점인 `DemoApplication.java`가 있다.
 
 `DemoApplication.java` 은 스프링 부트 프로젝트의 시작을 알리는 `@SpringBootApplication` 어노테이션을 사용하고 있다.
 
